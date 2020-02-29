@@ -51,7 +51,6 @@ class Subcategory(models.Model):
 # name - String
 # description - text
 # seller - foreign Key
-# current - boolean - so actually int (0 false 1 true)
 # buyer - foreign Key - can be null
 # subcategory - foreign key
 # price - float
@@ -59,66 +58,88 @@ class Subcategory(models.Model):
 # what about the address?
 
 class Product(models.Model):
-    name = models.CharField(max_lenght = 128, unique = True)
+    name = models.CharField(max_lenght = 128, help_text = "Eg. Notebook")
     subcategory = models.ForeignKey(Subcategory, on_delete = models.CASCADE)
-    description = models.TextField()
-    current = models.BooleanField(default = True)
-    seller = models.ForeignKey(Seller, on_delete = models.CASCADE)
-    buyer = models.ForeignKey(Buyer, to_field = "email", on_delete.SET("This user no longer exists"), null = True)
-    price = models.FloatField(default = 0)
+    description = models.TextField(help_text = "Tell the buyers something about your product")
+    seller = models.ForeignKey(UserProfile, on_delete = models.CASCADE)
+    price = models.FloatField(default = 0, help_text = "3.50")
+    # do i need this to be unique?
     slug = models.SlugField(unique = True)
     
     # put upload to with folder
     image1 = models.ImageField(blank = True)
+    
+    def save(self, *args, **kwargs):
+           self.slug = slugify(self.name)
+           super(Product, self).save(*args, **kwargs)
+        
+    class Meta:
+        abstract = True
+        
+    def __str__(self):
+        return self.name
+
+class CurrentProduct(Product):
+    # still miss the folder
     image2 = models.ImageField(blank = True)
     image3 = models.ImageField(blank = True)
     image4 = models.ImageField(blank = True)
     image5 = models.ImageField(blank = True)
     
-    def save(self, *args, **kwargs):
-           self.slug = slugify(self.name)
-           super(Product, self).save(*args, **kwargs)
-           
-    def __str__(self):
-        return self.name
-
+class SoldProduct(Product):
+    buyer = models.ForeignKey(UserProfile, on_delete.SET("This user no longer exists"), blank = False)
+        
 
 # User
-# Email - email
-# name - String
-# surname - string
-# username - string
 # address - string
 # description - text
 # picture - image
 # DOB - date field
 # is seller - boolean
-# password --> User deals with it
 # payement info?
 # rating - float
 #
 
 class UserProfile(models.Model):
+    # Take from here username, password, email, first:_name, last_name
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     
-    email = models.EmailField(unique = True)
-    name = CharField(max_lenght = 20)
-    surname = CharField(max_lenght = 20)
-    username = CharField(max_lenght = 20, unique = True)
     # this will probably change
-    address = CharField(max_lenght = 128)
-    description = TextField()
-    #create this folder and the link
+    streetAndNumber = CharField(max_lenght = 128, help_text = "Eg. Woodlands road 26")
+    city = CharField(max_lenght = 20, help_text = "Eg. Glasgow")
+    postcode = CharField(max_lenght = 10, help_text = "Eg. G4 7AL")
+    description = TextField(help_text = "Tell us something about you")
+    # create this folder and the link
     picture = models.ImageField(upload_to = 'profile_images', blank = True)
     dob = models.DateField()
     isSeller = BooleanField(default = False)
     ratings = FloatField(null = True)
     
-    # I am a bit stuck on making all the relationships
-    # I'll try again later or tomorrow
+    likedProducts = models.ManyToManyField(CurrentProduct, on_delete=models.CASCADE)
+    cartProducts = models.ManyToManyField(CurrentProduct, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.user.username
         
+
+# Review
+# Maker - Foreign key
+# Sold - foreign key
+# Text - Textfield
+# Rating - int
+# Title - string
+
+class Review(models.Model):
+    title = models.CharField(max_lenght = 128, help_text = "Insert title here")
+    text = models.TextField(help_text = "Tell us how the seller was")
+    rating = models.IntegerField(blank = False)
+    product = models.ForeignKey(SoldProduct, on_delete=models.SET("This product no longer exists"))
+    seller = product.seller
+    buyer = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.title
+        
+
 
 
