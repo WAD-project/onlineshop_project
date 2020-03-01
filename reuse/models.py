@@ -3,6 +3,19 @@ from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 
 
+# Create your models here.
+# YEYYY Let's build some models
+
+
+# User
+# address - string
+# description - text
+# picture - image
+# DOB - date field
+# is seller - boolean
+# payement info?
+# rating - float
+
 class UserProfile(models.Model):
     # Take from here username, password, email, first:_name, last_name
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -30,10 +43,7 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
  
-
-# Create your models here.
-# YEYYY Let's build some models
-
+ 
 # Category
 # has a name - String
 # and a number of subcat - int
@@ -117,18 +127,6 @@ class SoldProduct(Product):
     buyer = models.ForeignKey(UserProfile, on_delete=models.SET("This user no longer exists"), blank = False, related_name="buyer" )
     seller = models.ForeignKey(UserProfile, on_delete = models.CASCADE, related_name="sold_by")
         
-
-# User
-# address - string
-# description - text
-# picture - image
-# DOB - date field
-# is seller - boolean
-# payement info?
-# rating - float
-#
-
-   
 
 # Review
 # Maker - Foreign key
