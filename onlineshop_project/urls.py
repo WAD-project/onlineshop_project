@@ -15,7 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.urls import include
+from reuse import views
+
 
 urlpatterns = [
+    path('', views.homepage, name='homepage'),
+    path('reuse/', include('reuse.urls')),
     path('admin/', admin.site.urls),
 ]

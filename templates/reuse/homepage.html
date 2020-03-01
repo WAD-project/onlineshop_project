@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Rango - {{ title }}
+        </title>
+    </head>
+    <body>
+        {% if categories %}
+            <ul>
+            {% for category, subcategories in categories.items %}
+                <li> {{ category.name }} </li>
+                {% if subcategories %}
+                    <ul>
+                        {% for subcategory in subcategories %}
+                            <li> {{ subcategory.name}} </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <strong>There are no subcategories yet</strong>
+                {% endif %}
+            {% endfor %}
+            </ul>
+        {% else %}
+            <strong>There are no categories yet</strong>
+        {% endif %}
+    </body>
+</html>

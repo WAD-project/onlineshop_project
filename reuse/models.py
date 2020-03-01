@@ -2,6 +2,35 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 
+
+class UserProfile(models.Model):
+    # Take from here username, password, email, first:_name, last_name
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    # this will probably change
+    streetAndNumber = models.CharField(max_length = 128, help_text = "Eg. Woodlands road 26")
+    city = models.CharField(max_length = 20, help_text = "Eg. Glasgow")
+    postcode = models.CharField(max_length = 10, help_text = "Eg. G4 7AL")
+    description = models.TextField(help_text = "Tell us something about you")
+    # create this folder and the link
+    picture = models.ImageField(blank = True)
+    dob = models.DateField()
+    isSeller = models.BooleanField(default = False)
+    ratings = models.FloatField(null = True)
+
+    slug = models.SlugField(unique = True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.user.username)
+        super(Product, self).save(*args, **kwargs)
+
+    #likedProducts = models.ManyToManyField(CurrentProduct, on_delete=models.CASCADE)
+    #cartProducts = models.ManyToManyField(CurrentProduct, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
+ 
+
 # Create your models here.
 # YEYYY Let's build some models
 
@@ -10,8 +39,7 @@ from django.contrib.auth.models import User
 # and a number of subcat - int
 
 class Category(models.Model):
-    name = models.CharField(max_lenght = 128, unique = True)
-    subcat = models.IntegerField(default = 0)
+    name = models.CharField(max_length = 128, unique = True)
     slug = models.SlugField(unique = True)
     
     def save(self, *args, **kwargs):
@@ -31,9 +59,8 @@ class Category(models.Model):
 # n products - int
 
 class Subcategory(models.Model):
-    name = models.CharField(max_lenght = 128, unique = True)
+    name = models.CharField(max_length = 128, unique = True)
     category = models.ForeignKey(Category, on_delete = models.CASCADE)
-    products = models.IntegerField(default = 0)
     slug = models.SlugField(unique = True)
     
     def save(self, *args, **kwargs):
@@ -58,10 +85,9 @@ class Subcategory(models.Model):
 # what about the address?
 
 class Product(models.Model):
-    name = models.CharField(max_lenght = 128, help_text = "Eg. Notebook")
+    name = models.CharField(max_length = 128, help_text = "Eg. Notebook")
     subcategory = models.ForeignKey(Subcategory, on_delete = models.CASCADE)
     description = models.TextField(help_text = "Tell the buyers something about your product")
-    seller = models.ForeignKey(UserProfile, on_delete = models.CASCADE)
     price = models.FloatField(default = 0, help_text = "3.50")
     # do i need this to be unique?
     slug = models.SlugField(unique = True)
@@ -85,9 +111,11 @@ class CurrentProduct(Product):
     image3 = models.ImageField(blank = True)
     image4 = models.ImageField(blank = True)
     image5 = models.ImageField(blank = True)
+    seller = models.ForeignKey(UserProfile, on_delete = models.CASCADE, related_name="seller")
     
 class SoldProduct(Product):
-    buyer = models.ForeignKey(UserProfile, on_delete.SET("This user no longer exists"), blank = False)
+    buyer = models.ForeignKey(UserProfile, on_delete=models.SET("This user no longer exists"), blank = False, related_name="buyer" )
+    seller = models.ForeignKey(UserProfile, on_delete = models.CASCADE, related_name="sold_by")
         
 
 # User
@@ -100,27 +128,7 @@ class SoldProduct(Product):
 # rating - float
 #
 
-class UserProfile(models.Model):
-    # Take from here username, password, email, first:_name, last_name
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    
-    # this will probably change
-    streetAndNumber = CharField(max_lenght = 128, help_text = "Eg. Woodlands road 26")
-    city = CharField(max_lenght = 20, help_text = "Eg. Glasgow")
-    postcode = CharField(max_lenght = 10, help_text = "Eg. G4 7AL")
-    description = TextField(help_text = "Tell us something about you")
-    # create this folder and the link
-    picture = models.ImageField(upload_to = 'profile_images', blank = True)
-    dob = models.DateField()
-    isSeller = BooleanField(default = False)
-    ratings = FloatField(null = True)
-    
-    likedProducts = models.ManyToManyField(CurrentProduct, on_delete=models.CASCADE)
-    cartProducts = models.ManyToManyField(CurrentProduct, on_delete=models.CASCADE)
-    
-    def __str__(self):
-        return self.user.username
-        
+   
 
 # Review
 # Maker - Foreign key
@@ -130,12 +138,12 @@ class UserProfile(models.Model):
 # Title - string
 
 class Review(models.Model):
-    title = models.CharField(max_lenght = 128, help_text = "Insert title here")
+    title = models.CharField(max_length = 128, help_text = "Insert title here")
     text = models.TextField(help_text = "Tell us how the seller was")
     rating = models.IntegerField(blank = False)
     product = models.ForeignKey(SoldProduct, on_delete=models.SET("This product no longer exists"))
-    seller = product.seller
-    buyer = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    seller = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="reviewed")
+    buyer = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="reviewer")
     
     def __str__(self):
         return self.title
