@@ -1,0 +1,16 @@
+{% extends 'reuse/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %} 
+Login 
+{% endblock %}
+
+{% block body_block %} 
+<h1>Login to Re</h1> 
+<form id="login_form" method="post" action="{% url 'reuse:login' %}"> 
+	{% csrf_token %} 
+	Username: <input type="text" name="username" value="" /> <br /> 
+	Password: <input type="password" name="password" value="" /> <br /> 
+	<input type="submit" value="submit" /> 
+</form> 
+{% endblock %}
