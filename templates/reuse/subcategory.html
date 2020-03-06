@@ -1,0 +1,26 @@
+{% extends 'reuse/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Homepage
+{% endblock %}
+
+{% block body_block %}
+    <head>
+        <title>Category</title>
+    </head>
+
+    <body>
+    <body>
+    <h1>{{ subcategory.name }}</h1>
+    {% if products %}
+    <ul>
+        {% for product in products %}
+        <li><a href="/reuse/{{ category.slug }}/{{ subcategory.slug }}/{{product.slug}}">{{ product.name }}</a></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <strong>No products currently in this subcategory.</strong>
+    {% endif %}
+    </body>
+{% endblock %}
