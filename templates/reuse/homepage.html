@@ -5,14 +5,24 @@
 {% endblock %}
 
 {% block body_block %}
+<div>
+    {% if user.is_authenticated %}
+        Welcome {{ user.username }}!
+		<li><a href="/reuse/edit_profile/">Edit profile</a></li>
+    {% else %}
+        Enjoy your shopping!
+    {% endif %}
+    <br />
+    <strong>{{ boldmessage }}</strong><br />
+</div>
         {% if categories %}
             <ul>
             {% for category, subcategories in categories.items %}
-                <li> {{ category.name }} </li>
+                <h2><li><a href="/reuse/{{ category.slug }}/">{{ category.name }}</a></li></h2>
                 {% if subcategories %}
                     <ul>
                         {% for subcategory in subcategories %}
-                            <li> {{ subcategory.name}} </li>
+                            <li><a href="/reuse/{{ category.slug }}/{{ subcategory.slug }}">{{ subcategory.name}}</li>
                         {% endfor %}
                     </ul>
                 {% else %}
