@@ -37,10 +37,6 @@ class UserProfile(models.Model):
         self.slug = slugify(self.user.username)
         super(UserProfile, self).save(*args, **kwargs)
 
-
-    #likedProducts = models.ManyToManyField(CurrentProduct, on_delete=models.CASCADE)
-    #cartProducts = models.ManyToManyField(CurrentProduct, on_delete=models.CASCADE)
-
     def __str__(self):
         return self.user.username
  
@@ -127,7 +123,9 @@ class CurrentProduct(Product):
 class SoldProduct(Product):
     buyer = models.ForeignKey(UserProfile, on_delete=models.SET("This user no longer exists"), blank = False, related_name="buyer" )
     seller = models.ForeignKey(UserProfile, on_delete = models.CASCADE, related_name="sold_by")
-        
+  
+#class Wishlist(model.Model):
+#liker = models.ForeignKey(UserProfile, )
 
 # Review
 # Maker - Foreign key
@@ -148,5 +146,12 @@ class Review(models.Model):
         return self.title
         
 
+class Wishlist(models.Model):
+    user = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
+    #might need a fix
+    products = models.ManyToManyField(CurrentProduct)
 
-
+class ShoppingCart(models.Model):
+    user = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
+    #might need a fix
+    products = models.ManyToManyField(CurrentProduct)
