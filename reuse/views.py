@@ -8,6 +8,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
+from django.shortcuts import render,get_object_or_404
 
 
 
@@ -25,6 +26,8 @@ def homepage(request):
     response = render(request, 'reuse/homepage.html', context = context_dict)
     return response
 
+def about(request):
+    return render(request,'reuse/about.html')
 #@login_required
 def add_product(request):
     form=ProductForm()
@@ -67,8 +70,6 @@ def register(request):
     return render(request,'reuse/register.html',
     context = {'user_form': user_form,'profile_form': profile_form,
     'registered': registered})
-
-
 def user_login(request):
     if request.method=='POST':
         username=request.POST.get('username')
@@ -107,6 +108,27 @@ def change_password(request):
     return render(request, 'reuse/change_password.html', {
         'form': form
     })
+def show_category(request,category_name_slug):
+     context_dict = {}
+     try:
+         category = Category.objects.get(slug=category_name_slug)
+         subCat=Subcategory.objects.filter(category=category)
 
+         context_dict['subCat'] = subCat
+         context_dict['categories'] = category
+     except Category.DoesNotExist:
+         context_dict['subCat'] = None
+         context_dict['categories'] = None
+     return render(request,'reuse/category.html',context=context_dict)
+def show_sub(request,category_name_slug,subcategory_name_slug):
+    context_dict = {}
+    category=get_object_or_404(Category,slug=category_name_slug)
+    subcategory=get_object_or_404(Subcategory,slug=subcategory_name_slug)
+    context_dict['subCat'] = subcategory
+    context_dict['categories'] = category
+    return render(request,'reuse/subcategory.html',context=context_dict)
+@login_required
 def edit_profile(request):
-    b=3
+    return render(request,'reuse/edit_profile.html')
+    
+    
