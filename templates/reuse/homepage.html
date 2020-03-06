@@ -6,16 +6,7 @@
 
 {% block body_block %}
 <div>
-    {% if user.is_authenticated %}
-        Welcome {{ user.username }}!
-		<li><a href="/reuse/edit_profile/">Edit profile</a></li>
-    {% else %}
-        Enjoy your shopping!
-    {% endif %}
-    <br />
-    <strong>{{ boldmessage }}</strong><br />
-</div>
-        {% if categories %}
+{% if categories %}
             <ul>
             {% for category, subcategories in categories.items %}
                 <h2><li><a href="/reuse/{{ category.slug }}/">{{ category.name }}</a></li></h2>
@@ -33,4 +24,5 @@
         {% else %}
             <strong>There are no categories yet</strong>
         {% endif %}
+<div>
   {% endblock %}
