@@ -17,32 +17,18 @@ class ProductForm (forms.ModelForm):
         exclude=('subcategory',)
 
 
-#Registration
 class UserForm(forms.ModelForm):
-    password1 = forms.CharField(
-        label="Password",
-        widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}),
-        min_length = 6,
-        max_length = 20
-    )   
-
-    password2 = forms.CharField(
-        label="Password confirmation",
-        widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}),
-        help_text="Enter the same password as before, for verification.",
-        min_length = 6,
-        max_length = 20
-    )
+    password=forms.CharField(widget=forms.PasswordInput())
+    password2=forms.CharField(widget=forms.PasswordInput())
 
     def clean_password2(self):
-        password1 = self.cleaned_data.get('password1')
+        password = self.cleaned_data.get('password')
         password2 = self.cleaned_data.get('password2')
         if not password2:
             raise forms.ValidationError("You must confirm your password")
-        if password1 != password2:
+        if password != password2:
             raise forms.ValidationError("Your passwords do not match")
-        return password2
-
+        return password
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -52,24 +38,43 @@ class UserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name','username','email',)
+        fields = ('first_name', 'last_name','username','email','password',)
 
 
 
 
-  
-
-
-        
 class UserProfileForm(forms.ModelForm):
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
     class Meta:
         model = UserProfile
-        #add other fields
         fields = ('picture',)
 
+"""
+#Registration
+class UserForm(forms.ModelForm):
+    password1 = forms.CharField(
+        label="Password",
+        widget=forms.PasswordInput(),
+        min_length = 6,
+        max_length = 20
+    )   
+
+    password2 = forms.CharField(
+        label="Password confirmation",
+        widget=forms.PasswordInput(),
+        help_text="Enter the same password as before, for verification.",
+        min_length = 6,
+        max_length = 20
+    )
+
+    
 
 
+   
+
+
+
+"""
 
 
 
