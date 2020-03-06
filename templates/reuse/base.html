@@ -13,13 +13,16 @@
 		<nav>
 			<a href="{% url 'reuse:homepage' %}">Home</a>/
 			{% if user.is_authenticated %} 
-					
-					<a href="{% url 'reuse:change_password' %}">Change Pass</a>/
+			
+					<a href="{% url 'reuse:edit_profile' %}">Edit Profile</a>/
+					<a href="{% url 'reuse:change_password' %}">Change Password</a>/
 					<a href="{% url 'reuse:logout' %}">Logout</a>
 				{% else %} 
 					<a href="{% url 'reuse:register' %}">Register</a>/
 					<a href="{% url 'reuse:login' %}">Log in</a>/ 
 				{% endif %} 
+				    <li><a href="{% url 'reuse:about' %}">About</a></li>
+                    <li><a href="{% url 'reuse:homepage' %}">Home</a></li>
 			<hr />
 		</nav>
 		<div>
