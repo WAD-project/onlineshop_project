@@ -1,0 +1,36 @@
+{% extends 'reuse/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Homepage
+{% endblock %}
+
+{% block body_block %}
+    <head>
+        <title>Category</title>
+    </head>
+
+    <body>
+    <body>
+        {% if categories %}
+            <ul>
+            {% for category, subcategories in categories.items %}
+                <h2><li><a href="/reuse/{{ category.slug }}/">{{ category.name }}</a></li></h2>
+                {% if subcategories %}
+                    <ul>
+                        {% for subcategory in subcategories %}
+                            <li><a href="/reuse/{{ category.slug }}/{{ subcategory.slug }}">{{ subcategory.name}}</li>
+							
+                        {% endfor %}
+						
+                    </ul>
+                {% else %}
+                    <strong>There are no subcategories yet</strong>
+                {% endif %}
+            {% endfor %}
+            </ul>
+        {% else %}
+            <strong>There are no categories yet</strong>
+        {% endif %}
+    </body>
+{% endblock %}
