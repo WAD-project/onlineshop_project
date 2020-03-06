@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>
-            Rango - {{ title }}
-        </title>
-    </head>
-    <body>
+{% extends 'reuse/base.html' %}
+{% load staticfiles %}
+{% block title_block %}
+	Home
+{% endblock %}
+
+{% block body_block %}
         {% if categories %}
             <ul>
             {% for category, subcategories in categories.items %}
@@ -24,5 +23,4 @@
         {% else %}
             <strong>There are no categories yet</strong>
         {% endif %}
-    </body>
-</html>
+  {% endblock %}

@@ -26,8 +26,8 @@ class UserProfile(models.Model):
     postcode = models.CharField(max_length = 10, help_text = "Eg. G4 7AL")
     description = models.TextField(help_text = "Tell us something about you")
     # create this folder and the link
-    picture = models.ImageField(blank = True)
-    dob = models.DateField()
+    picture = models.ImageField(upload_to='profile_images', blank = True)
+    dob = models.DateField(null=True)
     isSeller = models.BooleanField(default = False)
     ratings = models.FloatField(null = True)
 
@@ -35,7 +35,8 @@ class UserProfile(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.user.username)
-        super(Product, self).save(*args, **kwargs)
+        super(UserProfile, self).save(*args, **kwargs)
+
 
     #likedProducts = models.ManyToManyField(CurrentProduct, on_delete=models.CASCADE)
     #cartProducts = models.ManyToManyField(CurrentProduct, on_delete=models.CASCADE)
