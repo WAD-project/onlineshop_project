@@ -129,6 +129,12 @@ def show_sub(request,category_name_slug,subcategory_name_slug):
     return render(request,'reuse/subcategory.html',context=context_dict)
 @login_required
 def edit_profile(request):
-    return render(request,'reuse/edit_profile.html')
-    
-    
+    form=UserForm()
+    if request.method =='POST':
+        form=UserForm(request.POST)
+        if form.is_valid():
+            form.save(commit=True)
+            return redirect ('/reuse/')
+        else:
+            print (form.errors)
+    return render(request, 'reuse/edit_profile.html',{'form':form})
