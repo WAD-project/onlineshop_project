@@ -19,11 +19,33 @@ from django.urls import include
 from reuse import views
 from django.conf import settings
 from django.conf.urls.static import static
-
-
-
+from django.contrib.auth.views import LogoutView, PasswordResetView, PasswordResetCompleteView,PasswordResetConfirmView,PasswordChangeDoneView,PasswordChangeView
 urlpatterns = [
     path('', views.homepage, name='homepage'),
     path('reuse/', include('reuse.urls')),
     path('admin/', admin.site.urls),
+    path('', include('social_django.urls', namespace='social')),
+    path(
+    'logout/',
+    LogoutView.as_view(template_name=settings.LOGOUT_REDIRECT_URL),
+    name='logout'
+    ),
+
+
+    path('manage/', views.manage, name='manage'),
+
+    #pass reset url`s
+    path('password_change/done/', PasswordChangeDoneView.as_view(template_name='reuse/password_change_done.html'), 
+        name='password_change_done'),
+
+    path('password_change/',PasswordChangeView.as_view(), 
+        name='password_change'),
+    path('password_reset/', PasswordResetView.as_view(template_name='reuse/password_reset_form.html'), name='password_reset'),
+    path('password_reset/done/', PasswordResetCompleteView.as_view(template_name='reuse/password_reset_done.html'),
+     name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(template_name='reuse/password_change.html'), name='password_reset_confirm'),
+    path('reset/done/', PasswordResetCompleteView.as_view(template_name='reuse/password_reset_complete.html'),
+     name='password_reset_complete'),
+   
+    
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

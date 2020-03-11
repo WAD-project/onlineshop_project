@@ -49,32 +49,26 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         fields = ('picture',)
 
-"""
-#Registration
-class UserForm(forms.ModelForm):
-    password1 = forms.CharField(
-        label="Password",
-        widget=forms.PasswordInput(),
-        min_length = 6,
-        max_length = 20
-    )   
 
-    password2 = forms.CharField(
-        label="Password confirmation",
-        widget=forms.PasswordInput(),
-        help_text="Enter the same password as before, for verification.",
-        min_length = 6,
-        max_length = 20
-    )
+class EditProfileForm (forms.ModelForm):
+    class Meta:
+        model = User
+        fields = (
+                 'email',
+                 'first_name',
+                 'last_name'
+                )
+
+class ProfileForm(forms.ModelForm):
+    streetAndNumber =forms.CharField(max_length = 200, label="Address")
+    class Meta:
+        model = UserProfile
+        fields = ('city', 'postcode', 'description', 'picture') 
+    field_order=['streetAndNumber',   'postcode', 'city', 'description', 'picture']
+
 
     
 
-
-   
-
-
-
-"""
 
 
 
