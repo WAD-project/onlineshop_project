@@ -2,16 +2,12 @@
 {% load staticfiles %}
 
 {% block title_block %}
-    Subcategoty
+    {{ subcategory.name }}
 {% endblock %}
 
 {% block body_block %}
-    <head>
-        <title>Subcategory</title>
-    </head>
+ 
 
-    <body>
-    <body>
     <h1>{{ subcategory.name }}</h1>
     {% if products %}
     <ul>
@@ -22,5 +18,5 @@
     {% else %}
     <strong>No products currently in this subcategory.</strong>
     {% endif %}
-    </body>
+  
 {% endblock %}

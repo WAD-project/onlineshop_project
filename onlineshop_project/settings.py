@@ -19,6 +19,10 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 
 
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY='105421927524-rqu9q3j4897rs74k3o1e4rtrldhl9sla'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET='UUw-NOA2igwOzlm3zQP7cUKG'
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -30,6 +34,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #during development!!!!
 
 # Application definition
 
@@ -40,8 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social_django',
     'reuse',
-
     
 ]
 
@@ -53,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'onlineshop_project.urls'
@@ -69,6 +75,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
+                'social_django.context_processors.backends',  
+                'social_django.context_processors.login_redirect', 
             ],
         },
     },
@@ -109,6 +117,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+
+
+
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
     'django.contrib.auth.hashers.BCryptPasswordHasher',
@@ -139,4 +151,15 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
 
-LOGIN_URL = 'reuse:login'
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+LOGIN_URL = '/auth/login/google-oauth2/'
+
+LOGIN_REDIRECT_URL = '/manage/'
+LOGOUT_REDIRECT_URL = ''
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+

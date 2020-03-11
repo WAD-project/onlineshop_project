@@ -1,14 +1,14 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.http import HttpResponse
 from reuse.models import Category, Subcategory
-from reuse.forms import ProductForm, UserForm, UserProfileForm
+from reuse.forms import ProductForm, UserForm, UserProfileForm, EditProfileForm, ProfileForm
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
-from django.shortcuts import render,get_object_or_404
+
 
 
 
@@ -70,6 +70,31 @@ def register(request):
     return render(request,'reuse/register.html',
     context = {'user_form': user_form,'profile_form': profile_form,
     'registered': registered})
+
+@login_required
+def edit_profile(request):
+    if request.method =='POST':
+        user_form=EditProfileForm(request.POST)
+        profile_form = ProfileForm(request.POST, request.FILES)
+        if user_form.is_valid() and profile_form.is_valid():
+            user = user_form.save()
+            #user.save()
+            prfile = profile_form.save(commit=False)
+            #profile.user=user
+            if 'picture' in request.FILES:
+                profile.picture = request.FILES['picture']
+                
+            profile.save()
+        else:
+             print(user_form.errors, profile_form.errors)
+    else:
+        user_form = EditProfileForm()
+        profile_form = ProfileForm()
+    return render(request, 'reuse/edit_profile.html', context={'form': user_form, 'profile_form':profile_form})
+
+
+
+
 def user_login(request):
     if request.method=='POST':
         username=request.POST.get('username')
@@ -98,9 +123,9 @@ def change_password(request):
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
-            update_session_auth_hash(request, user)  # Important!
+            update_session_auth_hash(request, user)  
             messages.success(request, 'Your password was successfully updated!')
-            #return redirect('reuse/homepage.html')
+            return redirect('reuse:homepage')
         else:
             messages.error(request, 'Please correct the error below.')
     else:
@@ -108,33 +133,34 @@ def change_password(request):
     return render(request, 'reuse/change_password.html', {
         'form': form
     })
+
+
+
+
 def show_category(request,category_name_slug):
      context_dict = {}
      try:
          category = Category.objects.get(slug=category_name_slug)
          subCat=Subcategory.objects.filter(category=category)
 
-         context_dict['subCat'] = subCat
-         context_dict['categories'] = category
+         context_dict['subcategories'] = subCat
+         context_dict['category'] = category
      except Category.DoesNotExist:
-         context_dict['subCat'] = None
-         context_dict['categories'] = None
+         context_dict['subcategories'] = None
+         context_dict['category'] = None
      return render(request,'reuse/category.html',context=context_dict)
+
 def show_sub(request,category_name_slug,subcategory_name_slug):
     context_dict = {}
     category=get_object_or_404(Category,slug=category_name_slug)
     subcategory=get_object_or_404(Subcategory,slug=subcategory_name_slug)
-    context_dict['subCat'] = subcategory
+    context_dict['subcategory'] = subcategory
     context_dict['categories'] = category
     return render(request,'reuse/subcategory.html',context=context_dict)
-@login_required
-def edit_profile(request):
-    form=UserForm()
-    if request.method =='POST':
-        form=UserForm(request.POST)
-        if form.is_valid():
-            form.save(commit=True)
-            return redirect ('/reuse/')
-        else:
-            print (form.errors)
-    return render(request, 'reuse/edit_profile.html',{'form':form})
+
+
+def manage(request):
+    return render(request, 'reuse/manage.html')
+
+
+

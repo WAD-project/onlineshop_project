@@ -3,6 +3,8 @@ from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 
 
+
+
 # Create your models here.
 # YEYYY Let's build some models
 
@@ -155,3 +157,6 @@ class ShoppingCart(models.Model):
     user = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
     #might need a fix
     products = models.ManyToManyField(CurrentProduct)
+
+
+
