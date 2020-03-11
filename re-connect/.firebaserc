@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "re-messagingapp-f367c",
+    "staging": "re-messagingapp-f367c"
+  }
+}
