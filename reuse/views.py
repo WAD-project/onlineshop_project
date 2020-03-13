@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect,get_object_or_404
 from django.http import HttpResponse
-from reuse.models import Category, Subcategory
+from reuse.models import Category, Subcategory,Product
 from reuse.forms import ProductForm, UserForm, UserProfileForm, EditProfileForm, ProfileForm
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
@@ -40,8 +40,6 @@ def add_product(request):
         else:
             print (form.errors)
     return render(request, 'reuse/add_product.html',{'form':form})
-
-
 def register(request):
     registered = False
     if request.method == 'POST':
@@ -78,9 +76,9 @@ def edit_profile(request):
         profile_form = ProfileForm(request.POST, request.FILES)
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save()
-            #user.save()
-            prfile = profile_form.save(commit=False)
-            #profile.user=user
+            user.save()
+            profile = profile_form.save(commit=False)
+            profile.user=user
             if 'picture' in request.FILES:
                 profile.picture = request.FILES['picture']
                 
@@ -157,10 +155,21 @@ def show_sub(request,category_name_slug,subcategory_name_slug):
     context_dict['subcategory'] = subcategory
     context_dict['categories'] = category
     return render(request,'reuse/subcategory.html',context=context_dict)
-
-
+def show_product(request,category_name_slug,subcategory_name_slug,product_name_slug):
+    context_dict = {}
+    category=get_object_or_404(Category,slug=category_name_slug)
+    subcategory=get_object_or_404(Subcategory,slug=subcategory_name_slug)
+    product=get_object_or_404(Product,slug=product_name_slug)
+    context_dict['subcategory'] = subcategory
+    context_dict['categories'] = category
+    context_dict['product'] = product
+    return render(request,'reuse/product.html',context=context_dict)
 def manage(request):
     return render(request, 'reuse/manage.html')
+def wishlist(request):
+    return render(request,'reuse/wishlist.html')
+def shoppingcart(request):
+    return render(request,'reuse/shoppingcart.html')
 
 
 
