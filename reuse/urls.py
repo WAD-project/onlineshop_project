@@ -1,9 +1,7 @@
-
-
-
-
 from django.urls import path
 from reuse import views
+from django.conf.urls import url
+from django.conf.urls import include
 
 
 app_name = 'reuse'
@@ -27,6 +25,7 @@ path('edit_profile',views.edit_profile, name='edit_profile'),
 #path('edit_profile/history',views.history,name='history'),
 #path('edit_profile/sold_products ',views.soldproducts,name='soldproducts'),
 #path('edit_profile/current_products_list ',views.currentproducts,name='currentproducts'),
+url(r'^search/', include('haystack.urls')),
 
 
 
