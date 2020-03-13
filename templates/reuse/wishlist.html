@@ -1,0 +1,24 @@
+{% extends 'reuse/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Wishlist
+{% endblock %}
+
+{% block body_block %}
+ 
+    <h1>Wishlist</h1>
+    <h1>{{ product.name }}</h1>
+	<h1>{{ product.description }}</h1>
+	<h1>{{ product.price}}</h1>
+    {% if products %}
+    <ul>
+        {% for product in products %}
+        <li><a><img src="{{product.image1.url}}"></a>{{product.name}}</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <strong>No products currently in this wishlist.</strong>
+    {% endif %}
+  
+{% endblock %}
