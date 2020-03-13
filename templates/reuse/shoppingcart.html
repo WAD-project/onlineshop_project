@@ -1,0 +1,25 @@
+{% extends 'reuse/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Shopping cart
+{% endblock %}
+
+{% block body_block %}
+ 
+    <h1>Shopping Cart</h1>
+    <h1>{{ product.name }}</h1>
+	<h1>{{ product.description }}</h1>
+	<h1>{{ product.price}}</h1>
+    {% if products %}
+    <ul>
+        {% for product in products %}
+	   <li><a href="/reuse/{{ category.slug }}/{{ subcategory.slug }}/{{product.slug}}">{{ product.name }}</a></li>
+       <li><a><img src="{{product.image1.url}}"></a>{{product.name}}</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <strong>Nothing in your shopping cart now</strong>
+    {% endif %}
+  
+{% endblock %}
