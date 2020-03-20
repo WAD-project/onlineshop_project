@@ -1,6 +1,7 @@
 from django import forms
 from reuse.models import Product, UserProfile
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import  UserChangeForm
 import re
 
 
@@ -12,6 +13,7 @@ class ProductForm (forms.ModelForm):
     description = forms.CharField(help_text="Enter short description of the product.")
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
     price=forms.FloatField(help_text="Price of the product.", min_value=0)
+    slug = forms.CharField(widget=forms.HiddenInput(), required=False) 
     class Meta:
         model=Product
         exclude=('subcategory',)
@@ -50,15 +52,6 @@ class UserProfileForm(forms.ModelForm):
         fields = ('picture',)
 
 
-class EditProfileForm (forms.ModelForm):
-    class Meta:
-        model = User
-        fields = (
-                 'email',
-                 'first_name',
-                 'last_name'
-                )
-
 class ProfileForm(forms.ModelForm):
     streetAndNumber =forms.CharField(max_length = 200, label="Address")
     class Meta:
@@ -67,9 +60,18 @@ class ProfileForm(forms.ModelForm):
     field_order=['streetAndNumber',   'postcode', 'city', 'description', 'picture']
 
 
-    
+
+class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField()
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']
 
 
-
-
-
+class ProfileUpdateForm(forms.ModelForm):
+    streetAndNumber =forms.CharField(max_length = 200, label="Address")
+    class Meta:
+        model = UserProfile
+        fields = ['city', 'postcode', 'description', 'picture']
+    field_order=['streetAndNumber',   'postcode', 'city', 'description', 'picture']

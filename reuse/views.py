@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect,get_object_or_404
 from django.http import HttpResponse
-from reuse.models import Category, Subcategory,Product
-from reuse.forms import ProductForm, UserForm, UserProfileForm, EditProfileForm, ProfileForm
+from reuse.models import Category, Subcategory,Product, CurrentProduct
+from reuse.forms import ProductForm, UserForm, UserProfileForm, ProfileForm, UserUpdateForm,ProfileUpdateForm
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
@@ -19,7 +19,8 @@ def homepage(request):
     context_dict = {}
     context_dict['title'] = 'Welcome'
     context_dict['categories'] = {}
-    
+    #recently_added = CurrentProduct.objects.order_by('-dat')[:4]
+    #context_dict["recently_added"]=recently_added
     for cat in category_list:
         context_dict['categories'][cat] = Subcategory.objects.filter(category=cat).order_by('name')
         
@@ -28,7 +29,9 @@ def homepage(request):
 
 def about(request):
     return render(request,'reuse/about.html')
-#@login_required
+
+
+@login_required
 def add_product(request):
     form=ProductForm()
     if request.method =='POST':
@@ -40,6 +43,8 @@ def add_product(request):
         else:
             print (form.errors)
     return render(request, 'reuse/add_product.html',{'form':form})
+
+
 def register(request):
     registered = False
     if request.method == 'POST':
@@ -69,30 +74,43 @@ def register(request):
     context = {'user_form': user_form,'profile_form': profile_form,
     'registered': registered})
 
-@login_required
+
+"""
+Edit profile view 
+"""
+@login_required 
 def edit_profile(request):
-    if request.method =='POST':
-        user_form=EditProfileForm(request.POST)
-        profile_form = ProfileForm(request.POST, request.FILES)
+    if request.method == 'POST':
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        profile_form = ProfileUpdateForm(request.POST,request.FILES,instance=request.user)
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save()
-            user.save()
             profile = profile_form.save(commit=False)
-            profile.user=user
-            if 'picture' in request.FILES:
-                profile.picture = request.FILES['picture']
-                
-            profile.save()
-        else:
-             print(user_form.errors, profile_form.errors)
+            profile.user = user
+            messages.success(request, f'Your account has been updated!')
+            return redirect (reverse ('reuse:homepage'))
+
     else:
-        user_form = EditProfileForm()
-        profile_form = ProfileForm()
-    return render(request, 'reuse/edit_profile.html', context={'form': user_form, 'profile_form':profile_form})
+        user_form = UserUpdateForm(instance=request.user)
+        profile_form = ProfileUpdateForm(instance=request.user)
 
+    context = {
+        'form': user_form,
+        'profile_form': profile_form
+    }
 
+    return render(request, 'reuse/edit_profile.html', context)
 
+"""
+User Profile view
+"""
+@login_required  
+def view_profile(request):
+    return render(request, 'reuse/profile.html')
 
+"""
+Login view 
+"""
 def user_login(request):
     if request.method=='POST':
         username=request.POST.get('username')
@@ -164,6 +182,10 @@ def show_product(request,category_name_slug,subcategory_name_slug,product_name_s
     context_dict['categories'] = category
     context_dict['product'] = product
     return render(request,'reuse/product.html',context=context_dict)
+
+"""
+Successful login with Google Account
+"""
 def manage(request):
     return render(request, 'reuse/manage.html')
 def wishlist(request):
