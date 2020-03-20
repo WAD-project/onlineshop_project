@@ -1,0 +1,19 @@
+<ul>
+    {% if categories %}
+        {% for category, subcategories in categories.items %}
+            <h2><li><a href="/reuse/{{ category.slug }}/">{{ category.name }}</a></li></h2>
+            <ul>
+                {% if subcategories %}
+                    {% for subcategory in subcategories %}
+                        <li><a href="/reuse/{{ category.slug }}/{{ subcategory.slug }}">{{ subcategory.name}}</li>
+                    {% endfor %}
+            
+                {% else %}
+                    <li><strong>There are no subcategories yet</strong></li>
+                {% endif %}
+            </ul>
+        {% endfor %}
+    {% else %}
+        <li><strong>There are no categories yet</strong></li>
+    {% endif %}
+</ul>
