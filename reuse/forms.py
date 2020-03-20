@@ -1,5 +1,5 @@
 from django import forms
-from reuse.models import Product, UserProfile
+from reuse.models import Product, CurrentProduct, UserProfile, Category
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import  UserChangeForm
 import re
@@ -12,11 +12,12 @@ class ProductForm (forms.ModelForm):
     name = forms.CharField(max_length = 128, help_text="Please enter the name of the product.")
     description = forms.CharField(help_text="Enter short description of the product.")
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
-    price=forms.FloatField(help_text="Price of the product.", min_value=0)
+    price = forms.FloatField(help_text="Price of the product.", min_value=0)
     slug = forms.CharField(widget=forms.HiddenInput(), required=False) 
     class Meta:
-        model=Product
-        exclude=('subcategory',)
+        model = CurrentProduct
+        exclude=('subcategory', 'category', 'seller',)
+        
 
 
 class UserForm(forms.ModelForm):

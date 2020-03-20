@@ -97,6 +97,7 @@ class Subcategory(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length = 128, help_text = "Eg. Notebook")
     subcategory = models.ForeignKey(Subcategory, on_delete = models.CASCADE)
+    category = models.ForeignKey(Category, blank=True, null=True, on_delete = models.CASCADE)
     description = models.TextField(help_text = "Tell the buyers something about your product")
     price = models.FloatField(default = 0, help_text = "3.50")
     dat = models.DateField(auto_now_add=True, blank=True, null=True)

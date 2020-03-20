@@ -6,9 +6,9 @@
 {% endblock %}
 
 {% block body_block %}
-        <h1>Add a Product</h1>
+    <h1>Add a Product to {{ subcategory.name }}</h1>
         <div>
-            <form id="product_form" method="post" action="/reuse/add_product/">
+            <form id="product_form" method="post" action="/reuse/{{ category.slug }}/{{ subcategory.slug }}/add_product/">
                 {% csrf_token %}
                 {% for hidden in form.hidden_fields %}
                     {{ hidden }}
