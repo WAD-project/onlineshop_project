@@ -46,19 +46,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'social_django',
-    'reuse',
-    'haystack'
-    
+    'reuse', 
 ]
 
-HAYSTACK_CONNECTIONS = {
-    'default': {
-        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
-        'URL': 'http://127.0.0.1:8000/',
-        'INDEX_NAME': 'haystack',
-    },
-}
-HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

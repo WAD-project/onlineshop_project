@@ -8,6 +8,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
+from django.http import JsonResponse
 
 
 
@@ -171,5 +172,18 @@ def wishlist(request):
 def shoppingcart(request):
     return render(request,'reuse/shoppingcart.html')
 
+
+def autocomplete(request):
+    if request.is_ajax():
+        queryset = User.objects.filter(username__startswith=request.GET.get('search', None))
+        list = []        
+        for i in queryset:
+            list.append(i.username)
+        data = {
+            'list': list,
+        }
+        return JsonResponse(data)
+    else:
+        print ('failed')
 
 

@@ -8,6 +8,7 @@
 			{% block title_block %}  
 			{% endblock %} 
 		</title>
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" />
 	</head>
 	<body>
 		<nav>
@@ -33,6 +34,7 @@
 		<div>
 			{% block welcome_block %}
 			<h1>Welcome to Re !</h1>
+            <a href="{% url 'reuse:search' %}">Search</a>
     		{% if user.is_authenticated %}
         			<h2>Hello, {{ user.username }}</h2>
    			 {% endif %}
@@ -49,7 +51,10 @@
 			{% block sidebar_block %} 
 			{% endblock %} 
 		</div>
-
+        
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" />
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
 
 	</body>
 </html>

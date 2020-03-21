@@ -25,7 +25,7 @@ path('change_password',views.change_password,name='change_password'),
 #path('edit_profile/history',views.history,name='history'),
 #path('edit_profile/sold_products ',views.soldproducts,name='soldproducts'),
 #path('edit_profile/current_products_list ',views.currentproducts,name='currentproducts'),
-url(r'^search/', include('haystack.urls')),
+url(r'^ajax/autocomplete/$', views.autocomplete, name='search')
 
 
 

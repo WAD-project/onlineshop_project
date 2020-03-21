@@ -125,7 +125,8 @@ class CurrentProduct(Product):
 class SoldProduct(Product):
     buyer = models.ForeignKey(UserProfile, on_delete=models.SET("This user no longer exists"), blank = False, related_name="buyer" )
     seller = models.ForeignKey(UserProfile, on_delete = models.CASCADE, related_name="sold_by")
-  
+
+
 #class Wishlist(model.Model):
 #liker = models.ForeignKey(UserProfile, )
 

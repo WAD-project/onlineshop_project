@@ -11,17 +11,26 @@ def populate():
         {'name': 'Sci Fi'},
         {'name': 'Art'},
         {'name': 'Romance'},
+        {'name': 'Action'},
+        {'name': 'Comic'},
+        {'name': 'Classics'},
+        {'name': 'Drama'},
+        {'name': 'Biographies'},
+        {'name': 'The Arts'},
         {'name': 'Poetry'}]
         
     clothesSubcat = [
         {'name': 'Skirts'},
         {'name': 'Shirts'},
         {'name': 'Trousers'},
+        {'name': 'Dresses'},
         {'name': 'Blouses'}]
         
     stationarySubcat = [
         {'name': 'Notebooks'},
         {'name': 'Pens & Pencils'},
+        {'name': 'Other Stationary'},
+        {'name': 'Files'},
         {'name': 'Pencil cases'}]
         
     categories = {'Books': {'subcategories': booksSubcat},
