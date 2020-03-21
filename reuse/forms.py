@@ -41,7 +41,7 @@ class UserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name','username','email','password',)
+        fields = ('first_name', 'last_name', 'username', 'email', 'password',)
 
 
 
@@ -58,7 +58,7 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('city', 'postcode', 'description', 'picture') 
-    field_order=['streetAndNumber',   'postcode', 'city', 'description', 'picture']
+    field_order=['streetAndNumber', 'postcode', 'city', 'description', 'picture']
 
 
 
@@ -75,4 +75,4 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['city', 'postcode', 'description', 'picture']
-    field_order=['streetAndNumber',   'postcode', 'city', 'description', 'picture']
+    field_order=['streetAndNumber', 'postcode', 'city', 'description', 'picture']

@@ -7,21 +7,34 @@
     top: 0px;
     left: 0px;
     overflow: auto;
-    height: 140px;
+    height: 120px;
+}
+
+.titlebar h1 {
+    margin: 10px;
+}
+
+.titlebar h3 {
+    margin: 9px;
 }
 
 .navbar {
     position: fixed;
+    border: 3px solid black;
     background-color: #f1f1f1;
+    height: 30px;
     width: 100%;
-    top: 140px;
+    top: 120px;
     left: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 .navbar ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
+  border: 3px solid black;
   overflow: hidden;
   background-color: #f1f1f1;
 }
@@ -41,3 +54,15 @@
 .navbar li a:hover {
   background-color: #333;
 }
+
+.bottompage {
+    padding: 3px 3px 3px 10px;
+    width: 100%;
+    background-color: #f1f1f1;
+    position: static;
+    bottom: 0;
+    left: 0;
+    height: 110px;
+}
+
+

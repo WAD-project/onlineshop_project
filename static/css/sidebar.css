@@ -1,13 +1,9 @@
 .sidebar {
-    margin: 0;
-    padding: 0;
     width: 200px;
     background-color: #f1f1f1;
-    position: fixed;
-    top: 200px;
+    height: 400px;
     left: 0;
-    height: 100%;
-    overflow: auto;
+    overflow: scroll;
 }
 
 /* Sidebar links */
@@ -15,7 +11,7 @@
   list-style-type: none;
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow: scroll;
   background-color: #f1f1f1;
 }
 
@@ -40,9 +36,4 @@
   color: white;
 }
 
-div.contento {
-    margin-left: 200px;
-    padding: 1px 16px;
-    height: 1000px;
-}
 

@@ -5,7 +5,7 @@
             <ul>
                 {% if subcategories %}
                     {% for subcategory in subcategories %}
-                        <li><a href="/reuse/{{ category.slug }}/{{ subcategory.slug }}">{{ subcategory.name}}</li>
+                        <li><a href="/reuse/{{ category.slug }}/{{ subcategory.slug }}">{{ subcategory.name}}</a></li>
                     {% endfor %}
             
                 {% else %}

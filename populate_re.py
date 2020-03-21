@@ -12,11 +12,10 @@ def populate():
         {'name': 'Art'},
         {'name': 'Romance'},
         {'name': 'Action'},
-        {'name': 'Comic'},
+        {'name': 'Comics'},
         {'name': 'Classics'},
         {'name': 'Drama'},
         {'name': 'Biographies'},
-        {'name': 'The Arts'},
         {'name': 'Poetry'}]
         
     clothesSubcat = [
@@ -49,7 +48,7 @@ def populate():
             
 def add_cat(name):
     c = Category.objects.get_or_create(name=name)[0]
-    c.save
+    c.save()
     return c
     
 def add_subcat(cat, name):
