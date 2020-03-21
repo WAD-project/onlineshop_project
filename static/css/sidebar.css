@@ -1,0 +1,48 @@
+.sidebar {
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    background-color: #f1f1f1;
+    position: fixed;
+    top: 200px;
+    left: 0;
+    height: 100%;
+    overflow: auto;
+}
+
+/* Sidebar links */
+.sidebar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}
+
+/* Fix needed */
+.sidebar li a {
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 0px 0px;
+    margin: 15px;
+    text-decoration: none;
+}
+
+.sidebar p.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+/* Links on mouse-over */
+.sidebar li a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+
+div.contento {
+    margin-left: 200px;
+    padding: 1px 16px;
+    height: 1000px;
+}
+

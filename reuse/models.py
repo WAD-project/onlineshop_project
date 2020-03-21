@@ -90,14 +90,17 @@ class Subcategory(models.Model):
 # buyer - foreign Key - can be null
 # subcategory - foreign key
 # price - float
+# dat - date and time field to indicate when product is added to the site 
 # pictures - image fields (give 'em five?)
 # what about the address?
 
 class Product(models.Model):
     name = models.CharField(max_length = 128, help_text = "Eg. Notebook")
     subcategory = models.ForeignKey(Subcategory, on_delete = models.CASCADE)
+    category = models.ForeignKey(Category, blank=True, null=True, on_delete = models.CASCADE)
     description = models.TextField(help_text = "Tell the buyers something about your product")
     price = models.FloatField(default = 0, help_text = "3.50")
+    dat = models.DateField(auto_now_add=True, blank=True, null=True)
     # do i need this to be unique?
     slug = models.SlugField(unique = True)
     

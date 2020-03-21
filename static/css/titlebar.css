@@ -1,0 +1,43 @@
+.titlebar {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background-color: #f1f1f1;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    overflow: auto;
+    height: 140px;
+}
+
+.navbar {
+    position: fixed;
+    background-color: #f1f1f1;
+    width: 100%;
+    top: 140px;
+    left: 0px;
+}
+
+.navbar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}
+
+.navbar li {
+  float: right;
+}
+
+.navbar li a {
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.navbar li a:hover {
+  background-color: #333;
+}
