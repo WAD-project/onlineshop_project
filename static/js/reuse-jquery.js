@@ -1,10 +1,12 @@
-$( function() {
-    var availableProducts = [
-        {% for pdt in all_products %}
-            "{{pdt}}",
-        {%endfor%}
-    ];
-    $( "#pdt" ).autocomplete({
-        source: availableProducts
-    });
-} );
+
+$(document).ready(function(){ 
+    $("#txtSearch").autocomplete({
+        source: "/ajax_calls/search/",
+        minLength: 2,
+        open: function(){
+            setTimeout(function () {
+                $('.ui-autocomplete').css('z-index', 99);
+            }, 0);
+        }
+      });
+});

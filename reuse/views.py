@@ -239,17 +239,18 @@ def shoppingcart(request):
     return render(request,'reuse/shoppingcart.html')
 
 
-def autocomplete(request):
+def autocompleteModel(request):
     if request.is_ajax():
-        queryset = User.objects.filter(username__startswith=request.GET.get('search', None))
-        list = []        
-        for i in queryset:
-            list.append(i.username)
-        data = {
-            'list': list,
-        }
-        return JsonResponse(data)
+        q = request.GET.get('term', '').capitalize()
+        search_qs = MODEL.objects.filter(name__startswith=q)
+        results = []
+        print (q)
+        for r in search_qs:
+            results.append(r.FIELD)
+        data = json.dumps(results)
     else:
-        print ('failed')
+        data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)
 
 
