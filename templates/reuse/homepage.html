@@ -29,8 +29,7 @@
                 <li style="float:left;"><a href="{% url 'reuse:about' %}">About</a></li>
                 <li style="float:left;"><a href="{% url 'reuse:homepage' %}">Home</a></li>
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'reuse:edit_profile' %}">Edit Profile</a></li>
-                    <li><a href="{% url 'reuse:change_password' %}">Change Password</a></li>
+                    <li><a href="{% url 'reuse:profile' %}"> My Profile</a></li>
                     <li><a href="{% url 'reuse:logout' %}">Logout</a></li>
                 {% else %}
                     <li><a href="{% url 'reuse:register' %}">Register</a></li>
