@@ -1,12 +1,15 @@
-{% extends 'reuse/homepage.html' %}
+{% extends 'reuse/base.html' %}
 {% load staticfiles %}
 
 {% block title_block %} 
-Successful login
+    Successful login
+{% endblock %}
+
+{% block titlebar_block %}
+    Login
 {% endblock %}
 
 {% block body_block %}  
-	<p> You have logged successfully.</p>
+	<p> You have logged in successfully.</p>
 	<a href="{% url 'reuse:homepage' %}"> Return to homepage </a>
-
 {% endblock %}

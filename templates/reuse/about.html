@@ -1,4 +1,4 @@
-{% extends 'reuse/homepage.html' %}
+{% extends 'reuse/base.html' %}
 {% load staticfiles %}
 
 {% block title_block %}
@@ -13,10 +13,14 @@
     <p>Elena</p>
 {% endblock %}
 
+{% block welcome_block %}
+    <h1>Welcome to Re !</h1>
+    {% if user.is_authenticated %}
+        <h2>Hello, {{ user.username }}</h2>
+    {% endif %}
+{% endblock %}
+
 {% block body_block %}
-    <h1>Welcome to Re online shop</h1>
-    <p>apagagsydvsjvdv</p>
-    <!--Content of the page-->
 {% endblock %}
 
 

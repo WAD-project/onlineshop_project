@@ -1,25 +1,24 @@
-{% extends 'reuse/homepage.html' %}
+{% extends 'reuse/base.html' %}
 {% load staticfiles %}
 
 {% block title_block %}
 	Edit Profile
 {% endblock %}
 
+{% block titlebar_block %}
+    Edit Profile
+{% endblock %}
+
 {% block body_block %}
 	<h1>Edit Profile</h1>
-	 
-	 
-	 
-		<div >
-    <form method="post" enctype="multipart/form-data">
+    <div>
+        <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-       
         {{ form.as_p }}
         {{ profile_form.as_p }}
         
         <button type="submit">Submit</button>
-    </form>
-    <br>
-</div>
-
-	{% endblock %}
+        </form>
+        <br/>
+    </div>
+{% endblock %}

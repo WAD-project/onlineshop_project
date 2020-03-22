@@ -5,6 +5,10 @@
     Search
 {% endblock %}
 
+{% block titlebar_block %}
+    Search
+{% endblock %}
+
 {% block body_block %}
     <h1>Please fill the search bar</h1>
     <form id=”search” method=”POST” action=”{% url ‘search’ %}”>

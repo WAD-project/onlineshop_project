@@ -1,13 +1,15 @@
-{% extends 'reuse/homepage.html' %}
+{% extends 'reuse/base.html' %}
 {% load staticfiles %}
 
 {% block title_block %}
     {{ subcategory.name }}
 {% endblock %}
 
-{% block body_block %}
- 
+{% block titlebar_block %}
+    Explore
+{% endblock %}
 
+{% block body_block %}
     <h1>{{ subcategory.name }}</h1>
     {% if user.is_authenticated %}
     <a href="/reuse/{{ category.slug }}/{{ subcategory.slug }}/add_product/">Add a product</a>

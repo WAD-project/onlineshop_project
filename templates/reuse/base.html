@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load reuse_template_tags %}
+
+<html>
+     <head lang="en">
+        <meta charset="UTF-8" />
+        <link rel="stylesheet" type="text/css" href="{% static 'css/headerAndSidebar.css' %}"/>
+        <title>
+            Re -
+            {% block title_block %}
+            {% endblock %}
+        </title>
+    </head>
+    <body>
+        <div class="titlebar">
+            <h1 style="text-align:center; padding:3px;">Re - <!--logo--></h1>
+            <hr style="width:200px;"/>
+            <h3 style="text-align:center; padding:3px;">
+            {% block titlebar_block %}
+            {% endblock %}
+            </h3>
+        </div>
+        
+        <nav class="navbar">
+            <ul>
+                <li style="float:left;"><a href="{% url 'reuse:about' %}">About</a></li>
+                <li style="float:left;"><a href="{% url 'reuse:homepage' %}">Home</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'reuse:profile' %}">My Profile</a></li>
+                    <li><a href="{% url 'reuse:change_password' %}">Change Password</a></li>
+                    <li><a href="{% url 'reuse:logout' %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'reuse:register' %}">Register</a></li>
+                    <li><a href="{% url 'reuse:login' %}">Log in</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        
+        <div id="left" class="col">
+            {% block sidebar_block %}
+                {% get_category_list %}
+            {% endblock %}
+        </div>
+        
+        <div id="right" class="col">
+            <div class="welcome">
+                {% block welcome_block %}
+                {% endblock %}
+            </div>
+            <div class="pagecontent">
+                {% block body_block %}
+                {% endblock %}
+            </div>
+        </div>
+        
+        <div class="bottompage">
+            <h3>Get Help</h3>
+            <a href="{% url 'reuse:faq' %}">F.A.Q.</a></br>
+            <a href="{% url 'reuse:contact_us' %}">Contact us</a>
+        </div>
+        
+    </body>
+</html>

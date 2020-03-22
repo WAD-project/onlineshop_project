@@ -1,13 +1,15 @@
-{% extends 'reuse/homepage.html' %}
+{% extends 'reuse/base.html' %}
 {% load staticfiles %}
 
 {% block title_block %}
     {{ product.name }}
 {% endblock %}
 
-{% block body_block %}
- 
+{% block titlebar_block %}
+    Explore
+{% endblock %}
 
+{% block body_block %}
     <h1>{{ product.name }}</h1>
 	<h1>{{ product.description }}</h1>
 	<h1>{{ product.price}}</h1>

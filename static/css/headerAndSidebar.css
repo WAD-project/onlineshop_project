@@ -1,0 +1,118 @@
+.titlebar {
+    font-family: "Courier";
+    color: #513E1B;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background-color: #f1f1f1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: auto;
+    height: 120px;
+}
+
+.titlebar h1 {
+    margin: 10px;
+}
+
+.titlebar h3 {
+    margin: 9px;
+}
+
+.navbar {
+    position: fixed;
+    background-color: #f1f1f1;
+    height: 30px;
+    width: 100%;
+    top: 120px;
+    left: 0px;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #f1f1f1;
+}
+
+.navbar li {
+  float: right;
+}
+
+.navbar li a {
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.navbar li a:hover {
+  background-color: #333;
+}
+
+body {
+    font-family: "Courier";
+    color: #513E1B;
+}
+
+.col {
+    margin-top: 158px;
+}
+
+#left {
+    width: 200px;
+    background-color: #f1f1f1;
+    height: 500px;
+    float: left;
+    left: 0;
+    position: fixed;
+    overflow: scroll;
+}
+
+#left ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: scroll;
+  background-color: #f1f1f1;
+}
+
+/* Fix needed */
+#left li a {
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 0px 0px;
+    margin: 15px;
+    text-decoration: none;
+}
+
+#left p.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+/* Links on mouse-over */
+#left li a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+
+#right {
+  margin-left: 210px;
+  float: left;
+}
+
+.bottompage {
+    top: 650px;
+    position: absolute;
+    clear: both;
+    
+}
+
+

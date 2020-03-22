@@ -1,24 +1,25 @@
-{% extends 'reuse/homepage.html' %}
+{% extends 'reuse/base.html' %}
 {% load staticfiles %}
 
 {% block title_block %}
     {{ category.name }}
 {% endblock %}
 
-        {% block body_block %}
+{% block titlebar_block %}
+    Explore
+{% endblock %}
 
-        {% if category %}
-          <h1> {{ category.name }} </h1>
-            <ul>
-             {% if subcategories %} 
+{% block body_block %}
+
+    {% if category %}
+        <h1> {{ category.name }} </h1>
+            {% if subcategories %}
                 <ul>
-                {% for subcategory in subcategories %}
-                <li><a href="/reuse/{{ category.slug }}/{{ subcategory.slug }}">{{ subcategory.name}}</li>
-                 {% endfor %}
+                    {% for subcategory in subcategories %}
+                        <li><a href="/reuse/{{ category.slug }}/{{ subcategory.slug }}">{{ subcategory.name}}</li>
+                        {% endfor %}
                 </ul>
             {% endif %}
-        {% endif %} 
-
-         
-        {% endblock %}
+    {% endif %}
+{% endblock %}
    
