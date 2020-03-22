@@ -1,20 +1,14 @@
-{% extends 'reuse/base.html' %}
+{% extends 'reuse/profile.html' %}
 {% load staticfiles %}
 
 {% block title_block %}
     Wishlist
 {% endblock %}
 
-{% block titlebar_block %}
-    My Profile
-{% endblock %}
-
 {% block body_block %}
  
     <h1>Wishlist</h1>
-    <h1>{{ product.name }}</h1>
-	<h1>{{ product.description }}</h1>
-	<h1>{{ product.price}}</h1>
+
     {% if products %}
     <ul>
         {% for product in products %}
