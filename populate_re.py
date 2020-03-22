@@ -60,3 +60,4 @@ def add_subcat(cat, name):
 if __name__ == '__main__':
     print('Starting re population script...')
     populate()
+    
