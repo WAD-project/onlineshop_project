@@ -31,7 +31,13 @@ def homepage(request):
 def about(request):
     return render(request,'reuse/about.html')
 
-
+def faq(request):
+    return render(request, 'reuse/faq.html')
+    
+def contact_us(request):
+    # Add stuff here
+    return render(request, 'reuse/contact_us.html')
+    
 @login_required
 def add_product(request, category_name_slug, subcategory_name_slug):
     try:
@@ -89,6 +95,7 @@ def register(request):
             user.save()
             profile = profile_form.save(commit=False)
             profile.user = user
+            print(profile.user)
 
             if 'picture' in request.FILES:
                 profile.picture = request.FILES['picture']
@@ -144,13 +151,14 @@ def view_profile(request):
 Login view 
 """
 def user_login(request):
-    if request.method=='POST':
-        username=request.POST.get('username')
-        password=request.POST.get('password')
-        user=authenticate(request,username=username, password=password)
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+        print(user)
         if user:
             if user.is_active:
-                login(request,user)
+                login(request, user)
                 return redirect (reverse ('reuse:homepage'))
             else:
                 return HttpResponse("Your account is disabled")
