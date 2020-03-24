@@ -1,7 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
+
 from reuse.models import Category, Subcategory, Product, CurrentProduct, UserProfile
 from reuse.forms import ProductForm, UserForm, UserProfileForm,  UserUpdateForm,ProfileUpdateForm
+
+
+
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
@@ -17,14 +21,10 @@ from django.http import JsonResponse
 # Create your views here.
 
 def homepage(request):
-    category_list = Category.objects.order_by('name')
     context_dict = {}
     context_dict['title'] = 'Welcome'
-    context_dict['categories'] = {}
     #recently_added = CurrentProduct.objects.order_by('-dat')[:4]
     #context_dict["recently_added"]=recently_added
-    for cat in category_list:
-        context_dict['categories'][cat] = Subcategory.objects.filter(category=cat).order_by('name')
         
     response = render(request, 'reuse/homepage.html', context = context_dict)
     return response
@@ -287,6 +287,7 @@ def manage(request):
     return render(request, 'reuse/manage.html')
 
 
+
 def wishlist(request):
     category_list = Category.objects.order_by('name')
     context_dict = {}
@@ -296,6 +297,20 @@ def wishlist(request):
     for cat in category_list:
         context_dict['categories'][cat] = Subcategory.objects.filter(category=cat).order_by('name')
     return render(request,'reuse/wishlist.html',context_dict)
+
+def wishlist(request):
+    user = request.user.id
+    try:
+        userProfile = UserProfile.objects.get(user=user)
+    except userProfile.DoesNotExist:
+        print("you don't have a userprofile")
+        return redirect('/reuse/')
+        
+    wishlist = Wishlist.objects.filter(user=userProfile)
+    #to be completed
+    return render(request,'reuse/wishlist.html')
+
+
 def shoppingcart(request):
     return render(request,'reuse/shoppingcart.html')
 

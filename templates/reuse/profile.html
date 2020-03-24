@@ -9,7 +9,18 @@
     My Profile
 {% endblock %}
 
+{% block sidebar_block %}
+    <ul>
+        <li><a href="{% url 'reuse:change_password' %}">Change Password </a></li>
+        <li><a href="{% url 'reuse:edit_profile' %}">Edit Profile </a></li>
+        <li><a href="/reuse/profile/add_a_product/">Add Product</a></li>
+        <li><a href="/reuse/profile/wishlist/">Wishlist</a></li>
+        <li><a href="/reuse/profile/shoppingcart/">Shopping Cart</a></li>
+    </ul>
+{% endblock %}
+
 {% block body_block %}
+
 
 
 
@@ -45,7 +56,8 @@
 
         <div class="col-lg-3 col-md-6 d-none d-lg-block">
             <p></p>
-        </div>
+
+
 
 
 
