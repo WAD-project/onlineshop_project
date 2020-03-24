@@ -5,7 +5,12 @@
 <html>
      <head lang="en">
         <meta charset="UTF-8" />
-        <link rel="stylesheet" type="text/css" href="{% static 'css/headerAndSidebar.css' %}"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+
+       <link rel="stylesheet" text="text/css" href="{% static 'css/main.css' %}">
+
         <title>
             Re -
             {% block title_block %}
@@ -13,7 +18,8 @@
         </title>
     </head>
     <body>
-        <div class="titlebar">
+
+         <div class="titlebar">
             <h1 style="text-align:center; padding:3px;">Re - <!--logo--></h1>
             <hr style="width:200px;"/>
             <h3 style="text-align:center; padding:3px;">
@@ -21,44 +27,136 @@
             {% endblock %}
             </h3>
         </div>
-        
-        <nav class="navbar">
-            <ul>
-                <li style="float:left;"><a href="{% url 'reuse:about' %}">About</a></li>
-                <li style="float:left;"><a href="{% url 'reuse:homepage' %}">Home</a></li>
-                {% if user.is_authenticated %}
-                    <li><a href="{% url 'reuse:profile' %}">My Profile</a></li>
-                    <li><a href="{% url 'reuse:change_password' %}">Change Password</a></li>
-                    <li><a href="{% url 'reuse:logout' %}">Logout</a></li>
-                {% else %}
-                    <li><a href="{% url 'reuse:register' %}">Register</a></li>
-                    <li><a href="{% url 'reuse:login' %}">Log in</a></li>
-                {% endif %}
-            </ul>
+
+
+        <!-- Navigation bar -->
+        <nav class="navbar navbar-expand-md navbar-light bg-light">
+            <a href="#" class="navbar-brand">Re-</a>
+            <!-- Hamburger button -->
+            <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarMenu">
+                <span class="navbar-toggler-icon"> </span>
+            </button>
+            <!-- Navbar content -->
+            <div class="collapse navbar-collapse" id="navbarMenu" >  
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a href="{% url 'reuse:homepage' %}" class="nav-link">Home</a>
+                    </li>
+
+                    <!-- megamenu -->
+                    <li class="nav-item dropdown d-md-block menu-area">  
+                            <a class="nav-link  dropdown-toggle" id="mega-menu" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Catalog</a>
+                            <div class="dropdown-menu mega-area">
+                               <div class="container mega-container">
+                                     <div class="row">
+                                {% if categories %}
+                               
+
+                                    {% for category, subcategories in categories.items %}
+                                    <div class="col-md-3 col-sm-4">
+                                        <h5> <a class="dropdown-item" href="/reuse/{{ category.slug }}/">{{ category.name }}</a> </h5>
+
+                                         {% if subcategories %}
+                                            {% for subcategory in subcategories %}
+                                                <a class="dropdown-item" href="/reuse/{{ category.slug }}/{{ subcategory.slug }}">{{ subcategory.name}} </a>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                    {% endfor %}
+                                {% endif %}
+
+                                <div class="col-md-3 col-sm-4 d-none d-md-block">
+                                    <a class="dropdown-item" href="/reuse/clothes/dresses/"> <img src="{% static 'images/dress.jpg' %}" alt=""> </a>
+                                    <a class="dropdown-item" href="/reuse/clothes/trousers/"> <img src="{% static 'images/trousers.jpg' %}" alt=""> </a>  
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </li>
+                    
+                    {% if user.is_authenticated %} 
+                        <li class="nav-item dropdown d-sm-none  d-md-block ">  
+                        <!-- --> 
+                            <a class="nav-link  dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >My Profile</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="{% url 'reuse:profile' %}">View profile</a>
+                                <a class="dropdown-item" href="{% url 'reuse:wishlist' %}">Wishlist</a>
+                                <a class="dropdown-item" href="{% url 'reuse:change_password' %}">Change Password</a>
+                                <a class="dropdown-item" href="{% url 'reuse:edit_profile' %}">Edit profile</a>
+                            </div>
+                        </li>
+                         <li class="nav-item  d-none d-sm-block d-md-none">
+                             <a class="nav-link"  href="{% url 'reuse:profile' %}"  >My Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'reuse:logout' %}" class="nav-link  "> Logout </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item ">
+                            <a href="{% url 'reuse:register' %}" class="nav-link ">Register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'reuse:login' %}" class="nav-link  ">Log in</a>
+                         </li>
+                {% endif %}   
+                </ul>
+            </div>
         </nav>
+
+       
+
         
-        <div id="left" class="col">
-            {% block sidebar_block %}
-                {% get_category_list %}
-            {% endblock %}
-        </div>
         
-        <div id="right" class="col">
-            <div class="welcome">
+       
+        
+        <div>
+            <div>
                 {% block welcome_block %}
                 {% endblock %}
             </div>
-            <div class="pagecontent">
+
+            <div >
                 {% block body_block %}
                 {% endblock %}
             </div>
         </div>
-        
-        <div class="bottompage">
-            <h3>Get Help</h3>
-            <a href="{% url 'reuse:faq' %}">F.A.Q.</a></br>
-            <a href="{% url 'reuse:contact_us' %}">Contact us</a>
-        </div>
-        
+
+
+
+        <footer>
+            <div class="footer-top">
+                <div class="container ">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-12 segment-one md-mb-30 sm-mb-30">
+                                <h3>Support</h3>
+                                <a href="{% url 'reuse:faq' %}">F.A.Q.</a><br />
+                                 <a href="{% url 'reuse:contact_us' %}">Contact us</a>
+                                
+                        </div>
+                        <div class="col-md-4 col-sm-12 segment-two md-mb-30 sm-mb-30">
+                            <h3>Company</h3>
+                            <a href="{% url 'reuse:about' %}">About us</a>
+                        </div>
+                        <div class="col-md-4 col-sm-12 segment-three md-mb-30 sm-mb-30">
+                            <h3>Follow us</h3>
+                            <p> Please follow us on our Social Media Profile so that you always know what`s new in our online shop</p>
+                            <a href="#"><i class="fa fa-facebook"> </i></a>
+                            <a href="#"><i class="fa fa-twitter"> </i></a>
+                            <a href="#"><i class="fa fa-instagram"> </i></a>
+                        </div>
+                    </div>
+                </div>
+                <p class="footer-bottom-text"> All images are from the royalty free website <a href="https://unsplash.com/"> Unsplash</a> 
+            </div>
+        </footer>
+       
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     </body>
 </html>
+

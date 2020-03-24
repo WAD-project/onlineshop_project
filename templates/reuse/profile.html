@@ -10,47 +10,47 @@
 {% endblock %}
 
 {% block body_block %}
-<h1> Profile </h1>
 
-<div class="jumbotron p-4">
-    <div class="container">
-        <h1 class="jumbotron-heading">{{ selected_user.username }}'s Profile</h1>
-    </div>
-</div>
+
+
+
+
 
 <div class="container">
-    <div class="row">
-        <img src="{{ MEDIA_URL }}{{ user_profile.picture }}"
-             width="300"
-             height="300"
-             alt="{{ selected_user.username }}'s profile image" />
-        <br />
-        <div>
-            {% if selected_user == user %}
-            <form method="post" action="." enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form.as_p }}
-                
-                <input type="submit" value="Update" />
-            </form>
-            {% else %}
-            <p >Username: {{ user.username }}</p>
-            <p >Email: {{ user.email }}</p>
-            <p >First name: {{ user.first_name }}</p>
-            <p >Last name: {{ user.last_name }}</p>
-            <p >Address: {{ user.streetAndNumber }}</p>
-            <p >City: {{ user.city }}</p>
-            <p> Postcode: {{ user.postcode }}</p>
-            <p> Description: {{ user.description }} </p>
-            
-            <a href="{% url 'reuse:change_password' %}"> Change Password </a>/
-            <a href="{% url 'reuse:edit_profile' %}"> Edit Profile </a>/
-            <a href="/reuse/profile/add_a_product">Add Product</a>/
-            <a href="/reuse/profile/wishlist">Wishlist</a>/
-            <a href="/reuse/profile/shoppingcart">Shopping Cart</a>
-            {% endif %}
+
+<div class="row profile-data">     
+
+        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 ">
+            <img src="{{ MEDIA_URL }}{{ picture }}" width="300" height="300" alt="{{ user.username }}'s profile image" />
+                <p ><a href="{% url 'reuse:change_password' %}"> Change Password </a></p>
+                <p> <a  href="{% url 'reuse:edit_profile' %}"> Edit Profile </a></p>
+                <p><a  href="/reuse/profile/add_a_product">Add Product</a></p>
+                <p><a href="/reuse/profile/wishlist">Wishlist</a></p>
+                <p ><a  href="/reuse/profile/shoppingcart">Shopping Cart</a></p>   
+
         </div>
-    </div>
+        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+         
+           <h4> {{ user.first_name }} {{ user.last_name }}</h4>
+           
+            <p ><i class="fa fa-user"></i>    {{ user.username }}</p>
+            <p ><i class="fa fa-envelope"></i> {{ user.email }}</p>
+            
+            <p > <i class="fa fa-map-marker"></i> {{ address }} <br /> 
+                {{ city }} <br /> {{ postcode }} </p>
+                <hr />
+            <p > <i class="fa fa-info"></i> {{ description }} </p>
+        </div>
+       
+
+        <div class="col-lg-3 col-md-6 d-none d-lg-block">
+            <p></p>
+        </div>
+
+
+
 </div>
+</div>
+
 {% endblock %}
 

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from reuse.models import Category, Subcategory, Product, CurrentProduct, UserProfile
-from reuse.forms import ProductForm, UserForm, UserProfileForm, ProfileForm, UserUpdateForm,ProfileUpdateForm
+from reuse.forms import ProductForm, UserForm, UserProfileForm,  UserUpdateForm,ProfileUpdateForm
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.http import JsonResponse
+
 
 
 
@@ -83,7 +84,15 @@ def add_product(request, category_name_slug, subcategory_name_slug):
     return render(request, 'reuse/add_product.html', {'form':form, 'subcategory':subcategory, 'category':category})
 
 
+
+
 def register(request):
+    category_list = Category.objects.order_by('name')
+    context_dict = {}
+    context_dict['title'] = 'Welcome'
+    context_dict['categories'] = {}
+    for cat in category_list:
+        context_dict['categories'][cat] = Subcategory.objects.filter(category=cat).order_by('name')
     registered = False
     if request.method == 'POST':
         user_form = UserForm(request.POST)
@@ -95,11 +104,9 @@ def register(request):
             user.save()
             profile = profile_form.save(commit=False)
             profile.user = user
-            print(profile.user)
 
             if 'picture' in request.FILES:
                 profile.picture = request.FILES['picture']
-                
             profile.save()
             registered = True
         else:
@@ -108,10 +115,11 @@ def register(request):
     else:
         user_form = UserForm()
         profile_form = UserProfileForm()
-        
+    context_dict['user_form'] = user_form
+    context_dict['profile_form'] = profile_form
+    context_dict['registered']=registered 
     return render(request,'reuse/register.html',
-    context = {'user_form': user_form,'profile_form': profile_form,
-    'registered': registered})
+    context_dict)
 
 
 """
@@ -119,33 +127,60 @@ Edit profile view
 """
 @login_required 
 def edit_profile(request):
+    #This is for the mega menu at the navbar
+    category_list = Category.objects.order_by('name')
+    context_dict = {}
+    context_dict['title'] = 'Welcome'
+    context_dict['categories'] = {}
+    for cat in category_list:
+        context_dict['categories'][cat] = Subcategory.objects.filter(category=cat).order_by('name')
+
+    #edit_profile 
     if request.method == 'POST':
-        user_form = UserUpdateForm(request.POST, instance=request.user)
-        profile_form = ProfileUpdateForm(request.POST,request.FILES,instance=request.user)
-        if user_form.is_valid() and profile_form.is_valid():
-            user = user_form.save()
-            profile = profile_form.save(commit=False)
-            profile.user = user
+        form = UserUpdateForm(request.POST, instance=request.user)
+        profile_form = ProfileUpdateForm(request.POST,request.FILES,instance=request.user.userprofile)
+        if form.is_valid() and profile_form.is_valid():
+            user_form =form.save()
+            custom_form = profile_form.save(commit=False)
+            custom_form.user = user_form
+            if 'picture' in request.FILES:
+                custom_form.picture = request.FILES['picture']
+            custom_form.save()
             messages.success(request, f'Your account has been updated!')
-            return redirect (reverse ('reuse:homepage'))
+            return redirect (reverse ('reuse:profile'))
 
     else:
-        user_form = UserUpdateForm(instance=request.user)
-        profile_form = ProfileUpdateForm(instance=request.user)
+        form = UserUpdateForm(instance=request.user)
+        profile_form = ProfileUpdateForm(instance=request.user.userprofile)
 
-    context = {
-        'form': user_form,
-        'profile_form': profile_form
-    }
-
-    return render(request, 'reuse/edit_profile.html', context)
+    context_dict ['form'] = form
+    context_dict['profile_form']=profile_form
+    return render(request, 'reuse/edit_profile.html', context_dict)
 
 """
 User Profile view
 """
 @login_required  
 def view_profile(request):
-    return render(request, 'reuse/profile.html')
+    #Need this for the mega menu at the nav bar
+    category_list = Category.objects.order_by('name')
+    context_dict = {}
+    context_dict['title'] = 'Welcome'
+    context_dict['categories'] = {}
+    for cat in category_list:
+        context_dict['categories'][cat] = Subcategory.objects.filter(category=cat).order_by('name')
+
+
+    # for the profile
+    #get user profile
+    profile=request.user.userprofile
+    context_dict['address'] = profile.address
+    context_dict['city'] = profile.city
+    context_dict['postcode'] = profile.postcode
+    context_dict['description'] = profile.description
+    context_dict['picture'] = profile.picture
+
+    return render(request, 'reuse/profile.html', context_dict)
 
 """
 Login view 
@@ -175,6 +210,14 @@ def user_logout(request):
 
 @login_required
 def change_password(request):
+    #This is for the mega menu at the navbar
+    category_list = Category.objects.order_by('name')
+    context_dict = {}
+    context_dict['title'] = 'Welcome'
+    context_dict['categories'] = {}
+    for cat in category_list:
+        context_dict['categories'][cat] = Subcategory.objects.filter(category=cat).order_by('name')
+
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
@@ -186,9 +229,10 @@ def change_password(request):
             messages.error(request, 'Please correct the error below.')
     else:
         form = PasswordChangeForm(request.user)
-    return render(request, 'reuse/change_password.html', {
-        'form': form
-    })
+    context_dict['form']=form
+    return render(request, 'reuse/change_password.html', 
+        context_dict
+    )
 
 
 
@@ -241,8 +285,17 @@ Successful login with Google Account
 """
 def manage(request):
     return render(request, 'reuse/manage.html')
+
+
 def wishlist(request):
-    return render(request,'reuse/wishlist.html')
+    category_list = Category.objects.order_by('name')
+    context_dict = {}
+    context_dict['title'] = 'Welcome'
+    context_dict['categories'] = {}
+    #recently_added = CurrentProduct.objects.order_by('-dat')[:4]
+    for cat in category_list:
+        context_dict['categories'][cat] = Subcategory.objects.filter(category=cat).order_by('name')
+    return render(request,'reuse/wishlist.html',context_dict)
 def shoppingcart(request):
     return render(request,'reuse/shoppingcart.html')
 

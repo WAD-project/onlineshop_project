@@ -23,12 +23,12 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     # this will probably change
-    streetAndNumber = models.CharField(max_length = 128, help_text = "Eg. Woodlands road 26")
-    city = models.CharField(max_length = 20, help_text = "Eg. Glasgow")
-    postcode = models.CharField(max_length = 10, help_text = "Eg. G4 7AL")
+    address = models.CharField(max_length = 128)
+    city = models.CharField(max_length = 20)
+    postcode = models.CharField(max_length = 10)
     description = models.TextField(help_text = "Tell us something about you")
     # create this folder and the link
-    picture = models.ImageField(upload_to='profile_images', blank = True)
+    picture = models.ImageField(upload_to='profile_images', default='profile_images/default-user.png')
     dob = models.DateField(null=True)
     isSeller = models.BooleanField(default = False)
     ratings = models.FloatField(null = True)

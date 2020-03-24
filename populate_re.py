@@ -25,16 +25,15 @@ def populate():
         {'name': 'Dresses'},
         {'name': 'Blouses'}]
         
-    stationarySubcat = [
-        {'name': 'Notebooks'},
-        {'name': 'Pens & Pencils'},
-        {'name': 'Other Stationary'},
-        {'name': 'Files'},
-        {'name': 'Pencil cases'}]
+    otherSubcat = [
+        {'name': 'Kid Toys'},
+        {'name': 'Kitchen Utelsils'},
+        {'name': 'Stationary'},
+        {'name': 'Other'}]
         
     categories = {'Books': {'subcategories': booksSubcat},
        'Clothes': {'subcategories': clothesSubcat},
-       'Stationary': {'subcategories': stationarySubcat}
+       'Other': {'subcategories': otherSubcat}
     }
        
     for cat, cat_data in categories.items():
