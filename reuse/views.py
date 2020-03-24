@@ -21,10 +21,12 @@ from django.http import JsonResponse
 # Create your views here.
 
 def homepage(request):
+    category_list = Category.objects.order_by('name')
     context_dict = {}
     context_dict['title'] = 'Welcome'
-    #recently_added = CurrentProduct.objects.order_by('-dat')[:4]
-    #context_dict["recently_added"]=recently_added
+    context_dict['categories'] = {}
+    for cat in category_list:
+        context_dict['categories'][cat] = Subcategory.objects.filter(category=cat).order_by('name')
         
     response = render(request, 'reuse/homepage.html', context = context_dict)
     return response
