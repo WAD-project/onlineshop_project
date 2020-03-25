@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 
-from reuse.models import Category, Subcategory, Product, CurrentProduct, UserProfile
+from reuse.models import Category, Subcategory, Product, CurrentProduct, UserProfile, Wishlist
 from reuse.forms import ProductForm, UserForm, UserProfileForm,  UserUpdateForm,ProfileUpdateForm
 
 
@@ -13,10 +13,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.http import JsonResponse
-
-
-
-
 
 # Create your views here.
 
@@ -85,7 +81,52 @@ def add_product(request, category_name_slug, subcategory_name_slug):
     
     return render(request, 'reuse/add_product.html', {'form':form, 'subcategory':subcategory, 'category':category})
 
-
+def add_to_wishlist(request, category_name_slug, subcategory_name_slug, product_name_slug):
+    try:
+       category = Category.objects.get(slug=category_name_slug)
+    except Category.DoesNotExist:
+       category = None
+       
+    try:
+       subcategory = Subcategory.objects.get(slug=subcategory_name_slug)
+    except Subcategory.DoesNotExist:
+       subcategory = None
+    
+    try:
+       product = CurrentProduct.objects.get(slug=product_name_slug)
+    except CurrentProduct.DoesNotExist:
+       product = None
+       
+    if product is None:
+       return redirect('/reuse/')
+       
+    user = request.user.id
+    try:
+        buyer = UserProfile.objects.get(user=user)
+    except UserProfile.DoesNotExist:
+        print("you don't have a userprofile")
+        return redirect(reverse('reuse:product', kwargs={'category_name_slug':category_name_slug, 'subcategory_name_slug':subcategory_name_slug, 'product_name_slug':product_name_slug}))
+        
+    if product.seller == buyer:
+        #add a popup and redirect to current window
+        print("Can't like your own products")
+        return redirect(reverse('reuse:product', kwargs={'category_name_slug':category_name_slug, 'subcategory_name_slug':subcategory_name_slug, 'product_name_slug':product_name_slug}))
+        
+    try:
+        wishlist = Wishlist.objects.get(user=buyer)
+    except Wishlist.DoesNotExist:
+        print("Can't find your wishlist")
+        return redirect(reverse('reuse:product', kwargs={'category_name_slug':category_name_slug, 'subcategory_name_slug':subcategory_name_slug, 'product_name_slug':product_name_slug}))
+    
+    if request.method == 'POST':
+        if product:
+            wishlist.products.add(product)
+            wishlist.save()
+            # Change to pop up
+            return redirect(reverse('reuse:product', kwargs={'category_name_slug':category_name_slug, 'subcategory_name_slug':subcategory_name_slug, 'product_name_slug':product_name_slug}))
+    
+    return render(request, 'reuse/product.html', {'category': category, 'subcategory': subcategory, 'product': product})
+            
 
 
 def register(request):
@@ -111,6 +152,9 @@ def register(request):
                 profile.picture = request.FILES['picture']
             profile.save()
             registered = True
+            
+            wishlist = Wishlist(user=profile)
+            wishlist.save()
         else:
             print(user_form.errors, profile_form.errors)
             
@@ -119,7 +163,7 @@ def register(request):
         profile_form = UserProfileForm()
     context_dict['user_form'] = user_form
     context_dict['profile_form'] = profile_form
-    context_dict['registered']=registered 
+    context_dict['registered'] = registered
     return render(request,'reuse/register.html',
     context_dict)
 
@@ -255,7 +299,7 @@ def show_category(request,category_name_slug):
 def show_sub(request, category_name_slug, subcategory_name_slug):
     context_dict = {}
     try:
-        category = get_object_or_404(Category, slug=category_name_slug)
+        category = Category.objects.get (slug=category_name_slug)
         subcategory = Subcategory.objects.get(slug=subcategory_name_slug)
         products = CurrentProduct.objects.filter(subcategory=subcategory)
         context_dict['subcategory'] = subcategory
@@ -289,28 +333,21 @@ def manage(request):
     return render(request, 'reuse/manage.html')
 
 
-
-def wishlist(request):
-    category_list = Category.objects.order_by('name')
-    context_dict = {}
-    context_dict['title'] = 'Welcome'
-    context_dict['categories'] = {}
-    #recently_added = CurrentProduct.objects.order_by('-dat')[:4]
-    for cat in category_list:
-        context_dict['categories'][cat] = Subcategory.objects.filter(category=cat).order_by('name')
-    return render(request,'reuse/wishlist.html',context_dict)
-
 def wishlist(request):
     user = request.user.id
     try:
         userProfile = UserProfile.objects.get(user=user)
-    except userProfile.DoesNotExist:
+    except UserProfile.DoesNotExist:
         print("you don't have a userprofile")
         return redirect('/reuse/')
-        
-    wishlist = Wishlist.objects.filter(user=userProfile)
-    #to be completed
-    return render(request,'reuse/wishlist.html')
+    
+    try:
+        wishlist = Wishlist.objects.get(user=userProfile)
+        products = wishlist.products.all()
+    except Wishlist.DoesNotExist:
+        return redirect('/reuse/')
+    
+    return render(request,'reuse/wishlist.html', {'products': products})
 
 
 def shoppingcart(request):

@@ -17,11 +17,15 @@
     <ul>
         {% for product in products %}
 		 <li><a href="/reuse/{{ category.slug }}/{{ subcategory.slug }}/{{product.slug}}">{{ product.name }}</a></li>
-        <li><a><img src="{{product.image1.url}}"></a>{{product.image1}}</li>
+        <li><a><img src="{{product.image1.url}}"></a>{{ product.image1 }}</li>
         {% endfor %}
     </ul>
     {% else %}
     <strong>This product is not available now</strong>
     {% endif %}
-  
+
+    <form id="add_to_wishlist" action="/reuse/{{ category.slug }}/{{ subcategory.slug }}/{{ product.slug }}/add_to_wishlist/" method="post">
+        {% csrf_token %}
+        <input name="submit" type="submit" value="Like" />
+    </form>
 {% endblock %}

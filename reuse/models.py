@@ -105,7 +105,7 @@ class Product(models.Model):
     slug = models.SlugField(unique = True)
     
     # put upload to with folder
-    image1 = models.ImageField(blank = True)
+    image1 = models.ImageField(upload_to='product_images', default='product_images/default.png')
     
     def save(self, *args, **kwargs):
            self.slug = slugify(self.name)
