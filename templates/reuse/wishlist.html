@@ -13,7 +13,7 @@
     <ul>
         {% for product in products %}
 		 <li><a href="/reuse/{{ category.slug }}/{{ subcategory.slug }}/{{product.slug}}">{{ product.name }}</a></li>
-        <li><a><img src="{{product.image1.url}}"></a>{{product.name}}</li>
+        <li><a><img src="{{product.image1.url}}" style="width:200px;height:200px;"></a>{{product.name}}</li>
         {% endfor %}
     </ul>
     {% else %}

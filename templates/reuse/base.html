@@ -5,11 +5,13 @@
 <html>
      <head lang="en">
         <meta charset="UTF-8" />
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
+        <!--link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+            rel="stylesheet"-->
+        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"/>
+        <!--link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css"-->
 
-       <link rel="stylesheet" text="text/css" href="{% static 'css/main.css' %}">
+       <link rel="stylesheet" text="text/css" href="{% static 'css/main.css' %}"/>
 
         <title>
             Re -
@@ -57,35 +59,22 @@
                     </li>
 
                     <!-- megamenu -->
-                    <li class="nav-item dropdown d-md-block menu-area">  
-                            <a class="nav-link  dropdown-toggle" id="mega-menu" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Catalog</a>
-                            <div class="dropdown-menu mega-area">
+                    
+                    <li class="nav-item dropdown d-md-block menu-area">
+                        <a class="nav-link  dropdown-toggle" id="mega-menu" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Catalog</a>
+                        <div class="dropdown-menu mega-area">
                                <div class="container mega-container">
                                      <div class="row">
-                                {% if categories %}
-                               
+                                        {% get_category_list %}
 
-                                    {% for category, subcategories in categories.items %}
-                                    <div class="col-md-3 col-sm-4">
-                                        <h5> <a class="dropdown-item" href="/reuse/{{ category.slug }}/">{{ category.name }}</a> </h5>
-
-                                         {% if subcategories %}
-                                            {% for subcategory in subcategories %}
-                                                <a class="dropdown-item" href="/reuse/{{ category.slug }}/{{ subcategory.slug }}">{{ subcategory.name}} </a>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                    {% endfor %}
-                                {% endif %}
-
-                                <div class="col-md-3 col-sm-4 d-none d-md-block">
-                                    <a class="dropdown-item" href="/reuse/clothes/dresses/"> <img src="{% static 'images/dress.jpg' %}" alt=""> </a>
-                                    <a class="dropdown-item" href="/reuse/clothes/trousers/"> <img src="{% static 'images/trousers.jpg' %}" alt=""> </a>  
-                                </div>
-                            </div>
-                            </div>
+                                        <div class="col-md-3 col-sm-4 d-none d-md-block">
+                                            <a class="dropdown-item" href="/reuse/clothes/dresses/"> <img src="{% static 'images/dress.jpg' %}" alt=""> </a>
+                                            <a class="dropdown-item" href="/reuse/clothes/trousers/"> <img src="{% static 'images/trousers.jpg' %}" alt=""> </a>
+                                        </div>
+                                     </div>
+                               </div>
                         </div>
-                        </li>
+                    </li>
                     
                     {% if user.is_authenticated %} 
                         <li class="nav-item dropdown d-sm-none  d-md-block ">  

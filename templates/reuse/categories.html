@@ -1,19 +1,13 @@
-<ul>
-    {% if categories %}
-        {% for category, subcategories in categories.items %}
-            <h2><li><a href="/reuse/{{ category.slug }}/">{{ category.name }}</a></li></h2>
-            <ul>
+{% if categories %}
+    {% for category, subcategories in categories.items %}
+        <div class="col-md-3 col-sm-4">
+                <h5> <a class="dropdown-item" href="/reuse/{{ category.slug }}/">{{ category.name }}</a> </h5>
+
                 {% if subcategories %}
                     {% for subcategory in subcategories %}
-                        <li><a href="/reuse/{{ category.slug }}/{{ subcategory.slug }}">{{ subcategory.name}}</a></li>
+                        <a class="dropdown-item" href="/reuse/{{ category.slug }}/{{ subcategory.slug }}">{{ subcategory.name}} </a>
                     {% endfor %}
-            
-                {% else %}
-                    <li><strong>There are no subcategories yet</strong></li>
                 {% endif %}
-            </ul>
-        {% endfor %}
-    {% else %}
-        <li><strong>There are no categories yet</strong></li>
-    {% endif %}
-</ul>
+        </div>
+    {% endfor %}
+{% endif %}
