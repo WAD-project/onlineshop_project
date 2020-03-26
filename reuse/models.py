@@ -2,9 +2,6 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 
-
-
-
 # Create your models here.
 # YEYYY Let's build some models
 
@@ -32,8 +29,10 @@ class UserProfile(models.Model):
     dob = models.DateField(null=True)
     isSeller = models.BooleanField(default = False)
     ratings = models.FloatField(null = True)
-
     slug = models.SlugField(unique = True)
+    paypal = models.BooleanField(default = False)
+    cash = models.BooleanField(default = False)
+    bank_transfer = models.BooleanField(default = False)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.user.username)

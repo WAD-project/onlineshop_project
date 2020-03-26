@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 
 from reuse.models import Category, Subcategory, Product, CurrentProduct, UserProfile, Wishlist
-from reuse.forms import ProductForm, UserForm, UserProfileForm,  UserUpdateForm,ProfileUpdateForm
+from reuse.forms import ProductForm, UserForm, UserProfileForm,  UserUpdateForm, ProfileUpdateForm, SellerForm
 from django.db.models import Q
 
 
@@ -86,6 +86,7 @@ def add_product(request, category_name_slug, subcategory_name_slug):
     
     return render(request, 'reuse/add_product.html', {'form':form, 'subcategory':subcategory, 'category':category})
 
+@login_required
 def add_to_wishlist(request, category_name_slug, subcategory_name_slug, product_name_slug):
     try:
        category = Category.objects.get(slug=category_name_slug)
@@ -179,12 +180,7 @@ Edit profile view
 @login_required 
 def edit_profile(request):
     #This is for the mega menu at the navbar
-    category_list = Category.objects.order_by('name')
     context_dict = {}
-    context_dict['title'] = 'Welcome'
-    context_dict['categories'] = {}
-    for cat in category_list:
-        context_dict['categories'][cat] = Subcategory.objects.filter(category=cat).order_by('name')
 
     #edit_profile 
     if request.method == 'POST':
@@ -205,26 +201,68 @@ def edit_profile(request):
         profile_form = ProfileUpdateForm(instance=request.user.userprofile)
 
     context_dict ['form'] = form
-    context_dict['profile_form']=profile_form
+    context_dict['profile_form'] = profile_form
     return render(request, 'reuse/edit_profile.html', context_dict)
+
+"""
+Become a seller views
+"""
+
+@login_required
+def become_a_seller(request):
+    
+    context_dict = {'title': 'Join the team'}
+    
+    user = request.user
+    context_dict['username'] = user.username
+    profile = UserProfile.objects.get(user=user)
+    
+    if request.method == 'POST':
+        form = SellerForm(request.POST)
+        listPay = request.POST.keys()
+        if 'paypal' in listPay:
+            profile.paypal = True
+        if 'cash' in listPay:
+            profile.cash = True
+        if 'bank_transfer' in listPay:
+            profile.bank_transfer = True
+        
+        profile.isSeller = True
+        profile.save()
+        return render(request, 'reuse/youre_seller.html', context_dict)
+    
+    form = SellerForm()
+    context_dict['form'] = form
+    return render(request, 'reuse/become_a_seller.html', context_dict)
+
+
+@login_required
+def you_are_seller(request):
+    
+    context_dict = {}
+    context_dict['title'] = 'Join the team'
+    context_dict['username'] = request.user.username
+    return render(request, 'reuse/youre_seller.html', context_dict)
+
+def seller_manual(request):
+    context_dict = {}
+    context_dict['title'] = 'The Seller Manual'
+    return render(request, 'reuse/seller_manual.html', context_dict)
+    
 
 """
 User Profile view
 """
+
 @login_required  
 def view_profile(request):
-    #Need this for the mega menu at the nav bar
-    category_list = Category.objects.order_by('name')
+    #Need this for the mega menu at the nav bar --> No longer, fixed with template tags <3
+    
     context_dict = {}
-    context_dict['title'] = 'Welcome'
-    context_dict['categories'] = {}
-    for cat in category_list:
-        context_dict['categories'][cat] = Subcategory.objects.filter(category=cat).order_by('name')
 
+    user = request.user
+    profile = UserProfile.objects.get(user=user)
 
-    # for the profile
-    #get user profile
-    profile=request.user.userprofile
     context_dict['address'] = profile.address
     context_dict['city'] = profile.city
     context_dict['postcode'] = profile.postcode

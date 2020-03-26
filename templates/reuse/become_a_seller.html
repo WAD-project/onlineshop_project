@@ -1,0 +1,26 @@
+{% extends 'reuse/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    {{ title }}
+{% endblock %}
+
+{% block body_block %}
+<div class="centre">
+    <h1>Become a seller</h1>
+    <h2>Join the Re* team</h2>
+    <p>We are glad to hear you'd like to become a seller, {{ username }}!<br/>
+    Becoming a seller on Re* means that you have officially taken one step forward in helping the planet. Add other text because my creativity is over</p>
+    <br/>
+    <hr style="width:80%;"/>
+    <br/>
+    <h3>How can the user pay you?</h3>
+    <h4>Please select</h4>
+    <form id="sellerForm" method="POST" action="{% url 'reuse:become_a_seller' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Become A Seller"/>
+    </form>
+    <a href="{% url 'reuse:homepage' %}">Return to the homepage</a></p>
+</div>
+{% endblock %}
