@@ -1,0 +1,24 @@
+{% extends 'reuse/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Past Orders
+{% endblock %}
+
+{% block titlebar_block %}
+    My Profile
+{% endblock %}
+
+{% block body_block %}
+
+    {% if products %}
+    <ul>
+        {% for product in products %}
+        <li><a href="{% url 'reuse:product' category_name_slug=product.category.slug, subcategory_name_slug=product.subcategory.slug, product_name_slug=product.slug">{{ product.name }}</a></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <strong>You haven't bought anything yet</strong>
+    {% endif %}
+  
+{% endblock %}

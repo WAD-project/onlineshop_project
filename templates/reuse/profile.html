@@ -9,60 +9,67 @@
     My Profile
 {% endblock %}
 
-{% block sidebar_block %}
-    <ul>
-        <li><a href="{% url 'reuse:change_password' %}">Change Password </a></li>
-        <li><a href="{% url 'reuse:edit_profile' %}">Edit Profile </a></li>
-        <li><a href="/reuse/profile/add_a_product/">Add Product</a></li>
-        <li><a href="/reuse/profile/wishlist/">Wishlist</a></li>
-        <li><a href="/reuse/profile/shoppingcart/">Shopping Cart</a></li>
-    </ul>
-{% endblock %}
-
 {% block body_block %}
-
-
-
-
-
-
-
 <div class="container">
-
-<div class="row profile-data">     
-
-        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 ">
-            <img src="{{ MEDIA_URL }}{{ picture }}" width="300" height="300" alt="{{ user.username }}'s profile image" />
-                <p ><a href="{% url 'reuse:change_password' %}"> Change Password </a></p>
-                <p> <a  href="{% url 'reuse:edit_profile' %}"> Edit Profile </a></p>
-                <p><a  href="/reuse/profile/add_a_product">Add Product</a></p>
-                <p><a href="/reuse/profile/wishlist">Wishlist</a></p>
-                <p ><a  href="/reuse/profile/shoppingcart">Shopping Cart</a></p>   
-
-        </div>
+    <div class="row profile-data">
         <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-         
-           <h4> {{ user.first_name }} {{ user.last_name }}</h4>
+            <img src="{{ MEDIA_URL }}{{ picture }}" width="300" height="300" alt="{{ user.username }}'s profile image" />
+                {% if owned %}
+                    <p><a href="{% url 'reuse:change_password' user_name_slug=the_name %}"> Change Password </a></p>
+                    <p><a href="{% url 'reuse:edit_profile' user_name_slug=the_name  %}"> Edit Profile </a></p>
+                    <p><a href="{% url 'reuse:wishlist' user_name_slug=the_name  %}">Wishlist</a></p>
+                    {% if isSeller %}
+                        <p><a href="{% url 'reuse:seller_manual' %}">Read the Seller Manual</a></p>
+                        <p><a href="{% url 'reuse:current_products' user_name_slug=the_name %}">Your Current Products</a></p>
+                        <p><a href="{% url 'reuse:sold_products' user_name_slug=the_name %}">Your Sold Products</a></p>
+                    {% else %}
+                        <p><a href="{% url 'reuse:become_a_seller' user_name_slug=the_name  %}">Become A Seller</a></p>
+                    {% endif %}
+                    <p><a href="{% url 'reuse:past_orders' user_name_slug=the_name %}">Your Past Orders</a></p>
+                {% endif %}
+        </div>
+        
+        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+            <h4> {{ user.first_name }} {{ user.last_name }}</h4>
            
-            <p ><i class="fa fa-user"></i>    {{ user.username }}</p>
-            <p ><i class="fa fa-envelope"></i> {{ user.email }}</p>
-            
-            <p > <i class="fa fa-map-marker"></i> {{ address }} <br /> 
-                {{ city }} <br /> {{ postcode }} </p>
-                <hr />
-            <p > <i class="fa fa-info"></i> {{ description }} </p>
+            <p><i class="fa fa-user"></i>{{ user.username }}</p>
+            {% if user.is_authenticated %}
+                <p><i class="fa fa-envelope"></i>{{ user.email }}</p>
+                <p><i class="fa fa-map-marker"></i>{{ address }}<br/> {{ city }} <br/> {{ postcode }} </p>
+            {% else %}
+                <p><a href="{% url 'reuse:login' %}">Log in</a> or <a href="{% url 'reuse:register' %}">Register</a> to see the user's info </p>
+            {% endif %}
+            <hr/>
+            <p><i class="fa fa-info"></i>{{ description }}</p>
         </div>
        
-
+       
+       <div>
+           {% if user.is_authenticated %}
+               {% if isSeller %}
+                    {% if products %}
+                        <h3>Currently selling:</h3>
+                        <ul>
+                            {% for product in products %}
+                                <li><a href="{% url 'reuse:product' category_name_slug=product.category.slug subcategory_name_slug=product.subcategory.slug product_name_slug=product.slug %}">{{ product.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        {% if owned %}
+                            <p>You are not currently selling anything.</p>
+                        {% else %}
+                            <p>This user is not currently selling anything.</p>
+                        {% endif %}
+                    {% endif %}
+               {% endif %}
+            {% endif %}
+        </div>
+       
         <div class="col-lg-3 col-md-6 d-none d-lg-block">
             <p></p>
+        </div>
 
-
-
-
-
+    </div>
 </div>
-</div>
-
 {% endblock %}
 

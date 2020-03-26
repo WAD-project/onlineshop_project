@@ -79,20 +79,21 @@
                         </div>
                     </li>
                     
-                    {% if user.is_authenticated %} 
+                    {% if user.is_authenticated %}
+                        {% get_user_name user as the_name %}
                         <li class="nav-item dropdown d-sm-none  d-md-block ">  
                         <!-- --> 
                             <a class="nav-link  dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >My Profile</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="{% url 'reuse:profile' %}">View profile</a>
-                                <a class="dropdown-item" href="{% url 'reuse:wishlist' %}">Wishlist</a>
-                                <a class="dropdown-item" href="{% url 'reuse:change_password' %}">Change Password</a>
-                                <a class="dropdown-item" href="{% url 'reuse:edit_profile' %}">Edit profile</a>
-                                <a class="dropdown-item" href="{% url 'reuse:become_a_seller' %}">Become a seller</a>
+                                <a class="dropdown-item" href="{% url 'reuse:profile' user_name_slug=the_name %}">View Profile</a>
+                                <a class="dropdown-item" href="{% url 'reuse:wishlist' user_name_slug=the_name %}">Wishlist</a>
+                                <a class="dropdown-item" href="{% url 'reuse:change_password' user_name_slug=the_name %}">Change Password</a>
+                                <a class="dropdown-item" href="{% url 'reuse:edit_profile' user_name_slug=the_name %}">Edit profile</a>
+                                <a class="dropdown-item" href="{% url 'reuse:become_a_seller' user_name_slug=the_name %}">Become a seller</a>
                             </div>
                         </li>
                          <li class="nav-item  d-none d-sm-block d-md-none">
-                             <a class="nav-link"  href="{% url 'reuse:profile' %}"  >My Profile</a>
+                             <a class="nav-link"  href="{% url 'reuse:profile' user_name_slug=the_name %}">My Profile</a>
                         </li>
                         <li class="nav-item">
                             <a href="{% url 'reuse:logout' %}" class="nav-link  "> Logout </a>
@@ -108,12 +109,6 @@
                 </ul>
             </div>
         </nav>
-
-       
-
-        
-        
-       
         
         <div>
             <div>
@@ -126,8 +121,6 @@
                 {% endblock %}
             </div>
         </div>
-
-
 
         <footer>
             <div class="footer-top">
