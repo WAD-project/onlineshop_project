@@ -16,6 +16,13 @@
             {% block title_block %}
             {% endblock %}
         </title>
+         
+        <style type="text/css">
+            .search-form{
+                max-width: 500px;
+                width: 100%;
+            }
+         </style>
     </head>
     <body>
 
@@ -26,6 +33,12 @@
             {% block titlebar_block %}
             {% endblock %}
             </h3>
+        </div>
+        
+        <div class="search-bar">
+            <form method="get">
+                <input type="text" class="form-control" name ="q" id="id_q" placeholder="Search...">
+            </form>    
         </div>
 
 

@@ -3,6 +3,7 @@ from django.http import HttpResponse
 
 from reuse.models import Category, Subcategory, Product, CurrentProduct, UserProfile
 from reuse.forms import ProductForm, UserForm, UserProfileForm,  UserUpdateForm,ProfileUpdateForm
+from django.db.models import Q
 
 
 
@@ -27,6 +28,10 @@ def homepage(request):
     context_dict['categories'] = {}
     for cat in category_list:
         context_dict['categories'][cat] = Subcategory.objects.filter(category=cat).order_by('name')
+    query = ""
+    if request.GET:
+        query = request.GET['q']
+        context['query'] = str(query)
         
     response = render(request, 'reuse/homepage.html', context = context_dict)
     return response
@@ -317,18 +322,32 @@ def shoppingcart(request):
     return render(request,'reuse/shoppingcart.html')
 
 
-def autocompleteModel(request):
-    if request.is_ajax():
-        q = request.GET.get('term', '').capitalize()
-        search_qs = MODEL.objects.filter(name__startswith=q)
-        results = []
-        print (q)
-        for r in search_qs:
-            results.append(r.FIELD)
-        data = json.dumps(results)
-    else:
-        data = 'fail'
-    mimetype = 'application/json'
-    return HttpResponse(data, mimetype)
+def get_shop_queryset(query=None):
+    queryset = []
+    queries = query.split(" ")
+#    for q in queries:
+#        posts = MODEL.objects.filter(
+#                Q(title_icontains=q)
+#                Q(body_icontains=q)
+#            ).distinct()
+#        
+#        for post in posts:
+#            queryset.append(post)
+            
+    return list(set(queryset))
 
+
+#def autocompleteModel(request):
+#    if request.is_ajax():
+#        q = request.GET.get('term', '').capitalize()
+#        search_qs = MODEL.objects.filter(name__startswith=q)
+#        results = []
+#        print (q)
+#        for r in search_qs:
+#            results.append(r.FIELD)
+#        data = json.dumps(results)
+#    else:
+#        data = 'fail'
+#    mimetype = 'application/json'
+#    return HttpResponse(data, mimetype)
 

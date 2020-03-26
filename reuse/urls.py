@@ -29,7 +29,7 @@ path('<slug:category_name_slug>/<slug:subcategory_name_slug>/<slug:product_name_
 #path('edit_profile/history',views.history,name='history'),
 #path('edit_profile/sold_products ',views.soldproducts,name='soldproducts'),
 #path('edit_profile/current_products_list ',views.currentproducts,name='currentproducts'),
-url(r'^ajax_calls/search/', views.autocompleteModel, name='search'),
+#url(r'^ajax_calls/search/', views.autocompleteModel, name='search'),
 
 
 
