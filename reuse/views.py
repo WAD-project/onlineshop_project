@@ -17,7 +17,9 @@ from pyrebase import pyrebase
 from django.shortcuts import render
 from operator import attrgetter
 
-# Create your views here.
+"""
+General views
+"""
 
 def homepage(request):
     category_list = Category.objects.order_by('name')
@@ -32,15 +34,104 @@ def homepage(request):
     response = render(request, 'reuse/homepage.html', context = context_dict)
     return response
 
+
 def about(request):
     return render(request,'reuse/about.html')
 
+
 def faq(request):
     return render(request, 'reuse/faq.html')
-    
+
+
 def contact_us(request):
     # Add stuff here
     return render(request, 'reuse/contact_us.html')
+
+
+"""
+Search bar view and function
+"""
+def query_result(request):
+    context_dict = {}
+    query = ""
+    if request.GET:
+        query = request.GET['q']
+        context_dict['query'] = str(query)
+    
+    product_post = None
+    if (str(query) != ""):
+        product_post = sorted(get_shop_queryset(query), key=attrgetter('date'), reverse=True)
+    else:
+        return redirect(reverse('reuse:homepage'))
+
+    context_dict['product_post'] = product_post
+    return render(request, 'reuse/search.html', context = context_dict)
+
+
+def get_shop_queryset(query=None):
+    queryset = []
+    queries = query.split(" ")
+    for q in queries:
+        posts = CurrentProduct.objects.filter(
+                Q(name__icontains=q))
+        otherposts = CurrentProduct.objects.filter(Q(description__icontains=q))
+        
+        print(posts)
+            
+    return posts
+ 
+ 
+"""
+Showing products, categories, and subcategories
+"""
+
+def show_category(request, category_name_slug):
+     context_dict = {}
+     try:
+         category = Category.objects.get(slug=category_name_slug)
+         subCat = Subcategory.objects.filter(category=category)
+         context_dict['subcategories'] = subCat
+         context_dict['category'] = category
+     except Category.DoesNotExist:
+         context_dict['subcategories'] = None
+         context_dict['category'] = None
+    
+     return render(request, 'reuse/category.html', context=context_dict)
+
+
+def show_sub(request, category_name_slug, subcategory_name_slug):
+    context_dict = {}
+        
+    try:
+        subcategory = Subcategory.objects.get(slug=subcategory_name_slug)
+        products = CurrentProduct.objects.filter(subcategory=subcategory)
+        context_dict['category'] = subcategory.category
+        context_dict['subcategory'] = subcategory
+        context_dict['products'] = products
+        context_dict['user'] = request.user
+        context_dict['profile'] = UserProfile.objects.get(user=context_dict['user'])
+    except Subcategory.DoesNotExist:
+        context_dict['subcategory'] = None
+        context_dict['products'] = None
+        context_dict['category'] = None
+    return render(request,'reuse/subcategory.html',context=context_dict)
+  
+  
+def show_product(request, category_name_slug, subcategory_name_slug, product_name_slug):
+    context_dict = {}
+    try:
+        product = CurrentProduct.objects.get(slug=product_name_slug)
+        context_dict['user'] = request.user
+        context_dict['profile'] = UserProfile.objects.get(user=context_dict['user'])
+        context_dict['subcategory'] = product.subcategory
+        context_dict['category'] = product.category
+        context_dict['product'] = product
+    except CurrentProduct.DoesNotExist:
+        context_dict['subcategory'] = None
+        context_dict['category'] = None
+        context_dict['product'] = None
+    return render(request,'reuse/product.html',context=context_dict)
+
  
 """
 Register
@@ -79,16 +170,49 @@ def register(request):
     context_dict['profile_form'] = profile_form
     context_dict['registered'] = registered
     return render(request, 'reuse/register.html', context_dict)
+    
 
 """
-Edit profile view 
+User Profile view
 """
-@login_required 
+@login_required  
+def view_profile(request, user_name_slug):
+    #Need this for the mega menu at the nav bar --> No longer, fixed with template tags <3
+    owned = False
+    context_dict = {}
+
+    profile = UserProfile.objects.get(slug=user_name_slug)
+    if request.user == profile.user:
+        owned = True
+        
+    context_dict['address'] = profile.address
+    context_dict['city'] = profile.city
+    context_dict['postcode'] = profile.postcode
+    context_dict['description'] = profile.description
+    context_dict['picture'] = profile.picture
+    context_dict['isSeller'] = profile.isSeller
+    context_dict['date_reg'] = profile.date_reg
+    context_dict['owned'] = owned
+    if profile.isSeller:
+        try:
+            products = CurrentProduct.objects.filter(seller=profile).order_by('date')
+        except CurrentProduct.DoesNotExist:
+            products = None
+        context_dict['products'] = products
+
+    return render(request, 'reuse/profile.html', context_dict)
+   
+   
+"""
+Edit profile view
+"""
+@login_required
 def edit_profile(request, user_name_slug):
     #This is for the mega menu at the navbar
     context_dict = {}
-
-    #edit_profile 
+    changed = False
+    #edit_profile
+    #work to be done here!!!
     if request.method == 'POST':
         form = UserUpdateForm(request.POST, instance=request.user)
         profile_form = ProfileUpdateForm(request.POST,request.FILES,instance=request.user.userprofile)
@@ -100,15 +224,87 @@ def edit_profile(request, user_name_slug):
                 custom_form.picture = request.FILES['picture']
             custom_form.save()
             messages.success(request, f'Your account has been updated!')
-            return redirect (reverse ('reuse:profile'))
+            changed = True
 
     else:
         form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.userprofile)
-
+    
+    context_dict['changed'] = changed
     context_dict ['form'] = form
     context_dict['profile_form'] = profile_form
     return render(request, 'reuse/edit_profile.html', context_dict)
+    
+
+"""
+Login view 
+"""
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+        print(user)
+        if user:
+            if user.is_active:
+                login(request, user)
+                return redirect(reverse('reuse:homepage'))
+            else:
+                return HttpResponse("Your account is disabled")
+        else:
+            print(f"Invalid login details:{username}, {password}")
+            return HttpResponse ("Invalid login details supplied.")
+    else:
+        return render(request, 'reuse/login.html')
+ 
+ 
+"""
+Successful login with Google Account
+"""
+def manage(request):
+    return render(request, 'reuse/manage.html')
+
+
+"""
+Logout and change password
+"""
+        
+@login_required
+def user_logout(request):
+     logout(request)
+     return redirect(reverse('reuse:homepage'))
+
+
+@login_required
+def change_password(request, user_name_slug):
+    user = request.user
+    try:
+        profile = UserProfile.objects.get(user=user)
+    except UserProfile.DoesNotExist:
+        print("No user profile")
+        return redirect(reverse('reuse:homepage'))
+        
+    context_dict = {}
+    changed = False
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  
+            messages.success(request, 'Your password has been updated successfully!')
+            user.save()
+            print("get here")
+            changed = True
+
+        else:
+            print(form.errors)
+    else:
+        form = PasswordChangeForm(request.user)
+        
+    context_dict['changed'] = changed
+    context_dict['profile'] = profile
+    context_dict['form'] = form
+    return render(request, 'reuse/change_password.html', context_dict)
 
 
 """
@@ -137,92 +333,33 @@ def become_a_seller(request, user_name_slug):
         
         profile.isSeller = True
         profile.save()
-        return render(request, 'reuse/become_a_seller.html', context_dict)
     
     form = SellerForm()
     context_dict['form'] = form
     return render(request, 'reuse/become_a_seller.html', context_dict)
 
+
 def seller_manual(request):
     context_dict = {}
     context_dict['title'] = 'The Seller Manual'
     return render(request, 'reuse/seller_manual.html', context_dict)
-    
+
 
 """
-User Profile view
+Profile insights - first for buyers, other for sellers
 """
-
-@login_required  
-def view_profile(request, user_name_slug):
-    #Need this for the mega menu at the nav bar --> No longer, fixed with template tags <3
-    owned = False
+def past_orders(request, user_name_slug):
+    user = request.user
+    profile = UserProfile.objects.get(user=user)
+    try:
+        soldProducts = SoldProduct.objects.filter(buyer=profile)
+    except SoldProduct.DoesNotExist:
+        soldProducts = None
     context_dict = {}
-
-    profile = UserProfile.objects.get(slug=user_name_slug)
-    if request.user == profile.user:
-        owned = True
-        
-    context_dict['address'] = profile.address
-    context_dict['city'] = profile.city
-    context_dict['postcode'] = profile.postcode
-    context_dict['description'] = profile.description
-    context_dict['picture'] = profile.picture
-    context_dict['isSeller'] = profile.isSeller
-    context_dict['owned'] = owned
-    if profile.isSeller:
-        try:
-            products = CurrentProduct.objects.filter(seller=profile).order_by('date')
-        except CurrentProduct.DoesNotExist:
-            products = None
-        context_dict['products'] = products
-
-    return render(request, 'reuse/profile.html', context_dict)
-    
-
-"""
-Login view 
-"""
-def user_login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
-        print(user)
-        if user:
-            if user.is_active:
-                login(request, user)
-                return redirect (reverse ('reuse:homepage'))
-            else:
-                return HttpResponse("Your account is disabled")
-        else:
-            print(f"Invalid login details:{username}, {password}")
-            return HttpResponse ("Invalid login details supplied.")
-    else:
-        return render(request, 'reuse/login.html')
-        
-@login_required
-def user_logout(request):
-     logout(request)
-     return redirect(reverse('reuse:homepage'))
-
-@login_required
-def change_password(request, user_name_slug):
-    
-    context_dict = {}
-    if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)  
-            messages.success(request, 'Your password has been updated successfully!')
-            return redirect('reuse:homepage')
-        else:
-            messages.error(request, 'Please correct the error(s) below.')
-    else:
-        form = PasswordChangeForm(request.user)
-    context_dict['form']=form
-    return render(request, 'reuse/change_password.html',ccontext_dict)
+    context_dict['user'] = user
+    context_dict['profile'] = profile
+    context_dict['products'] = soldProducts
+    return render(request, 'reuse/past_orders.html', context_dict)
 
 
 def current_products(request, user_name_slug):
@@ -255,124 +392,9 @@ def sold_products(request, user_name_slug):
     print(context_dict)
     return render(request, 'reuse/sold_products.html', context_dict)
 
-def past_orders(request, user_name_slug):
-    user = request.user
-    profile = UserProfile.objects.get(user=user)
-    try:
-        soldProducts = SoldProduct.objects.filter(buyer=profile)
-    except SoldProduct.DoesNotExist:
-        soldProducts = None
-    context_dict = {}
-    context_dict['user'] = user
-    context_dict['profile'] = profile
-    context_dict['products'] = soldProducts
-    return render(request, 'reuse/past_orders.html', context_dict)
-    
-
-def show_category(request, category_name_slug):
-     context_dict = {}
-     try:
-         category = Category.objects.get(slug=category_name_slug)
-         subCat = Subcategory.objects.filter(category=category)
-         context_dict['subcategories'] = subCat
-         context_dict['category'] = category
-     except Category.DoesNotExist:
-         context_dict['subcategories'] = None
-         context_dict['category'] = None
-    
-     return render(request, 'reuse/category.html', context=context_dict)
-
-def show_sub(request, category_name_slug, subcategory_name_slug):
-    context_dict = {}
-    try:
-        category = Category.objects.get(slug=category_name_slug)
-        context_dict['category'] = category
-    except Category.DoesNotExist:
-        context_dict['category'] = None
-        
-    try:
-        subcategory = Subcategory.objects.get(slug=subcategory_name_slug)
-        products = CurrentProduct.objects.filter(subcategory=subcategory)
-        context_dict['subcategory'] = subcategory
-        context_dict['products'] = products
-        context_dict['user'] = request.user
-        context_dict['profile'] = UserProfile.objects.get(user=context_dict['user'])
-    except Subcategory.DoesNotExist:
-        context_dict['subcategory'] = None
-        context_dict['products'] = None
-    return render(request,'reuse/subcategory.html',context=context_dict)
-    
-def show_product(request, category_name_slug, subcategory_name_slug, product_name_slug):
-    context_dict = {}
-    try:
-        category = get_object_or_404(Category,slug=category_name_slug)
-        subcategory = get_object_or_404(Subcategory,slug=subcategory_name_slug)
-        product = CurrentProduct.objects.get(slug=product_name_slug)
-        context_dict['user'] = request.user
-        context_dict['profile'] = UserProfile.objects.get(user=context_dict['user'])
-        context_dict['subcategory'] = subcategory
-        context_dict['category'] = category
-        context_dict['product'] = product
-    except CurrentProduct.DoesNotExist:
-        context_dict['subcategory'] = None
-        context_dict['category'] = None
-        context_dict['product'] = None
-    return render(request,'reuse/product.html',context=context_dict)
-
 """
-Successful login with Google Account
+Add a product view
 """
-def manage(request):
-    return render(request, 'reuse/manage.html')
-
-
-def wishlist(request, user_name_slug):
-    user = request.user.id
-    try:
-        userProfile = UserProfile.objects.get(user=user)
-    except UserProfile.DoesNotExist:
-        print("you don't have a userprofile")
-        return redirect('/reuse/')
-    
-    try:
-        wishlist = Wishlist.objects.get(user=userProfile)
-        products = wishlist.products.all()
-    except Wishlist.DoesNotExist:
-        return redirect('/reuse/')
-    
-    return render(request,'reuse/wishlist.html', {'products': products})
-
-def query_result(request):
-    context_dict = {}
-    query = ""
-    if request.GET:
-        query = request.GET['q']
-        context_dict['query'] = str(query)
-        
-    
-    product_post = None
-    if (str(query) != ""):
-        product_post = sorted(get_shop_queryset(query), key=attrgetter('date'), reverse=True)
-    else:
-        return redirect(reverse('reuse:homepage'))
-
-    context_dict['product_post'] = product_post
-    return render(request, 'reuse/search.html', context = context_dict)
-
-def get_shop_queryset(query=None):
-    queryset = []
-    queries = query.split(" ")
-    for q in queries:
-        posts = CurrentProduct.objects.filter(
-                Q(name__icontains=q))
-        otherposts = CurrentProduct.objects.filter(Q(description__icontains=q))
-        
-        print(posts)
-            
-    return posts
-
-
-
 
 @login_required
 @user_is_seller
@@ -419,7 +441,26 @@ def add_product(request, category_name_slug, subcategory_name_slug):
             print(form.errors)
     
     return render(request, 'reuse/add_product.html', {'form':form, 'subcategory':subcategory, 'category':category, 'added':added})
+
+"""
+Wishlist and add to wishlist
+"""
+@login_required
+def wishlist(request, user_name_slug):
+    user = request.user.id
+    try:
+        userProfile = UserProfile.objects.get(user=user)
+    except UserProfile.DoesNotExist:
+        print("you don't have a userprofile")
+        return redirect('/reuse/')
     
+    try:
+        wishlist = Wishlist.objects.get(user=userProfile)
+        products = wishlist.products.all()
+    except Wishlist.DoesNotExist:
+        return redirect('/reuse/')
+    
+    return render(request,'reuse/wishlist.html', {'products': products})
 
 @login_required
 def add_to_wishlist(request, category_name_slug, subcategory_name_slug, product_name_slug):
@@ -462,6 +503,8 @@ def add_to_wishlist(request, category_name_slug, subcategory_name_slug, product_
             return redirect(reverse('reuse:product', kwargs={'category_name_slug':category_name_slug, 'subcategory_name_slug':subcategory_name_slug, 'product_name_slug':product_name_slug}))
     
     return render(request, 'reuse/product.html', {'category': category, 'subcategory': subcategory, 'product': product})
+
+
 
 
 

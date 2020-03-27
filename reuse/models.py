@@ -33,6 +33,7 @@ class UserProfile(models.Model):
     paypal = models.BooleanField(default = False)
     cash = models.BooleanField(default = False)
     bank_transfer = models.BooleanField(default = False)
+    date_reg = models.DateField(auto_now_add=True, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.user.username)
@@ -116,7 +117,6 @@ class Product(models.Model):
         return self.name
 
 class CurrentProduct(Product):
-    # still miss the folder
     image2 = models.ImageField(upload_to='product_images', blank = True)
     image3 = models.ImageField(upload_to='product_images', blank = True)
     image4 = models.ImageField(upload_to='product_images', blank = True)

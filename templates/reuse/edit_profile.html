@@ -10,19 +10,23 @@
 {% endblock %}
 
 {% block body_block %}
-	
-    <div class="container">
-        <div class="edit-profile">
-        <h1>Edit Profile</h1>
-        <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <table>
-        {{ form.as_table }}
-        {{ profile_form.as_table}}
-        </table>
-        <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-        <br/>
+<div class="container">
+    <div class="edit-profile">
+        {% if changed %}
+            <strong>Your profile has beed updated successfully!</strong>
+            <p>Go to <a href="{% url 'reuse:profile' the_name %}">your profile page </a>or back to the <a href="{% url 'reuse:homepage' %}">Homepage</a></p><br />
+        {% else %}
+            <h1>Edit Profile</h1>
+            <form method="post" enctype="multipart/form-data" action="{% url 'reuse:edit_profile' the_name %}">
+                {% csrf_token %}
+                <table>
+                    {{ form.as_table }}
+                    {{ profile_form.as_table}}
+                </table>
+                <input type="submit" class="btn btn-primary" value="Submit"/>
+            </form>
+            <br/>
+        {% endif %}
     </div>
-    </div>
+</div>
 {% endblock %}
