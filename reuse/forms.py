@@ -13,12 +13,15 @@ class ProductForm (forms.ModelForm):
     description = forms.CharField(help_text="Enter short description of the product.")
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
     price = forms.FloatField(help_text="Price of the product.", min_value=0)
-    slug = forms.CharField(widget=forms.HiddenInput(), required=False) 
+
     class Meta:
         model = CurrentProduct
         exclude=('subcategory', 'category', 'seller',)
         
-
+class SellerForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ('paypal', 'cash', 'bank_transfer',)
 
 class UserForm(forms.ModelForm):
     password=forms.CharField(widget=forms.PasswordInput())
@@ -44,15 +47,12 @@ class UserForm(forms.ModelForm):
         fields = ('first_name', 'last_name', 'username', 'email', 'password',)
 
 
-
-
 class UserProfileForm(forms.ModelForm):
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
     class Meta:
         model = UserProfile
         fields = ('city', 'postcode', 'description','picture', 'address')
     field_order=['address', 'postcode', 'city', 'description', 'picture']
-
 
 
 class UserUpdateForm(forms.ModelForm):

@@ -2,9 +2,6 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 
-
-
-
 # Create your models here.
 # YEYYY Let's build some models
 
@@ -32,8 +29,10 @@ class UserProfile(models.Model):
     dob = models.DateField(null=True)
     isSeller = models.BooleanField(default = False)
     ratings = models.FloatField(null = True)
-
     slug = models.SlugField(unique = True)
+    paypal = models.BooleanField(default = False)
+    cash = models.BooleanField(default = False)
+    bank_transfer = models.BooleanField(default = False)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.user.username)
@@ -100,11 +99,10 @@ class Product(models.Model):
     category = models.ForeignKey(Category, blank=True, null=True, on_delete = models.CASCADE)
     description = models.TextField(help_text = "Tell the buyers something about your product")
     price = models.FloatField(default = 0, help_text = "3.50")
-    dat = models.DateField(auto_now_add=True, blank=True, null=True)
+    date = models.DateField(auto_now_add=True, blank=True, null=True)
     # do i need this to be unique?
     slug = models.SlugField(unique = True)
     
-    # put upload to with folder
     image1 = models.ImageField(upload_to='product_images', default='product_images/default.png')
     
     def save(self, *args, **kwargs):
@@ -119,10 +117,10 @@ class Product(models.Model):
 
 class CurrentProduct(Product):
     # still miss the folder
-    image2 = models.ImageField(blank = True)
-    image3 = models.ImageField(blank = True)
-    image4 = models.ImageField(blank = True)
-    image5 = models.ImageField(blank = True)
+    image2 = models.ImageField(upload_to='product_images', blank = True)
+    image3 = models.ImageField(upload_to='product_images', blank = True)
+    image4 = models.ImageField(upload_to='product_images', blank = True)
+    image5 = models.ImageField(upload_to='product_images', blank = True)
     seller = models.ForeignKey(UserProfile, on_delete = models.CASCADE, related_name="seller")
     
 class SoldProduct(Product):

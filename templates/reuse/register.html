@@ -13,7 +13,7 @@
 	<h1>Register for Re</h1>
 	{% if registered %}
 		<strong>Thank you for registering!</strong>
-		<a href="{% url 'reuse:login' %}">Go to the Log in page.</a><br />
+        <p>Go to the <a href="{% url 'reuse:login' %}">Log in page </a>or back to the <a href="{% url 'reuse:homepage' %}">Homepage</a></p><br />
 	{% else %}
 		<strong>Register here!</strong><br />
 		<form id="user_form" method="post" action="{% url 'reuse:register' %}" enctype="multipart/form-data">

@@ -10,20 +10,25 @@
 {% endblock %}
 
 {% block body_block %}
-    <h1>Add a Product to {{ subcategory.name }}</h1>
-        <div>
-            <form id="product_form" method="post" action="/reuse/{{ category.slug }}/{{ subcategory.slug }}/add_product/">
-                {% csrf_token %}
-                {% for hidden in form.hidden_fields %}
-                    {{ hidden }}
-                {% endfor %}
-                {% for field in form.visible_fields %}
-                    {{ field.errors }}
-                    {{ field.help_text }} 
-                    {{ field }}
-					<br/>
-                {% endfor %}
-                <input type="submit" name="submit" value="Create Product" />
-            </form>
-        </div>
+    {% if added %}
+        <h1>{{ product.name }} added successfully!</h1>
+        <p>See <a href="{% url 'reuse:product' category_name_slug=category.slug subcategory_name_slug=subcategory.slug product_name_slug=product.slug %}">your product </a>, or go back to <a href="{% url 'reuse:profile' %}">your profile </a>or the <a href="{% url 'reuse:homepage' %}">Homepage</a></p>
+    {% else %}
+        <h1>Add a Product to {{ subcategory.name }}</h1>
+            <div>
+                <form id="product_form" method="post" action="/reuse/{{ category.slug }}/{{ subcategory.slug }}/add_product/">
+                    {% csrf_token %}
+                    {% for hidden in form.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+                    {% for field in form.visible_fields %}
+                        {{ field.errors }}
+                        {{ field.help_text }}
+                        {{ field }}
+                        <br/>
+                    {% endfor %}
+                    <input type="submit" name="submit" value="Create Product" />
+                </form>
+            </div>
+    {% endif %}
 {% endblock %}
