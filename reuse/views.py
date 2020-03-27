@@ -13,6 +13,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.http import JsonResponse
+from pyrebase import pyrebase
+from django.shortcuts import render
 
 # Create your views here.
 
@@ -452,4 +454,32 @@ def add_to_wishlist(request, category_name_slug, subcategory_name_slug, product_
             return redirect(reverse('reuse:product', kwargs={'category_name_slug':category_name_slug, 'subcategory_name_slug':subcategory_name_slug, 'product_name_slug':product_name_slug}))
     
     return render(request, 'reuse/product.html', {'category': category, 'subcategory': subcategory, 'product': product})
+
+
+
+config = {
+    'apiKey': "AIzaSyBy-6FZq9Ye6hY_43_Yy49nCL1dBeo-Hcg",
+    'authDomain': "re-messagingapp-f367c.firebaseapp.com",
+    'databaseURL': "https://re-messagingapp-f367c.firebaseio.com",
+    'projectId': "re-messagingapp-f367c",
+    'storageBucket': "re-messagingapp-f367c.appspot.com",
+    'messagingSenderId': "580230052480",
+    'appId': "1:580230052480:web:b96ad2766de3d9f9044465",
+    'measurementId': "G-QC8JTNCKDP"
+}
+firebase = pyrebase.initialize_app(config)
+auth = firebase.auth()
+
+def singIn(request):
+    return render(request, "signIn.html")
+    def postsign(request):
+        email=request.POST.get('email')
+        passw = request.POST.get("pass")
+        try:
+            user = auth.sign_in_with_email_and_password(email,passw)
+        except:
+            message = "invalid cerediantials"
+        return render(request,"signIn.html",{"msg":message})
+    print(user)
+    return render(request, "welcome.html",{"e":email})
             

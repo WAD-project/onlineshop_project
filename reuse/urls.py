@@ -2,6 +2,7 @@ from django.urls import path
 from reuse import views
 from django.conf.urls import url
 from django.conf.urls import include
+from django.contrib import admin
 
 
 app_name = 'reuse'
@@ -29,6 +30,9 @@ path('<slug:category_name_slug>/<slug:subcategory_name_slug>/',views.show_sub, n
 path('<slug:category_name_slug>/<slug:subcategory_name_slug>/add_product/', views.add_product, name='add_product'),
 path('<slug:category_name_slug>/<slug:subcategory_name_slug>/<slug:product_name_slug>/', views.show_product, name='product'),
 path('<slug:category_name_slug>/<slug:subcategory_name_slug>/<slug:product_name_slug>/add_to_wishlist/', views.add_to_wishlist, name='add_to_wishlist'),
+url(r'^admin/', admin.site.urls),
+url(r'^$',views.singIn),
+#url(r'^postsign/',views.postsign),
 
 
 #url(r'^ajax_calls/search/', views.autocompleteModel, name='search'),
