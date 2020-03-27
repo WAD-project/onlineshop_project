@@ -1,0 +1,21 @@
+.jumbotron h2{
+	color:#C2B4D6;
+}
+
+.first-paragraph:before{
+	content:"|";
+	color: #C2B4D6;
+	padding-right: 10px;
+}
+
+.container{
+	margin-top: 50px;
+	margin-bottom: 50px;
+}
+
+.container i{
+	color:#C2B4D6;
+}
+.container h1{
+	color:#C2B4D6;
+}
