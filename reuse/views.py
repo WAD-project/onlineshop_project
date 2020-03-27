@@ -15,6 +15,7 @@ from django.urls import reverse
 from django.http import JsonResponse
 from pyrebase import pyrebase
 from django.shortcuts import render
+from operator import attrgetter
 
 # Create your views here.
 
@@ -27,14 +28,6 @@ def homepage(request):
         context_dict['categories'][cat] = Subcategory.objects.filter(category=cat).order_by('name')
         
     #context_dict['recently'] = CurrentProduct.objects.order_by('date')[5]
-    
-    query = ""
-    if request.GET:
-        query = request.GET['q']
-        context['query'] = str(query)
-    
-    product_posts = sorted(get_shop_queryset(query), key=attrgetter('date_uploaded', reverse=True))
-    context['product_posts']=product_posts
     
     response = render(request, 'reuse/homepage.html', context = context_dict)
     return response
@@ -116,6 +109,7 @@ def edit_profile(request, user_name_slug):
     context_dict ['form'] = form
     context_dict['profile_form'] = profile_form
     return render(request, 'reuse/edit_profile.html', context_dict)
+
 
 """
 Become a seller views
@@ -348,20 +342,34 @@ def wishlist(request, user_name_slug):
     
     return render(request,'reuse/wishlist.html', {'products': products})
 
+def query_result(request):
+    context_dict = {}
+    query = ""
+    if request.GET:
+        query = request.GET['q']
+        context_dict['query'] = str(query)
+        
+    
+    product_post = None
+    if (str(query) != ""):
+        product_post = sorted(get_shop_queryset(query), key=attrgetter('date'), reverse=True)
+    else:
+        return redirect(reverse('reuse:homepage'))
+
+    context_dict['product_post'] = product_post
+    return render(request, 'reuse/search.html', context = context_dict)
 
 def get_shop_queryset(query=None):
     queryset = []
     queries = query.split(" ")
     for q in queries:
-        posts = product_posts.objects.filter(
-                Q(title_icontains=q),
-                Q(body_icontains=q)
-            ).distinct()
+        posts = CurrentProduct.objects.filter(
+                Q(name__icontains=q))
+        otherposts = CurrentProduct.objects.filter(Q(description__icontains=q))
         
-        for post in posts:
-            queryset.append(post)
+        print(posts)
             
-    return list(set(queryset))
+    return posts
 
 
 
