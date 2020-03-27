@@ -30,7 +30,10 @@ def homepage(request):
     if request.GET:
         query = request.GET['q']
         context['query'] = str(query)
-        
+    
+    product_posts = sorted(get_shop_queryset(query), key=attrgetter('date_uploaded', reverse=True))
+    context['product_posts']=product_posts
+    
     response = render(request, 'reuse/homepage.html', context = context_dict)
     return response
 
@@ -347,14 +350,14 @@ def wishlist(request, user_name_slug):
 def get_shop_queryset(query=None):
     queryset = []
     queries = query.split(" ")
-#    for q in queries:
-#        posts = MODEL.objects.filter(
-#                Q(title_icontains=q)
-#                Q(body_icontains=q)
-#            ).distinct()
-#        
-#        for post in posts:
-#            queryset.append(post)
+    for q in queries:
+        posts = product_posts.objects.filter(
+                Q(title_icontains=q),
+                Q(body_icontains=q)
+            ).distinct()
+        
+        for post in posts:
+            queryset.append(post)
             
     return list(set(queryset))
 

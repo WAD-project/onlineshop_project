@@ -20,5 +20,17 @@
     {% else %}
         <strong>You are not selling any product yet</strong>
     {% endif %}
+
+    {if products_posts %}
+        {% for product in product_posts %}
+            <div class="product-post-container">
+                {% include 'search.html' with product_posts=post %}
+            </div>
+        {% end for %}
+    {% else %}
+        <div class="prodiuct-post-container">
+            {% include 'search.html' with query=query %}
+        </div>
+    {% endif %}
   
 {% endblock %}

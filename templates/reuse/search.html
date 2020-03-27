@@ -1,23 +1,52 @@
-<!--
-{% extends 'reuse/base.html' %}
-{% load staticfiles %}
+<style type="text/css">
+    .card{
+        max-width: 700px;
+    }
+    .card-body{
+        padding:20px;
+        width:100%;
+    }
+</style>
 
-{% block title_block %}
-    Search
-{% endblock %}
-
-{% block titlebar_block %}
-    Search
-{% endblock %}
-
-{% block body_block %}
-    <h1>Please fill the search bar</h1>
-    <form id=”search” method=”POST” action=”{% url ‘search’ %}”>
-        {% csrf_token %}
-        <input type=”text” class=”form-control” id=”txtSearch” name=”txtSearch”>
-            <button type=”submit” class=”btn btn-default btn-submit”>Submit</button>
-    </form>
-
-{% endblock %}
-
--->
+{% if product_post %}
+<div class="container">
+    <div class="row">
+        
+        <div class="card m-auto">
+            <a href="{% url 'reuse: base' post.slug %}">
+                <img class="card-img-top" src"{{product_post.image.url}}"
+            </a>
+                
+            <div class="card-body">
+                <a href="{% url 'reuse: base' post.slug %}">
+                    <h2 class="card-title">{{product_post.title}}</h2>
+                </a>
+                <p class="card-text">{{product_post.descriptions|truncatechars:200}}</p>
+                {% if seller == request.user%}
+                    <a href="{% url 'reuse: add_product' product_post.slug %}">Update</a>
+                {% endif %}
+                </div>
+            <div class="card-footer text-muted">   
+                Updated on {{product_post.date_updated}} by {{seller}}
+            </div>
+        </div>
+    </div>
+</div>
+    
+{% else %}
+    
+<div class="contaner">
+    <div class="row">
+        <div class="card m-auto">
+            <div class="card-body">
+                <h2 class="card-title">
+                    No results
+                </h2>
+                <p class="card-text">
+                    There were no results matching your search: "{{query}}"
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% end if %}
