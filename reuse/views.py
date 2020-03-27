@@ -374,17 +374,4 @@ def get_shop_queryset(query=None):
     return list(set(queryset))
 
 
-#def autocompleteModel(request):
-#    if request.is_ajax():
-#        q = request.GET.get('term', '').capitalize()
-#        search_qs = MODEL.objects.filter(name__startswith=q)
-#        results = []
-#        print (q)
-#        for r in search_qs:
-#            results.append(r.FIELD)
-#        data = json.dumps(results)
-#    else:
-#        data = 'fail'
-#    mimetype = 'application/json'
-#    return HttpResponse(data, mimetype)
 
