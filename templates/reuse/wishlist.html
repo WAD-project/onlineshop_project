@@ -12,12 +12,13 @@
     {% if products %}
     <ul>
         {% for product in products %}
-		 <li><a href="/reuse/{{ category.slug }}/{{ subcategory.slug }}/{{product.slug}}">{{ product.name }}</a></li>
-        <li><a><img src="{{product.image1.url}}" style="width:200px;height:200px;"></a>{{product.name}}</li>
+            <li><a href="{% url 'reuse:product' product.category.slug product.subcategory.slug product.slug %}">{{ product.name }}</a></li>
+            <li><img src="{{ product.image1.url }}" style="width:200px;height:200px;"></li>
         {% endfor %}
     </ul>
     {% else %}
-    <strong>No products currently in this wishlist.</strong>
-    {% endif %}
-  
+        <strong>Your wishlist is still empty.</strong>
+        <p>What are you waiting for? It's second-hand shopping time!</p>
+   {% endif %}
+
 {% endblock %}

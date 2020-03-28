@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 
 from reuse.models import Category, Subcategory, Product, CurrentProduct, UserProfile, Wishlist, SoldProduct
-from reuse.forms import ProductForm, UserForm, UserProfileForm,  UserUpdateForm, ProfileUpdateForm, SellerForm
+from reuse.forms import ProductForm, UserForm, UserProfileForm,  UserUpdateForm, ProfileUpdateForm, SellerForm #UpdateProductForm
 from django.db.models import Q
 from reuse.decorators import user_is_seller
 
@@ -75,8 +75,6 @@ def get_shop_queryset(query=None):
         posts = CurrentProduct.objects.filter(
                 Q(name__icontains=q))
         otherposts = CurrentProduct.objects.filter(Q(description__icontains=q))
-        
-        print(posts)
             
     return posts
  
@@ -108,8 +106,12 @@ def show_sub(request, category_name_slug, subcategory_name_slug):
         context_dict['category'] = subcategory.category
         context_dict['subcategory'] = subcategory
         context_dict['products'] = products
-        context_dict['user'] = request.user
-        context_dict['profile'] = UserProfile.objects.get(user=context_dict['user'])
+        if request.user.is_anonymous:
+            context_dict['user'] = "Nope"
+        else:
+            context_dict['user'] = request.user
+            context_dict['profile'] = UserProfile.objects.get(user=context_dict['user'])
+            
     except Subcategory.DoesNotExist:
         context_dict['subcategory'] = None
         context_dict['products'] = None
@@ -119,13 +121,19 @@ def show_sub(request, category_name_slug, subcategory_name_slug):
   
 def show_product(request, category_name_slug, subcategory_name_slug, product_name_slug):
     context_dict = {}
-    try:
-        product = CurrentProduct.objects.get(slug=product_name_slug)
+    if request.user.is_anonymous:
+        context_dict['user'] = "Nope"
+    else:
         context_dict['user'] = request.user
         context_dict['profile'] = UserProfile.objects.get(user=context_dict['user'])
+    
+    try:
+        product = CurrentProduct.objects.get(slug=product_name_slug)
         context_dict['subcategory'] = product.subcategory
         context_dict['category'] = product.category
+        context_dict['seller'] = product.seller
         context_dict['product'] = product
+        print(context_dict)
     except CurrentProduct.DoesNotExist:
         context_dict['subcategory'] = None
         context_dict['category'] = None
@@ -184,7 +192,8 @@ def view_profile(request, user_name_slug):
     profile = UserProfile.objects.get(slug=user_name_slug)
     if request.user == profile.user:
         owned = True
-        
+    else:
+        context_dict['otheruser'] = profile.user
     context_dict['address'] = profile.address
     context_dict['city'] = profile.city
     context_dict['postcode'] = profile.postcode
@@ -425,6 +434,8 @@ def add_product(request, category_name_slug, subcategory_name_slug):
         print("you don't have a userprofile")
         return redirect('/reuse/')
     
+    product = None
+    
     if request.method =='POST':
         form = ProductForm(request.POST)
 
@@ -436,12 +447,64 @@ def add_product(request, category_name_slug, subcategory_name_slug):
                 product.seller = seller
                 product.save()
                 added = True
-                return render(request, 'reuse/add_product.html', {'form':form, 'subcategory':subcategory, 'category':category, 'product':product, 'added':added})
+    
         else:
             print(form.errors)
+    else:
+        form = ProductForm()
     
-    return render(request, 'reuse/add_product.html', {'form':form, 'subcategory':subcategory, 'category':category, 'added':added})
+    return render(request, 'reuse/add_product.html', {'form':form, 'subcategory':subcategory, 'category':category, 'product':product, 'added':added})
 
+
+"""
+Manage and sell products
+"""
+
+""" THIS BASTARD DOES NOT WORK
+@login_required
+def manage_product(request, category_name_slug, subcategory_name_slug, product_name_slug):
+    
+    context_dict = {'title': 'Manage your products'}
+    
+    user = request.user.id
+    try:
+        seller = UserProfile.objects.get(user=user)
+    except UserProfile.DoesNotExist:
+        print("you don't have a userprofile")
+        return redirect('/reuse/')
+    
+    modif = False
+    try:
+        product = CurrentProduct.objects.get(slug = product_name_slug)
+        category = product.category
+        subcategory = product.subcategory
+        slug = product.slug
+        name = product.name
+    except CurrentProduct.DoesNotExist:
+        product = None
+    
+    if request.method == 'POST':
+        form = UpdateProductForm(request.POST, instance=product)
+        
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.save()
+            modif = True
+        else:
+            print(form.errors)
+        
+    else:
+        form = UpdateProductForm(instance = product)
+        
+    context_dict['form'] = form
+    return render(request, 'reuse/manage_product.html', {'form':form, 'product':product, 'modif':modif})
+ 
+"""
+
+def sell_product(request, category_name_slug, subcategory_name_slug, product_name_slug):
+    context_dict = {'title':'Sell your product'}
+    return render(request, 'reuse/sell_product.html', context_dict)
+    
 """
 Wishlist and add to wishlist
 """
@@ -456,7 +519,7 @@ def wishlist(request, user_name_slug):
     
     try:
         wishlist = Wishlist.objects.get(user=userProfile)
-        products = wishlist.products.all()
+        products = wishlist.products.filter(wishlist=wishlist)
     except Wishlist.DoesNotExist:
         return redirect('/reuse/')
     

@@ -6,14 +6,18 @@
 {% endblock %}
 
 {% block titlebar_block %}
-    My Profile
+    {% if owned %}
+        My Profile
+    {% else %}
+        {{ otheruser.username }}'s Profile
+    {% endif %}
 {% endblock %}
 
 {% block body_block %}
 <div class="container">
     <div class="row profile-data">
         <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-            <img src="{{ MEDIA_URL }}{{ picture }}" width="300" height="300" alt="{{ user.username }}'s profile image" />
+            <img src="{{ picture.url }}" width="300" height="300" alt="profile image" />
                 {% if owned %}
                     <p><a href="{% url 'reuse:change_password' user_name_slug=the_name %}"> Change Password </a></p>
                     <p><a href="{% url 'reuse:edit_profile' user_name_slug=the_name  %}"> Edit Profile </a></p>
@@ -30,11 +34,21 @@
         </div>
         
         <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-            <h4> {{ user.first_name }} {{ user.last_name }}</h4>
-           
-            <p><i class="fa fa-user"></i>{{ user.username }}</p>
+            
+            {% if owned %}
+                <h4>{{ user.fist_name }} {{ user.last_name}}</h4>
+                <p><i class="fa fa-user"></i>{{ user.username }}</p>
+            {% else %}
+                <h4>{{ otheruser.first_name }}  {{ otheruser.last_name }}</h4>
+                <p><i class="fa fa-user"></i>{{ otheruser.username }}</p>
+            {% endif %}
+        
             {% if user.is_authenticated %}
-                <p><i class="fa fa-envelope"></i>{{ user.email }}</p>
+                {% if owned %}
+                    <p><i class="fa fa-envelope"></i>{{ user.email }}</p>
+                {% else %}
+                    <p><i class="fa fa-envelope"></i>{{ otheruser.email }}</p>
+                {% endif %}
                 <p><i class="fa fa-map-marker"></i>{{ address }}<br/> {{ city }} <br/> {{ postcode }} </p>
             {% else %}
                 <p><a href="{% url 'reuse:login' %}">Log in</a> or <a href="{% url 'reuse:register' %}">Register</a> to see the user's info </p>

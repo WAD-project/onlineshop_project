@@ -2,21 +2,22 @@
 {% load staticfiles %}
 
 {% block title_block %}
-	Add a Product
+    Sell Product
 {% endblock %}
 
 {% block titlebar_block %}
-    Add a Product
+    Sell Product
 {% endblock %}
 
 {% block body_block %}
-    {% if added %}
-        <h1>{{ product.name }} added successfully!</h1>
-        <p>See <a href="{% url 'reuse:product' category.slug subcategory.slug product.slug %}">your product </a>, or go back to <a href="{% url 'reuse:profile' the_name%}">your profile </a>or the <a href="{% url 'reuse:homepage' %}">Homepage</a></p>
+    {% if sold %}
+        <h1>{{ product.name }} sold successfully!</h1>
+        <a href="{% url 'reuse:profile' the_name %}">My Profile</a><br/>
+        <a href="{% url 'reuse:homepage' %}">Homepage</a>
     {% else %}
-        <h1>Add a Product to {{ subcategory.name }}</h1>
+        <h1>Sell {{ product.name }}</h1>
             <div>
-                <form id="product_form" method="post" action="{% url 'reuse:add_product' category.slug subcategory.slug %}">
+                <form id="product_form" method="post" action="{% url 'reuse:sell_product' product.category.slug product.subcategory.slug product.slug %}"/>
                     {% csrf_token %}
                     {% for hidden in form.hidden_fields %}
                         {{ hidden }}

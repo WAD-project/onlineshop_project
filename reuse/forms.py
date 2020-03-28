@@ -17,6 +17,12 @@ class ProductForm (forms.ModelForm):
     class Meta:
         model = CurrentProduct
         exclude=('subcategory', 'category', 'seller',)
+ 
+
+#class UpdateProductForm(forms.ModelForm):
+#class Meta:
+#        model = CurrentProduct
+#        fields = ('description', 'price', 'image1', 'image2', 'image3', 'image4', 'image5')
         
 class SellerForm(forms.ModelForm):
     class Meta:
