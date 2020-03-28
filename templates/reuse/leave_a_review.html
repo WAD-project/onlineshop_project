@@ -1,0 +1,27 @@
+{% extends 'reuse/homepage.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Leave A Review
+{% endblock %}
+
+{% block titlebar_block %}
+    {{ title }}
+{% endblock %}
+
+{% block body_block %}
+    {% if completed %}
+        <h1>Review completed!</h1>
+        <p>See <a href="{% url 'reuse:profile' review.seller.slug %}">your review </a>, or go back to <a href="{% url 'reuse:profile' the_name %}">your profile </a>or the <a href="{% url 'reuse:homepage' %}">Homepage</a></p>
+    {% else %}
+        <h1>Review for {{ product.name }}</h1>
+            <div>
+                <form id="product_form" method="post" action="{% url 'reuse:leave_a_review' product.slug %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" name="submit" value="Leave a review!" />
+                </form>
+            </div>
+    {% endif %}
+{% endblock %}
+

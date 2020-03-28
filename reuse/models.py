@@ -141,11 +141,11 @@ class SoldProduct(Product):
 class Review(models.Model):
     title = models.CharField(max_length = 128, help_text = "Insert title here")
     text = models.TextField(help_text = "Tell us how the seller was")
-    rating = models.IntegerField(blank = False)
-    product = models.ForeignKey(SoldProduct, on_delete=models.SET("This product no longer exists"))
+    product = models.OneToOneField(SoldProduct, on_delete=models.SET("This product no longer exists"))
     seller = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="reviewed")
     buyer = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="reviewer")
-    
+    on_date = models.DateField(auto_now_add=True, blank=True, null=True)
+    rating = models.IntegerField(blank = False)
     def __str__(self):
         return self.title
         
@@ -155,10 +155,6 @@ class Wishlist(models.Model):
     #might need a fix
     products = models.ManyToManyField(CurrentProduct)
 
-class ShoppingCart(models.Model):
-    user = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
-    #might need a fix
-    products = models.ManyToManyField(CurrentProduct)
 
 
 

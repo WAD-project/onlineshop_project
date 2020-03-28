@@ -1,11 +1,11 @@
 {% if categories %}
     {% for category, subcategories in categories.items %}
         <div class="col-md-3 col-sm-4">
-                <h5> <a class="dropdown-item" href="/reuse/{{ category.slug }}/">{{ category.name }}</a> </h5>
+                <h5> <a class="dropdown-item" href="{% url 'reuse:show_category' category_name_slug=category.slug %}">{{ category.name }}</a> </h5>
 
                 {% if subcategories %}
                     {% for subcategory in subcategories %}
-                        <a class="dropdown-item" href="/reuse/{{ category.slug }}/{{ subcategory.slug }}">{{ subcategory.name}} </a>
+                        <a class="dropdown-item" href="{% url 'reuse:show_sub' category.slug subcategory.slug %}">{{ subcategory.name }} </a>
                     {% endfor %}
                 {% endif %}
         </div>

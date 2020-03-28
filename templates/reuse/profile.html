@@ -36,7 +36,7 @@
         <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
             
             {% if owned %}
-                <h4>{{ user.fist_name }} {{ user.last_name}}</h4>
+                <h4> {{ user.first_name }} {{ user.last_name }}</h4>
                 <p><i class="fa fa-user"></i>{{ user.username }}</p>
             {% else %}
                 <h4>{{ otheruser.first_name }}  {{ otheruser.last_name }}</h4>
@@ -77,6 +77,19 @@
                     {% endif %}
                {% endif %}
             {% endif %}
+        </div>
+       
+        <div>
+        {% if not owned %}
+            <p>If you've bought something from {{ otheruser }}, you can leave a review in <a href="{% url 'reuse:past_orders' the_name %}">your past orders</a></p><hr style="width:20%;"/>
+        {% endif %}
+        {% if reviews %}
+            {% for review in reviews %}
+            <li><h4>{{ review.title }}</h4><h5>{{ review.rating }}</h5>
+                <h5>By {{ review.buyer }}, {{ review.on_date }}</h5>
+                <p>{{ review.text }}</p></li>
+            {% endfor %}
+        {% endif %}
         </div>
        
         <div class="col-lg-3 col-md-6 d-none d-lg-block">

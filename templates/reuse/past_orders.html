@@ -14,7 +14,13 @@
     {% if products %}
     <ul>
         {% for product in products %}
-        <li><a href="{% url 'reuse:product' category_name_slug=product.category.slug, subcategory_name_slug=product.subcategory.slug, product_name_slug=product.slug">{{ product.name }}</a></li>
+            <li><img src="{{ product.image1.url }}" alt="{{ product.name }}'s image" style="width:200px;height:200px;"/>
+                <h2>{{ product.name }}<h2>
+                    <h4>Sold by {{ product.seller }}, £{{ product.price }}</h4>
+                <p>{{ product.description }}<p>
+                <a href="{% url 'reuse:leave_a_review' product_name_slug=product.slug %}">Leave a review!</a>
+            </li>
+            <hr />
         {% endfor %}
     </ul>
     {% else %}

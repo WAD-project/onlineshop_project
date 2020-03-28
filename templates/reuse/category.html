@@ -16,7 +16,7 @@
             {% if subcategories %}
                 <ul>
                     {% for subcategory in subcategories %}
-                        <li><a href="/reuse/{{ category.slug }}/{{ subcategory.slug }}">{{ subcategory.name}}</li>
+                        <li><a href="{% url 'reuse:show_sub' category.slug subcategory.slug }">{{ subcategory.name }}</li>
                         {% endfor %}
                 </ul>
             {% endif %}

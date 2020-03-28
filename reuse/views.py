@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 
-from reuse.models import Category, Subcategory, Product, CurrentProduct, UserProfile, Wishlist, SoldProduct
-from reuse.forms import ProductForm, UserForm, UserProfileForm,  UserUpdateForm, ProfileUpdateForm, SellerForm #UpdateProductForm
+from reuse.models import Category, Subcategory, Product, CurrentProduct, UserProfile, User, Wishlist, SoldProduct, Review
+from reuse.forms import ProductForm, UserForm, UserProfileForm,  UserUpdateForm, ProfileUpdateForm, SellerForm, UpdateProductForm, ReviewForm
 from django.db.models import Q
 from reuse.decorators import user_is_seller
 
@@ -208,6 +208,12 @@ def view_profile(request, user_name_slug):
         except CurrentProduct.DoesNotExist:
             products = None
         context_dict['products'] = products
+        
+        try:
+            reviews = Review.objects.filter(seller=profile)
+        except Review.DoesNotExist:
+            reviews = None
+        context_dict['reviews'] = reviews
 
     return render(request, 'reuse/profile.html', context_dict)
    
@@ -460,35 +466,23 @@ def add_product(request, category_name_slug, subcategory_name_slug):
 Manage and sell products
 """
 
-""" THIS BASTARD DOES NOT WORK
 @login_required
 def manage_product(request, category_name_slug, subcategory_name_slug, product_name_slug):
     
     context_dict = {'title': 'Manage your products'}
     
-    user = request.user.id
-    try:
-        seller = UserProfile.objects.get(user=user)
-    except UserProfile.DoesNotExist:
-        print("you don't have a userprofile")
-        return redirect('/reuse/')
-    
-    modif = False
     try:
         product = CurrentProduct.objects.get(slug = product_name_slug)
-        category = product.category
-        subcategory = product.subcategory
-        slug = product.slug
-        name = product.name
     except CurrentProduct.DoesNotExist:
-        product = None
+        redirect('/reuse/')
+           
+    seller = product.seller
+    modif = False
     
     if request.method == 'POST':
-        form = UpdateProductForm(request.POST, instance=product)
-        
+        form = UpdateProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
-            product = form.save(commit=False)
-            product.save()
+            form.save()
             modif = True
         else:
             print(form.errors)
@@ -498,11 +492,38 @@ def manage_product(request, category_name_slug, subcategory_name_slug, product_n
         
     context_dict['form'] = form
     return render(request, 'reuse/manage_product.html', {'form':form, 'product':product, 'modif':modif})
- 
-"""
+
 
 def sell_product(request, category_name_slug, subcategory_name_slug, product_name_slug):
     context_dict = {'title':'Sell your product'}
+    
+    try:
+        product = CurrentProduct.objects.get(slug = product_name_slug)
+    except CurrentProduct.DoesNotExist:
+        product = None
+   
+    if product is None:
+       return redirect('/reuse/')
+
+    seller = product.seller
+    context_dict['product'] = product
+    sold = False
+    if request.method == 'POST':
+        buyer_name = request.POST.getlist('uname')[0]
+        try:
+            userb = User.objects.get(username=buyer_name)
+            buyer = UserProfile.objects.get(user=userb)
+        except User.DoesNotExist:
+            context_dict['message'] = 'No user with such name'
+            return render(request, 'reuse/sell_product.html', context_dict)
+        newProduct = SoldProduct(name=product.name, subcategory=product.subcategory, category=product.category, description=product.description, price=product.price, image1=product.image1)
+        newProduct.seller = seller
+        newProduct.buyer = buyer
+        newProduct.save()
+        sold = True
+        product.delete()
+    
+    context_dict['sold'] = sold
     return render(request, 'reuse/sell_product.html', context_dict)
     
 """
@@ -568,6 +589,38 @@ def add_to_wishlist(request, category_name_slug, subcategory_name_slug, product_
     return render(request, 'reuse/product.html', {'category': category, 'subcategory': subcategory, 'product': product})
 
 
+def leave_a_review(request, product_name_slug):
+
+    context_dict = {'title': 'Leave A Review'}
+    completed = False
+    try:
+        product = SoldProduct.objects.get(slug = product_name_slug)
+    except SoldProduct.DoesNotExist:
+        redirect('/reuse/')
+        
+    review = None
+    
+    context_dict['product'] = product
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            print("hello")
+            review = form.save(commit=False)
+            review.seller = product.seller
+            review.buyer = product.buyer
+            review.product = product
+            review.save()
+            completed = True
+        else:
+            print(form.errors)
+    
+    else:
+        form = ReviewForm()
+    
+    context_dict['review'] = review
+    context_dict['completed'] = completed
+    context_dict['form'] = form
+    return render(request, 'reuse/leave_a_review.html', context_dict)
 
 
 
