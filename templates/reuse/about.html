@@ -5,22 +5,56 @@
     About Reuse
 {% endblock %}
 
-{% block sidebar_block %}
-    <p class="active">About</p>
-    <p>Caterina</p>
-    <p>Viktoria</p>
-    <p>Angela</p>
-    <p>Elena</p>
+{% block titlebar_block %}
+    About us
 {% endblock %}
 
-{% block welcome_block %}
-    <h1>Welcome to Re !</h1>
-    {% if user.is_authenticated %}
-        <h2>Hello, {{ user.username }}</h2>
-    {% endif %}
+
+
+{% block body_block %}  
+<div class="faq">
+<div class="top-up-image">
+    <figure>
+<img src="{% static 'images/about-us.jpg' %}" alt="" class="img-fluid" />
+</figure>
+</div>
+
+<div class="container">
+<div class="jumbotron">
+    <h2> About Us </h2>
+    <div>
+<p class="first-paragraph"> Re was developed as part of our group project for the subject Web App Development. The team consisted of Angela, Caterina, Elena and Viktoria. The rest is bacon ipsum text, because I don`t know what else to include here. Pig t-bone fatback short loin pork belly frankfurter leberkas pork tail filet mignon picanha. Boudin chislic rump capicola bresaola, corned beef t-bone kielbasa chicken swine shankle. Beef ribs picanha pork chop shoulder, prosciutto shankle alcatra pork belly. Sausage tenderloin kielbasa shoulder. Ham hock ball tip jerky boudin pork chop chuck capicola. Pork loin landjaeger sausage kielbasa, alcatra pork cow short ribs salami pork belly meatball andouille ham hock. Chuck sausage meatloaf frankfurter tri-tip ham hock bresaola venison ham meatball hamburger.</p>
+
+<p>Hamburger kevin flank short loin. Short loin shankle biltong turkey, burgdoggen ribeye chicken jerky pancetta pig tri-tip meatloaf prosciutto ball tip. Bresaola porchetta ham hock sausage ball tip. Landjaeger ham hock turducken t-bone sausage tri-tip. Meatloaf shoulder ground round ham strip steak pastrami ham hock ribeye beef chuck short ribs.</p>
+
+
+    </div>
+</div> 
+
+<div class="jumbotron">
+    <h2> Our mission </h2>
+    <div>
+<p class="first-paragraph"> Beef chicken cow andouille kevin burgdoggen prosciutto. Burgdoggen brisket tail pancetta pastrami picanha drumstick biltong beef. Tenderloin picanha biltong, kevin beef pig salami porchetta ham pork belly turducken. Cow porchetta t-bone, beef frankfurter meatloaf pastrami sirloin. Fatback porchetta buffalo hamburger sausage corned beef burgdoggen t-bone strip steak ball tip drumstick meatball spare ribs. Jerky pork belly shankle pork chop.</p>
+
+    </div>
+</div> 
+
+<div class="jumbotron">
+    <h2> Our Goal </h2>
+    <div>
+<p class="first-paragraph">Shankle chicken biltong, fatback ham tenderloin pork loin chislic salami shoulder ground round short loin. Beef corned beef rump doner sausage bresaola tail andouille pork belly porchetta. Tongue flank pork belly, jowl tenderloin landjaeger sausage shankle bresaola drumstick chicken. Salami beef ribs tri-tip jerky turducken. Picanha bresaola chuck kevin brisket hamburger.</p>
+
+<p>Kielbasa picanha strip steak, chislic beef flank ham hock ball tip. Brisket kevin tail, hamburger pork belly meatball boudin shankle capicola swine tongue. Short ribs hamburger ham hock picanha leberkas jowl bresaola venison swine chislic cow corned beef turducken. Beef pastrami picanha spare ribs, venison tenderloin capicola short loin bresaola chicken. Ham hock brisket burgdoggen frankfurter. Shankle kevin porchetta, short loin capicola prosciutto drumstick kielbasa t-bone pig beef ribs chislic beef. Frankfurter porchetta beef ribs tri-tip, prosciutto flank corned beef meatball chislic landjaeger turducken picanha.</p>
+
+<p>Cupim jowl brisket tongue chicken biltong spare ribs. Shoulder bresaola bacon kielbasa, filet mignon ribeye picanha. Turkey sirloin kevin biltong meatball landjaeger. Chislic pig beef, shoulder drumstick ground round prosciutto biltong tri-tip kevin. Picanha capicola boudin ham meatball salami ribeye pork loin brisket t-bone.</p>
+
+    </div>
+</div> 
+</div>
+
+</div>
 {% endblock %}
 
-{% block body_block %}
-{% endblock %}
+
 
 
