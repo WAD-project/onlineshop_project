@@ -22,11 +22,11 @@ class ReviewForm(forms.ModelForm):
     title = forms.CharField(max_length = 128, help_text="Title: ")
     text = forms.CharField(help_text="Review: ")
     CHOICES = (
-        (1, 'Poor'),
-        (2, 'Average'),
-        (3, 'Good'),
-        (4, 'Very Good'),
-        (5, 'Excellent')
+        (1, '1 - Poor'),
+        (2, '2 - Average'),
+        (3, '3 - Good'),
+        (4, '4 - Very Good'),
+        (5, '5 - Excellent')
     )
     rating = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES)
 
