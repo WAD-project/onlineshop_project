@@ -17,7 +17,7 @@
         
         <div class="card m-auto">
             <a href="{% url 'reuse:product' product.category.slug product.subcategory.slug product.slug %}">
-                <img class="card-img-top" src"{{ product.image1.url }}" alt="{{ product.name }}'s picture" />
+                <img class="card-img-top" src="{{ product.image1.url }}" alt="{{ product.name }}'s picture" />
             </a>
                 
             <div class="card-body">

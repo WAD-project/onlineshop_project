@@ -86,10 +86,16 @@ Showing products, categories, and subcategories
 def show_category(request, category_name_slug):
      context_dict = {}
      try:
-         category = Category.objects.get(slug=category_name_slug)
-         subCat = Subcategory.objects.filter(category=category)
-         context_dict['subcategories'] = subCat
-         context_dict['category'] = category
+        category_list = Category.objects.order_by('name')
+        context_dict['categories'] = {}
+        for cat in category_list:
+            context_dict['categories'][cat] = Subcategory.objects.filter(category=cat).order_by('name')
+        category_selected = Category.objects.get(slug=category_name_slug)
+        context_dict['selected_category']=category_selected
+        products=CurrentProduct.objects.filter(category=category_selected).order_by('name')
+        context_dict['products']=products
+         #context_dict['subcategories'] = subCat
+         #context_dict['category'] = category
      except Category.DoesNotExist:
          context_dict['subcategories'] = None
          context_dict['category'] = None

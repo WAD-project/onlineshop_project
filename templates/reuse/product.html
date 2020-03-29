@@ -10,24 +10,80 @@
 {% endblock %}
 
 {% block body_block %}
-    <img src="{{ product.image1.url }}" alt="{{ product.name }}'s picture" style="width:200px;height:200px;float:left;margin:3px;"/>
-    <h4 style="float:right;">£{{ product.price }}</h4>
-    <h2>{{ product.name }}</h2>
-	<p>{{ product.description }}</p>
-	
+<div class="super_container">
+    
+    <div class="single_product">
+        <div class="container-fluid" style=" background-color: #fff; padding: 11px;">
+            <div class="row">
 
-    {% if user.is_authenticated %}
-        {% if seller != profile %}
-            <form id="add_to_wishlist" action="{% url 'reuse:add_to_wishlist' category.slug subcategory.slug product.slug %}" method="post">
-                {% csrf_token %}
-                <input name="submit" type="submit" value="Like" />
-            </form>
-                
-            <hr style="margin-top:100px"/>
+                <div class="col-lg-2 order-lg-1 order-2 d-none d-lg-block">
+                    <ul class="image_list">
+                        {% if product.image2 %}
+                        <li data-image="{{ product.image2.url }}"><img src="{{ product.image2.url }}" alt=""></li>
+                        {% endif %}
+                         {% if product.image3 %}
+                         <li data-image="{{ product.image3.url }}"><img src="{{ product.image3.url }}" alt=""></li>
+                        {% endif %}
+                         {% if product.image4 %}
+                         <li data-image="{{ product.image4.url }}"><img src="{{ product.image4.url }}" alt=""></li>
+                        {% endif %}
+                        {% if product.image5 %}
+                         <li data-image="{{ product.image5.url }}"><img src="{{ product.image5.url }}" alt=""></li>
+                        {% endif %}
+                        
+                        
+                    </ul>
+                </div>
+
+                <div class="col-lg-4 order-lg-2 order-1">
+                    <div class="image_selected"><img src="{{ product.image1.url }}" alt=""></div>
+                </div>
+
+                <div class="col-lg-6 order-3">
+                    <div class="product_description">
+                        
+                        <div class="product_name">{{ product.name }}
+
+                        </div>
+                        
+                        <div> <span class="product_price"> £{{ product.price }}0 </span>  </div>
+                       
+                        <hr class="singleline">
+                        <div> <span class="product_info">
+                            <h5> Description </h5>{{ product.description}}
+                            
+                            
+                        </div>
+                        <hr class="singleline">
+                    <div> 
+                        {% if user.is_authenticated %}
+                            {% if seller == profile %}
+                                <button type="button" class="btn btn-primary"> <a href="{% url 'reuse:manage_product' category.slug subcategory.slug product.slug %}" style="color:white">Manage</a></button>
+                                <button type="button" class="btn btn-primary"><a href="{% url 'reuse:sell_product' category.slug subcategory.slug product.slug %}" style="color:white" >Sell</a></button>
+                            
+                            {% else %}
+                                <form id="add_to_wishlist" action="{% url 'reuse:add_to_wishlist' category.slug subcategory.slug product.slug %}" method="post">
+                                {% csrf_token %}
+                                <input name="submit" type="submit" value="Like" class="btn btn-primary" />
+                                </form>   
+                    </div>
+                    </div>
+                </div>
+            </div>
+          
+            <hr class="singleline" style="margin-top: 80px"> 
+            <div class="profile-data">
+         
+            <h2> Seller Information </h2>
+           
+          
+            <img src="{{ seller.picture.url }}" alt="{{ seller }}'s profile pic" width="300" height="300" />
+             
+            
             <p>Sold by: <a href="{% url 'reuse:profile' seller.slug %}">{{ seller }}</a></p>
-            <img src="{{ seller.picture.url }}" alt="{{ seller }}'s profile pic" style="width:150px;height:150px;float:left;margin:3px;"/>
-            <p>Payments accepted: </p>
-            <ul style="float:left;">
+           
+            <p style="margin-bottom:0">Payments accepted: </p>
+            <ul>
                 {% if seller.paypal %}
                     <li>Paypal</li>
                 {% endif %}
@@ -38,16 +94,21 @@
                     <li>Cash</li>
                 {% endif %}
             </ul>
-            <div style="clear:both;">
+            <div style="margin-top:20px">
             <h5>Location</h5>
             <p><i class="fa fa-map-marker"></i>{{ seller.address }}<br/> {{ seller.city }} <br/> {{ seller.postcode }} </p>
-            </div>
-        
-        {% else %}
-            <a href="{% url 'reuse:manage_product' category.slug subcategory.slug product.slug %}">Manage</a>
-            <a href="{% url 'reuse:sell_product' category.slug subcategory.slug product.slug %}">Sell</a>
+           </div>
+       
+        </div>
+    
+           
         {% endif %}     
     {% else %}
+
         <p><a href="{% url 'reuse:login' %}">Log in</a> or <a href="{% url 'reuse:register' %}">Register</a> to see the product's info</p>
    {% endif %}
+
+
+
+
 {% endblock %}
