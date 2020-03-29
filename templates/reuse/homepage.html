@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block titlebar_block %}
-    Welcome
+    {{ title }}
 {% endblock %}
 
 
@@ -25,7 +25,7 @@
         <div class="carousel-caption">
           <h5>Welcome to Re!</h5>
           {% if user.is_authenticated %} 
-          <p> Hey, {{user.username}}! Welcome back!</p>
+          <p> Hey, {{ user.username }}! Welcome back!</p>
           {% endif %}
         </div>
       </div>

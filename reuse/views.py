@@ -4,7 +4,6 @@ from django.http import HttpResponse
 from reuse.models import Category, Subcategory, Product, CurrentProduct, UserProfile, User, Wishlist, SoldProduct, Review
 from reuse.forms import ProductForm, UserForm, UserProfileForm,  UserUpdateForm, ProfileUpdateForm, SellerForm, UpdateProductForm, ReviewForm
 from django.db.models import Q
-from reuse.decorators import user_is_seller
 
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
@@ -22,13 +21,8 @@ General views
 """
 
 def homepage(request):
-    category_list = Category.objects.order_by('name')
     context_dict = {}
     context_dict['title'] = 'Welcome'
-    context_dict['categories'] = {}
-    for cat in category_list:
-        context_dict['categories'][cat] = Subcategory.objects.filter(category=cat).order_by('name')
-        
     #context_dict['recently'] = CurrentProduct.objects.order_by('date')[5]
     
     response = render(request, 'reuse/homepage.html', context = context_dict)
@@ -44,7 +38,6 @@ def faq(request):
 
 
 def contact_us(request):
-    # Add stuff here
     return render(request, 'reuse/contact_us.html')
 
 
@@ -75,8 +68,14 @@ def get_shop_queryset(query=None):
         posts = CurrentProduct.objects.filter(
                 Q(name__icontains=q))
         otherposts = CurrentProduct.objects.filter(Q(description__icontains=q))
+        
+    for post in posts:
+        queryset.append(post)
+        
+    for otherpost in otherposts:
+        queryset.append(otherpost)
             
-    return posts
+    return queryset
  
  
 """
@@ -113,7 +112,7 @@ def show_sub(request, category_name_slug, subcategory_name_slug):
         context_dict['subcategory'] = subcategory
         context_dict['products'] = products
         if request.user.is_anonymous:
-            context_dict['user'] = "Nope"
+            context_dict['user'] = None
         else:
             context_dict['user'] = request.user
             context_dict['profile'] = UserProfile.objects.get(user=context_dict['user'])
@@ -128,7 +127,7 @@ def show_sub(request, category_name_slug, subcategory_name_slug):
 def show_product(request, category_name_slug, subcategory_name_slug, product_name_slug):
     context_dict = {}
     if request.user.is_anonymous:
-        context_dict['user'] = "Nope"
+        context_dict['user'] = None
     else:
         context_dict['user'] = request.user
         context_dict['profile'] = UserProfile.objects.get(user=context_dict['user'])
@@ -418,7 +417,6 @@ Add a product view
 """
 
 @login_required
-@user_is_seller
 def add_product(request, category_name_slug, subcategory_name_slug):
     added = False
     try:

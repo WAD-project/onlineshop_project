@@ -1,5 +1,5 @@
 from django import template
-from reuse.models import Category, Subcategory, UserProfile
+from reuse.models import Category, Subcategory, UserProfile, Review
 
 register = template.Library()
 
@@ -19,6 +19,17 @@ def get_user_name(user):
     try:
         profile = UserProfile.objects.get(user=user)
         name = profile.slug
-    except:
+    except UserProfile.DoesNotExist:
         name = None
     return name
+
+@register.simple_tag
+def get_rating(reviews):
+    i = 0
+    j = 0
+    for review in reviews:
+        i = i + int(review.rating)
+        j = j + 1
+    
+    rating = i/j
+    return rating
