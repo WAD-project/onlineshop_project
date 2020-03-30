@@ -19,23 +19,28 @@
             <a href="{% url 'reuse:product' product.category.slug product.subcategory.slug product.slug %}">
                 <img class="card-img-top" src="{{ product.image1.url }}" alt="{{ product.name }}'s picture" />
             </a>
-                
-            <div class="card-body">
-                <a href="{% url 'reuse:product' product.category.slug product.subcategory.slug product.slug %}">
-                    <h2 class="card-title">{{ product.name }}</h2>
-                </a>
-                <p class="card-text">{{ product_post.descriptions|truncatechars:200 }}</p>
-                <p> Sold by:
-                    {% if product.seller == request.user %}
+            {% if user.is_authenticated %}
+                <div class="card-body">
+                    <a href="{% url 'reuse:product' product.category.slug product.subcategory.slug product.slug %}">
+                        <h2 class="card-title">{{ product.name }}</h2>
+                    </a>
+                    <p class="card-text">{{ product_post.descriptions|truncatechars:200 }}</p>
+                    <p> Sold by:
+                    {% if product.seller.user == request.user %}
                         <a href="{% url 'reuse:profile' the_name %}">You</a>
                     {% else %}
-                    <a href="{% url 'reuse:profile' product.seller.slug %}">{{ product.seller.name }}</a>
+                        <a href="{% url 'reuse:profile' product.seller.slug %}">{{ product.seller }}</a>
                     {% endif %}
-                </p>
+                    </p>
                 </div>
-            <div class="card-footer text-muted">   
-                Updated on {{product_post.date_updated}} by {{seller}}
-            </div>
+                <div class="card-footer text-muted">
+                    Added on {{ product.date }} by {{ product.seller }}
+                </div>
+            {% else %}
+                <div class="card-body">
+                    <p><a href="{% url 'reuse:login' %}">Log in</a> or <a href="{% url 'reuse:register' %}">Register</a> to see the product's info</p>
+                </div>
+            {% endif %}
         </div>
     </div>
     {% endfor %}

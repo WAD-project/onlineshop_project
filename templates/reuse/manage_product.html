@@ -12,7 +12,7 @@
 {% block body_block %}
     {% if modif %}
         <h1>{{ product.name }} updated successfully!</h1>
-        <p>See <a href="{% url 'reuse:product' product.category.slug product.subcategory.slug product.slug %}">your product </a>, or go back to <a href="{% url 'reuse:profile' the_name%}">your profile </a>or the <a href="{% url 'reuse:homepage' %}">Homepage</a></p>
+        <p>See <a href="{% url 'reuse:product' product.category.slug product.subcategory.slug product.slug %}">your product</a>, or go back to <a href="{% url 'reuse:profile' the_name%}">your profile </a>or the <a href="{% url 'reuse:homepage' %}">Homepage</a></p>
     {% else %}
         <h1>Manage {{ product.name }}</h1>
             <div>

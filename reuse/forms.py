@@ -34,7 +34,12 @@ class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         fields = ('title', 'text', 'rating')
-    
+   
+class UpdateReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ('title', 'text', 'rating')
+
 class UpdateProductForm(forms.ModelForm):
     class Meta:
         model = CurrentProduct

@@ -14,7 +14,11 @@
     {% if products %}
     <ul>
         {% for product in products %}
-        <li><a href="/reuse/{{ product.category.slug }}/{{ product.subcategory.slug }}/{{ product.slug }}">{{ product.name }}</a></li>
+            <li><img src="{{ product.image1.url }}" alt="{{ product.name }}'s image" style="width:200px;height:200px;"/>
+                <h2>{{ product.name }}</h2>
+                    <h4>Sold to <a href="{% url 'reuse:profile' product.buyer.slug %}">{{ product.buyer }}</a> for £{{ product.price }}</h4>
+                    <p>{{ product.description }}</p>
+            </li>
         {% endfor %}
     </ul>
     {% else %}

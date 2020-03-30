@@ -58,9 +58,8 @@
             <p><i class="fa fa-info"></i>{{ description }}</p>
         </div>
        
-       
-       <div>
-           {% if user.is_authenticated %}
+       {% if user.is_authenticated %}
+            <div>
                {% if isSeller %}
                     {% if products %}
                         <h3>Currently selling:</h3>
@@ -76,27 +75,28 @@
                             <p>This user is not currently selling anything.</p>
                         {% endif %}
                     {% endif %}
+                    <div>
+                    {% if not owned %}
+                        <p>If you've bought something from {{ otheruser }}, you can leave a review in <a href="{% url 'reuse:past_orders' the_name %}">your past orders</a></p><hr style="width:20%;"/>
+                    {% endif %}
+                    {% if reviews %}
+                        <p>Rating: {% get_rating reviews %}</p>
+                        <ul>
+                        {% for review in reviews %}
+                        <li><h4>{{ review.title }}</h4><h5>{{ review.rating }}</h5>
+                            <h5>By <a href="{% url 'reuse:profile' review.buyer.slug %}">{{ review.buyer }}</a>, {{ review.on_date }}</h5>
+                            <p>{{ review.text }}</p></li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No reviews yet! Be the first one</p>
+                    {% endif %}
+                    </div>
                {% endif %}
-            {% endif %}
-        </div>
-       
-        <div>
-        {% if not owned %}
-            <p>If you've bought something from {{ otheruser }}, you can leave a review in <a href="{% url 'reuse:past_orders' the_name %}">your past orders</a></p><hr style="width:20%;"/>
-        {% endif %}
-        {% if reviews %}
-            <p>Rating: {% get_rating reviews %}</p>
-            <ul>
-            {% for review in reviews %}
-            <li><h4>{{ review.title }}</h4><h5>{{ review.rating }}</h5>
-                <h5>By {{ review.buyer }}, {{ review.on_date }}</h5>
-                <p>{{ review.text }}</p></li>
-            {% endfor %}
-            </ul>
+            </div>
         {% else %}
-            <p> No reviews yet! Be the first one</p>
+            <p><a href="{% url 'reuse:login' %}">Log in</a> or <a href="{% url 'reuse:register' %}">Register</a> to see the product's info</p>
         {% endif %}
-        </div>
        
         <div class="col-lg-3 col-md-6 d-none d-lg-block">
             <p></p>

@@ -1,5 +1,5 @@
 from django import template
-from reuse.models import Category, Subcategory, UserProfile, Review
+from reuse.models import Category, Subcategory, UserProfile, Review, CurrentProduct, SoldProduct, Product
 
 register = template.Library()
 
@@ -33,3 +33,12 @@ def get_rating(reviews):
     
     rating = i/j
     return rating
+
+@register.simple_tag
+def get_review(product):
+    try:
+        review = Review.objects.get(product=product)
+    except Review.DoesNotExist:
+        review = None
+        
+    return review

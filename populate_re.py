@@ -27,7 +27,7 @@ def populate():
         
     otherSubcat = [
         {'name': 'Kid Toys'},
-        {'name': 'Kitchen Utelsils'},
+        {'name': 'Kitchen Utensils'},
         {'name': 'Stationary'},
         {'name': 'Other'}]
         

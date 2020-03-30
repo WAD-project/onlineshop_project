@@ -1,0 +1,21 @@
+{% extends 'reuse/homepage.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Update Review
+{% endblock %}
+
+{% block titlebar_block %}
+    Update Review
+{% endblock %}
+
+{% block body_block %}
+    <h1>Review for {{ product.name }}</h1>
+    <div>
+        <form id="product_form" method="post" action="{% url 'reuse:update_review' product.slug %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+        <input type="submit" name="submit" value="Update review" />
+    </form>
+</div>
+{% endblock %}

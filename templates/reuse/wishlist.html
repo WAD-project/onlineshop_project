@@ -12,8 +12,12 @@
     {% if products %}
     <ul>
         {% for product in products %}
-            <li><a href="{% url 'reuse:product' product.category.slug product.subcategory.slug product.slug %}">{{ product.name }}</a></li>
-            <li><img src="{{ product.image1.url }}" style="width:200px;height:200px;"></li>
+            <li><h3><a href="{% url 'reuse:product' product.category.slug product.subcategory.slug product.slug %}">{{ product.name }}</a> </h3><br/>
+                <img src="{{ product.image1.url }}" style="width:200px;height:200px;">
+            <a href="{% url 'reuse:remove_from_wishlist' the_name product.slug %}">Remove</a>
+            <h4>Sold by <a href="{% url 'reuse:profile' product.seller.slug %}">{{ product.seller }}</a>, £{{ product.price }}</h4>
+            <p>{{ product.description }}</p>
+            </li>
         {% endfor %}
     </ul>
     {% else %}
