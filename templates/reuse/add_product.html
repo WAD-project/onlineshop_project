@@ -16,7 +16,7 @@
     {% else %}
         <h1>Add a Product to {{ subcategory.name }}</h1>
             <div>
-                <form id="product_form" method="post" action="{% url 'reuse:add_product' category.slug subcategory.slug %}">
+                <form id="product_form" method="post" enctype="multipart/form-data" action="{% url 'reuse:add_product' category.slug subcategory.slug %}">
                     {% csrf_token %}
                     {% for hidden in form.hidden_fields %}
                         {{ hidden }}

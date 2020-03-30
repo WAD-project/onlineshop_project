@@ -16,7 +16,7 @@
     {% else %}
         <h1>Manage {{ product.name }}</h1>
             <div>
-                <form id="product_form" method="post" action="{% url 'reuse:manage_product' product.category.slug product.subcategory.slug product.slug %}">
+                <form id="product_form" method="post" enctype="multipart/form-data" action="{% url 'reuse:manage_product' product.category.slug product.subcategory.slug product.slug %}">
                     {% csrf_token %}
                     {% for hidden in form.hidden_fields %}
                         {{ hidden }}

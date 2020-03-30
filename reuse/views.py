@@ -449,7 +449,7 @@ def add_product(request, category_name_slug, subcategory_name_slug):
     product = None
     
     if request.method =='POST':
-        form = ProductForm(request.POST)
+        form = ProductForm(request.POST, request.FILES)
 
         if form.is_valid():
             if subcategory:
@@ -457,6 +457,7 @@ def add_product(request, category_name_slug, subcategory_name_slug):
                 product.subcategory = subcategory
                 product.category = category
                 product.seller = seller
+                
                 product.save()
                 added = True
     
