@@ -10,20 +10,29 @@
 {% endblock %}
 
 {% block body_block %}
+
     {% if sold %}
+    <div class="container">
+        <div class="jumbotron">
         <h1>{{ product.name }} sold successfully!</h1>
-        <a href="{% url 'reuse:profile' the_name %}">My Profile</a><br/>
-        <a href="{% url 'reuse:homepage' %}">Homepage</a>
+        <a href="{% url 'reuse:profile' the_name % }" class="btn btn-primary">My Profile</a><br/>
+        <a href="{% url 'reuse:homepage' %}" class="btn btn-primary">Homepage</a>
+    </div>
+    </div>
     {% else %}
+    <div class="container">
+        <div class="jumbotron">
         <h1>Sell {{ product.name }}</h1>
-            <div>
+   </div>
+            <div class="centre form-signin">
                 <form id="product_form" method="post" action="{% url 'reuse:sell_product' product.category.slug product.subcategory.slug product.slug %}"/>
                     {% csrf_token %}
                     <label for="uname">I want to sell {{ product.name }} to:</label><br>
-                    <input type="text" name="uname" id="uname" value="Please enter username"><br>
+                    <input type="text" class="form-control" name="uname" id="uname" value="Please enter username"><br>
                         <p>{{ message }}</p><br>
-                    <input type="submit" name="submit" value="Sell" />
+                    <input type="submit" name="submit" value="Sell" class="btn btn-primary" />
                 </form>
             </div>
+        </div>
     {% endif %}
 {% endblock %}

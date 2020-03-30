@@ -12,7 +12,7 @@
 {% block body_block %} 
  
 <div class="container">
-	<div class="login-page">
+	<div class="login-page ">
 		<h1>Login to Re</h1> 
 		
 		<form  method="post" action="{% url 'reuse:login' %}">
@@ -25,8 +25,7 @@
 	
 		    <a href="{% url 'password_reset'  %}">Reset Password</a>
 		    <hr />
-		    <button type="button" class="btn btn-primary"> <i class="fa fa-google"> </i> Google Login
-		 	<a href="{% url 'social:begin' 'google-oauth2' %}"> ...  </a>  </button>
+		   <a href="{% url 'social:begin' 'google-oauth2' %}">  <button type="button" class="btn btn-primary"> Google Login </button></a>
 		
 	
 	</div>

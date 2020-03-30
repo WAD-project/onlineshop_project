@@ -12,13 +12,15 @@
 {% block body_block %}
     {% if added %}
         <h1>{{ product.name }} added successfully!</h1>
-        <p>See <a href="{% url 'reuse:product' category.slug subcategory.slug product.slug %}">your product </a>, or go back to <a href="{% url 'reuse:profile' the_name%}">your profile </a>or the <a href="{% url 'reuse:homepage' %}">Homepage</a></p>
+        <p>See <a href="{% url 'reuse:product' category.slug subcategory.slug product.slug %}">your product</a>, or go back to <a href="{% url 'reuse:profile' the_name%}">your profile </a>or the <a href="{% url 'reuse:homepage' %}">Homepage</a></p>
     {% else %}
     <div class="jumbotron">
         <h1>Add a Product to {{ subcategory.name }}</h1>
+
     </div>
             <div class="container centre">
-                <form id="product_form" method="post" action="{% url 'reuse:add_product' category.slug subcategory.slug %}">
+                <form id="product_form" method="post" enctype="multipart/form-data" action="{% url 'reuse:add_product' category.slug subcategory.slug %}">
+
                     {% csrf_token %}
                     {% for hidden in form.hidden_fields %}
                         {{ hidden }}

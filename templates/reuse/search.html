@@ -12,49 +12,66 @@
 {% block body_block %}
 {% if product_post %}
 <div class="container">
-    {% for product in product_post %}
     <div class="row">
-        
-        <div class="card m-auto">
-            <a href="{% url 'reuse:product' product.category.slug product.subcategory.slug product.slug %}">
-                <img class="card-img-top" src="{{ product.image1.url }}" alt="{{ product.name }}'s picture" />
-            </a>
-                
-            <div class="card-body">
-                <a href="{% url 'reuse:product' product.category.slug product.subcategory.slug product.slug %}">
-                    <h2 class="card-title">{{ product.name }}</h2>
-                </a>
-                <p class="card-text">{{ product_post.descriptions|truncatechars:200 }}</p>
-                <p> Sold by:
-                    {% if product.seller == request.user %}
-                        <a href="{% url 'reuse:profile' the_name %}">You</a>
-                    {% else %}
-                    <a href="{% url 'reuse:profile' product.seller.slug %}">{{ product.seller.name }}</a>
-                    {% endif %}
-                </p>
+    {% for product in product_post %}
+    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+                <div class="product-grid">
+                    <div class="product-image">
+                        <a href="{% url 'reuse:product' product.category.slug product.subcategory.slug product.slug %}"><img src="{{ product.image1.url }}" class="pic-1" width="300px" height="300px" alt="{{ product.name }}`s image" /><br/> 
+                        </a>
+                    </div>
+                     {% if user.is_authenticated %}
+                    <div class="product-content">
+                        <h3 class="title"><a href="{% url 'reuse:product' product.category.slug product.subcategory.slug product.slug %}">{{ product.name }}</a></h3>
+                        <h5 class="subcat"> {{ p.subcategory }}</h5>
+                        <div class="price">£{{ p.price }}0</div>
+                        <p> Added on {{ product.date }}.</p>
+
+                    </div>
+
+                    <!-- Pop-up buttons -->
+                    <ul class="social">
+                        <!-- pop-up quick preview-->
+                        <li> <a href="javascript:toggle_visibility('{{ product.slug }}')" data-tip="quick view">
+                            <i class="fa fa-eye"></i> </a>
+                         </li>
+                        <div id="{{ product.slug }}" class="pop-up-menu">
+                            <div class="card">
+                                      <div class="card-body">
+                                        <p class="card-text">{{ product.description }}</p>
+                                        <p class="card-text">  Sold by:
+                                            {% if product.seller.user == request.user %}
+                                                <a href="{% url 'reuse:profile' the_name %}">You</a>
+                                            {% else %}
+                                                <a href="{% url 'reuse:profile' product.seller.slug %}">{{ product.seller }}</a>
+                                            {% endif %}
+                                            </p>
+                                        <p>  </p>
+                                      </div>
+                            </div>         
+                        </div>
+                      
+                    </ul>
+                     {% else %}
+                    <div class="card-body">
+                        <p><a href="{% url 'reuse:login' %}">Log in</a> or <a href="{% url 'reuse:register' %}">Register</a> to see the product's info</p>
+                    </div>
+            {% endif %}
                 </div>
-            <div class="card-footer text-muted">   
-                Updated on {{product_post.date_updated}} by {{seller}}
-            </div>
-        </div>
-    </div>
+            </div>   
+
     {% endfor %}
-</div>
+
     
 {% else %}
     
 <div class="contaner">
-    <div class="row">
-        <div class="card m-auto">
-            <div class="card-body">
-                <h2 class="card-title">
-                    No results
-                </h2>
-                <p class="card-text">
-                    There were no results matching your search: "{{ query }}"
-                </p>
-            </div>
-        </div>
+    <div class="jumbotron">
+   
+
+    <h1>No results </h1>         
+    <p class="centre bold">There were no results matching your search: "{{ query }}"</p>
+    
     </div>
 </div>
 {% endif %}

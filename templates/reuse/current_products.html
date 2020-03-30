@@ -1,17 +1,16 @@
-{% extends 'reuse/profile.html' %}
+{% extends 'reuse/base.html' %}
 {% load staticfiles %}
 
 {% block title_block %}
-    Wishlist
+    Current Products
 {% endblock %}
 
 {% block titlebar_block %}
-    All items you love!
+    My products
 {% endblock %}
+
 {% block body_block %}
- <div class="jumbotron">
-    <h1>Wishlist</h1>
-</div>
+<div class="container">
     {% if products %}
         <div class="container">
         <div class="row">
@@ -24,23 +23,20 @@
                     </div>
                 <div class="product-content">
                         <h3 class="title"><a href="{% url 'reuse:product' p.category.slug p.subcategory.slug p.slug %}">{{ p.name }}</a></h3>
-                        <h5 class="subcat"> Sold by <a href="{% url 'reuse:profile' p.seller.slug %}">{{ p.seller }}</a></h5>
-                        <div class="price">£{{ p.price }}0</div>
-                         <a href="{% url 'reuse:remove_from_wishlist' the_name p.slug %}" class="btn btn-primary">Remove</a>
-                        
+                        <div class="price">£{{ p.price }}0</div>       
 
                 </div>
             </div>
         </div>
            
-               
-           
-           
+                   
         {% endfor %}
     {% else %}
-        <strong>Your wishlist is still empty.</strong>
-        <p>What are you waiting for? It's second-hand shopping time!</p>
-   {% endif %}
+    <div class="jumbotron">
+        <p class="bold">You are not selling any product yet</p>
+    </div>
+    {% endif %}
 
+</div> 
+  
 {% endblock %}
-

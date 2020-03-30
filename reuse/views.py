@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 
 from reuse.models import Category, Subcategory, Product, CurrentProduct, UserProfile, User, Wishlist, SoldProduct, Review
-from reuse.forms import ProductForm, UserForm, UserProfileForm,  UserUpdateForm, ProfileUpdateForm, SellerForm, UpdateProductForm, ReviewForm
+from reuse.forms import ProductForm, UserForm, UserProfileForm,  UserUpdateForm, ProfileUpdateForm, SellerForm, UpdateProductForm, ReviewForm, UpdateReviewForm
 from django.db.models import Q
 
 from django.contrib import messages
@@ -74,6 +74,8 @@ def get_shop_queryset(query=None):
         
     for otherpost in otherposts:
         queryset.append(otherpost)
+        
+    queryset = list(dict.fromkeys(queryset))
             
     return queryset
  
@@ -447,7 +449,7 @@ def add_product(request, category_name_slug, subcategory_name_slug):
     product = None
     
     if request.method =='POST':
-        form = ProductForm(request.POST)
+        form = ProductForm(request.POST, request.FILES)
 
         if form.is_valid():
             if subcategory:
@@ -455,6 +457,7 @@ def add_product(request, category_name_slug, subcategory_name_slug):
                 product.subcategory = subcategory
                 product.category = category
                 product.seller = seller
+                
                 product.save()
                 added = True
     
@@ -497,6 +500,13 @@ def manage_product(request, category_name_slug, subcategory_name_slug, product_n
     context_dict['form'] = form
     return render(request, 'reuse/manage_product.html', {'form':form, 'product':product, 'modif':modif})
 
+def delete_product(request, category_name_slug, subcategory_name_slug, product_name_slug):
+    user = request.user
+    profile = get_object_or_404(UserProfile, user=user)
+    product = get_object_or_404(CurrentProduct, slug=product_name_slug)
+
+    product.delete()
+    return redirect(reverse('reuse:profile', kwargs={'user_name_slug':profile.slug}))
 
 def sell_product(request, category_name_slug, subcategory_name_slug, product_name_slug):
     context_dict = {'title':'Sell your product'}
@@ -552,36 +562,15 @@ def wishlist(request, user_name_slug):
 
 @login_required
 def add_to_wishlist(request, category_name_slug, subcategory_name_slug, product_name_slug):
-    try:
-       category = Category.objects.get(slug=category_name_slug)
-    except Category.DoesNotExist:
-       category = None
-       
-    try:
-       subcategory = Subcategory.objects.get(slug=subcategory_name_slug)
-    except Subcategory.DoesNotExist:
-       subcategory = None
     
-    try:
-       product = CurrentProduct.objects.get(slug=product_name_slug)
-    except CurrentProduct.DoesNotExist:
-       product = None
-       
-    if product is None:
-       return redirect('/reuse/')
-       
+    category = get_object_or_404(Category, slug=category_name_slug)
+    subcategory = get_object_or_404(Subcategory, slug=subcategory_name_slug)
+    product = get_object_or_404(CurrentProduct, slug=product_name_slug)
+    
     user = request.user.id
-    try:
-        buyer = UserProfile.objects.get(user=user)
-    except UserProfile.DoesNotExist:
-        print("you don't have a userprofile")
-        return redirect(reverse('reuse:product', kwargs={'category_name_slug':category_name_slug, 'subcategory_name_slug':subcategory_name_slug, 'product_name_slug':product_name_slug}))
-        
-    try:
-        wishlist = Wishlist.objects.get(user=buyer)
-    except Wishlist.DoesNotExist:
-        print("Can't find your wishlist")
-        return redirect(reverse('reuse:product', kwargs={'category_name_slug':category_name_slug, 'subcategory_name_slug':subcategory_name_slug, 'product_name_slug':product_name_slug}))
+    buyer = get_object_or_404(UserProfile, user=user)
+
+    wishlist = get_object_or_404(Wishlist, user=buyer)
     
     if request.method == 'POST':
         if product:
@@ -592,6 +581,16 @@ def add_to_wishlist(request, category_name_slug, subcategory_name_slug, product_
     
     return render(request, 'reuse/product.html', {'category': category, 'subcategory': subcategory, 'product': product})
 
+def remove_from_wishlist(request, user_name_slug, product_name_slug):
+    user = request.user.id
+    buyer = get_object_or_404(UserProfile, user=user)
+    wishlist = get_object_or_404(Wishlist, user=buyer)
+    product = get_object_or_404(CurrentProduct, slug=product_name_slug)
+    
+    if product:
+        wishlist.products.remove(product)
+    return redirect(reverse('reuse:wishlist', kwargs={'user_name_slug':user_name_slug}))
+    
 
 def leave_a_review(request, product_name_slug):
 
@@ -626,7 +625,35 @@ def leave_a_review(request, product_name_slug):
     context_dict['form'] = form
     return render(request, 'reuse/leave_a_review.html', context_dict)
 
+def update_review(request, product_name_slug):
+    
+    user = request.user
+    profile = get_object_or_404(UserProfile, user=user)
+    product = get_object_or_404(SoldProduct, slug=product_name_slug)
+    review = get_object_or_404(Review, product=product)
+    
+    if request.method == 'POST':
+       form = UpdateReviewForm(request.POST, request.FILES, instance=review)
+       if form.is_valid():
+           form.save()
+           return redirect(reverse('reuse:past_orders', kwargs={'user_name_slug': profile.slug}))
+       else:
+           print(form.errors)
+       
+    else:
+       form = UpdateReviewForm(instance = review)
+       
+    return render(request, 'reuse/update_review.html', {'form':form, 'review':review, 'product':product})
 
+
+def delete_review(request, product_name_slug):
+    user = request.user
+    profile = get_object_or_404(UserProfile, user=user)
+    product = get_object_or_404(SoldProduct, slug=product_name_slug)
+    review = get_object_or_404(Review, product=product)
+    
+    review.delete()
+    return redirect(reverse('reuse:past_orders', kwargs={'user_name_slug': profile.slug}))
 
 config = {
     'apiKey': "AIzaSyBy-6FZq9Ye6hY_43_Yy49nCL1dBeo-Hcg",

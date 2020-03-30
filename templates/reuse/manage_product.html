@@ -2,21 +2,23 @@
 {% load staticfiles %}
 
 {% block title_block %}
-    Add a Product
+    Update product
 {% endblock %}
 
 {% block titlebar_block %}
-    Add a Product
+    Update product information
 {% endblock %}
 
 {% block body_block %}
     {% if modif %}
         <h1>{{ product.name }} updated successfully!</h1>
-        <p>See <a href="{% url 'reuse:product' product.category.slug product.subcategory.slug product.slug %}">your product </a>, or go back to <a href="{% url 'reuse:profile' the_name%}">your profile </a>or the <a href="{% url 'reuse:homepage' %}">Homepage</a></p>
+        <p>See <a href="{% url 'reuse:product' product.category.slug product.subcategory.slug product.slug %}">your product</a>, or go back to <a href="{% url 'reuse:profile' the_name%}">your profile </a>or the <a href="{% url 'reuse:homepage' %}">Homepage</a></p>
     {% else %}
-        <h1>Manage {{ product.name }}</h1>
-            <div>
-                <form id="product_form" method="post" action="{% url 'reuse:manage_product' product.category.slug product.subcategory.slug product.slug %}">
+    <div class="jumbotron">
+        <h1>Update product information: {{ product.name }}</h1>
+    </div>
+            <div class ="container edit-profile">
+                <form id="product_form" method="post" enctype="multipart/form-data" action="{% url 'reuse:manage_product' product.category.slug product.subcategory.slug product.slug %}">
                     {% csrf_token %}
                     {% for hidden in form.hidden_fields %}
                         {{ hidden }}
@@ -27,7 +29,7 @@
                         {{ field }}
                         <br/>
                     {% endfor %}
-                    <input type="submit" name="submit" value="Update Product" />
+                    <input type="submit" name="submit" value="Update Product" class="btn btn-primary" />
                 </form>
             </div>
     {% endif %}

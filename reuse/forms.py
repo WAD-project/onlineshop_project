@@ -34,12 +34,20 @@ class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         fields = ('title', 'text', 'rating')
-    
+   
+class UpdateReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ('title', 'text', 'rating')
+
 class UpdateProductForm(forms.ModelForm):
+    description=forms.CharField(help_text ="Describe your product: ")
+    price = forms.FloatField(help_text="Price of your product: ", min_value=0)
     class Meta:
         model = CurrentProduct
-        fields = ('description', 'price', 'image1', 'image2', 'image3', 'image4', 'image5')
-        
+        fields = ( 'image1', 'image2', 'image3', 'image4', 'image5')
+    field_order=['description', 'price', 'image1', 'image2', 'image3','image4', 'image5']
+
 class SellerForm(forms.ModelForm):
     class Meta:
         model = UserProfile

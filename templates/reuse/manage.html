@@ -10,6 +10,10 @@
 {% endblock %}
 
 {% block body_block %}  
-	<p> You have logged in successfully.</p>
-	<a href="{% url 'reuse:homepage' %}"> Return to homepage </a>
+<div class="container">
+	<div class="jumbotron">
+	<p class="bold"> You have logged in successfully.</p>
+	<a href="{% url 'reuse:homepage' %}" class="btn btn-primary"> Return to homepage </a>
+	</div>
+</div>
 {% endblock %}

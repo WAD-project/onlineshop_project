@@ -10,18 +10,28 @@
 {% endblock %}
 
 {% block body_block %}
-	<h1>Register for Re</h1>
+
+
 	{% if registered %}
-		<strong>Thank you for registering!</strong>
+	<div class="container">
+	<div class="jumbotron">
+		<p class="bold">Thank you for registering!</p>
         <p>Go to the <a href="{% url 'reuse:login' %}">Log in page </a>or back to the <a href="{% url 'reuse:homepage' %}">Homepage</a></p><br />
+    </div>
+	</div>
 	{% else %}
-		<strong>Register here!</strong><br />
+	<div class="jumbotron">
+		<h1>Register for Re</h1>
+	</div>
+	<div class="contaner centre">
 		<form id="user_form" method="post" action="{% url 'reuse:register' %}" enctype="multipart/form-data">
 	
 			{% csrf_token %}
 			{{ user_form.as_p }}
 			{{ profile_form.as_p }}
-			<input type="submit" name="submit" value="Register" />
+			<input type="submit" name="submit" value="Register" class="btn btn-primary"/>
 		</form>
+	</div>
 	{% endif %}
+
 	{% endblock %}

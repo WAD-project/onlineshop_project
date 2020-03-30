@@ -1,5 +1,6 @@
 {% extends 'reuse/base.html' %}
 {% load staticfiles %}
+{% load reuse_template_tags %}
 
 {% block title_block %}
     Past Orders
@@ -25,9 +26,22 @@
                          <p>Sold by: {{ p.seller }}</p>
                         <p class="price">£{{ p.price }}0</p>
                         <p> {{ p.description }}</p>
-                
-                        <a href="{% url 'reuse:leave_a_review' product_name_slug=product.slug %}">Leave a review!</a>
+                        {% get_review product as rev %}
+                            {% if rev %}
+                            <div class="jumbotron">
+                                <h4>Your review:</h4>
+                                <h5>{{ rev.title }}, rating: {{ rev.rating }}</h5>
+                                <p>On date {{ rev.on_date }}</p>
+                                <p>{{ rev.text }}</p>
+                                <a href="{% url 'reuse:update_review' product_name_slug=product.slug %}" class="btn btn-primary">Update</a>
+                                <a href="{% url 'reuse:delete_review' product_name_slug=product.slug %}" class="btn btn-primary">Delete</a>
+                            </div>
+                            {% else %}
+                                <a href="{% url 'reuse:leave_a_review' product_name_slug=product.slug %}" class="btn btn-primary">Leave a review!</a>
+                        {% endif %}
                     </div>
+                    <hr />
+                   
                 </div>
             </div>
         </div>
@@ -39,5 +53,7 @@
         <p class="bold">You haven't bought anything yet. Let`s start the shopping spree in Re*! </p>
     </div>
     {% endif %}
+
   </div>
+
 {% endblock %}

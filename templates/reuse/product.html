@@ -30,7 +30,6 @@
                          <li data-image="{{ product.image5.url }}"><img src="{{ product.image5.url }}" alt="{{ product.name }}`s picture"></li>
                         {% endif %}
                         
-                        
                     </ul>
                 </div>
 
@@ -49,7 +48,7 @@
                        
                         <hr class="singleline">
                         <div> <span class="product_info">
-                            <h5> Description </h5>{{ product.description}}
+                            <h5> Description </h5>{{ product.description }}
                             
                             
                         </div>
@@ -59,6 +58,7 @@
                             {% if seller == profile %}
                                 <button type="button" class="btn btn-primary"> <a href="{% url 'reuse:manage_product' category.slug subcategory.slug product.slug %}" style="color:white">Manage</a></button>
                                 <button type="button" class="btn btn-primary"><a href="{% url 'reuse:sell_product' category.slug subcategory.slug product.slug %}" style="color:white" >Sell</a></button>
+                                <button type="button" class="btn btn-primary"><a href="{% url 'reuse:delete_product' category.slug subcategory.slug product.slug %}" style="color:white" >Delete</a></button>
                             
                             {% else %}
                                 <form id="add_to_wishlist" action="{% url 'reuse:add_to_wishlist' category.slug subcategory.slug product.slug %}" method="post">
