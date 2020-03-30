@@ -5,30 +5,46 @@
     {{ title }}
 {% endblock %}
 
+{% block titlebar_block %}
+    {{ title }}
+{% endblock %}
+
 {% block body_block %}
 
-<div class="centre">
+
     {% if profile.isSeller %}
+    <div class="container">
+        <div class="jumbotron centre">
         <h1>Thank you.</h1>
         <h2>You are now part of the Re* team.</h2>
         <p>To start adding products, navigate into a category. You should see an "add product" button<br/>If you ever need help see the Seller Manual under "My Profile". Otherwhise you can always have a look at the FAQs or contact us</p>
-        <p><a href="{% url 'reuse:seller_manual' %}">Go to the seller manual</a> or <a href="{% url 'reuse:homepage' %}">return to the homepage</a></p>
+        <p><a href="{% url 'reuse:seller_manual' %}" >Go to the seller manual</a> or <a href="{% url 'reuse:homepage' %}">return to the homepage</a></p>
+    </div>
+    </div>
     {% else %}
+    <div class="jumbotron">
         <h1>Become a seller</h1>
-        <h2>Join the Re* team</h2>
+    </div>
+    <div class="container">
+        <div class="jumbotron centre">
+        <h2 >Join the Re* team</h2>
         <p>We are glad to hear you'd like to become a seller, {{ username }}!<br/>
-        Becoming a seller on Re* means that you have officially taken one step forward in helping the planet. Add other text because my creativity is over</p>
+        Becoming a seller on Re* means that you have officially taken one step forward in helping the planet. 
+        <br /> 
+    Add other text because my creativity is over</p>
+        </div>
+        <hr />
         <br/>
-        <hr style="width:80%;"/>
-        <br/>
+        <div class="jumbotron centre">
         <h3>How can the user pay you?</h3>
-        <h4>Please select</h4>
+        <h4>Please select all kind of payments you accept: </h4>
         <form id="sellerForm" method="POST" action="{% url 'reuse:become_a_seller' user_name_slug=the_name %}">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <input type="submit" value="Become A Seller"/>
+                <input type="submit" value="Become A Seller" class="btn btn-primary"/>
         </form>
-        <a href="{% url 'reuse:homepage' %}">Return to the homepage</a></p>
+        <a href="{% url 'reuse:homepage' %} " >Return to the homepage</a></p>
+    </div>
     {% endif %}
 </div>
 {% endblock %}

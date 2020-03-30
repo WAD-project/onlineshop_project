@@ -6,25 +6,38 @@
 {% endblock %}
 
 {% block titlebar_block %}
-    My Profile
+    My Past Orders
 {% endblock %}
 
 {% block body_block %}
-
+<div class="container">
     {% if products %}
-    <ul>
-        {% for product in products %}
-            <li><img src="{{ product.image1.url }}" alt="{{ product.name }}'s image" style="width:200px;height:200px;"/>
-                <h2>{{ product.name }}<h2>
-                    <h4>Sold by {{ product.seller }}, £{{ product.price }}</h4>
-                <p>{{ product.description }}<p>
-                <a href="{% url 'reuse:leave_a_review' product_name_slug=product.slug %}">Leave a review!</a>
-            </li>
-            <hr />
+    <div class="row">
+            {% for p in products %}
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+                <div class="product-grid">
+                    <div class="product-image">
+                        <a href="#"><img src="{{  p.image1.url }}" class="pic-1" width="300px" height="300px" alt="{{ p.name }}'s image" /><br/> 
+                        </a>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="title">{{ p.name }}</h3>
+                         <p>Sold by: {{ p.seller }}</p>
+                        <p class="price">£{{ p.price }}0</p>
+                        <p> {{ p.description }}</p>
+                
+                        <a href="{% url 'reuse:leave_a_review' product_name_slug=product.slug %}">Leave a review!</a>
+                    </div>
+                </div>
+            </div>
+        </div>
         {% endfor %}
-    </ul>
+        <hr />
+
     {% else %}
-        <strong>You haven't bought anything yet</strong>
+    <div class="jumbotron">
+        <p class="bold">You haven't bought anything yet. Let`s start the shopping spree in Re*! </p>
+    </div>
     {% endif %}
-  
+  </div>
 {% endblock %}

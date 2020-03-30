@@ -11,6 +11,7 @@
 
 
 {% block body_block %}
+<!--Carousel code -->
 <div class="jumbotron jumbotron-carousel" >
 <div class="bd-example">
   <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
@@ -22,6 +23,7 @@
     <div class="carousel-inner carousel-resize">
       <div class="carousel-item active md-sizing">
         <img src="{% static 'images/flower.jpg' %}" class="d-block w-100 " alt="Picture of a flower on a desk">
+        <!--First image -->
         <div class="carousel-caption">
           <h5>Welcome to Re!</h5>
           {% if user.is_authenticated %} 
@@ -29,6 +31,7 @@
           {% endif %}
         </div>
       </div>
+      <!--Second image -->
       <div class="carousel-item">
         <img src="{% static 'images/skirt.jpg' %}" class="d-block w-100" alt="Image of a yellow skirt">
         <div class="carousel-caption ">
@@ -36,6 +39,7 @@
           <p>Here you can find fashion at amazing prices!</p>
         </div>
       </div>
+      <!--Third image -->
       <div class="carousel-item">
         <img src="{% static 'images/toy.jpg' %}" class="d-block w-100" alt="Image of a toy">
         <div class="carousel-caption">

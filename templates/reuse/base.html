@@ -3,65 +3,41 @@
 {% load reuse_template_tags %}
 
 <html>
+
      <head lang="en">
         <meta charset="UTF-8" />
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
-        <!--link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-            rel="stylesheet"-->
         <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"/>
-        <!--link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css"-->
-
-       <link rel="stylesheet" text="text/css" href="{% static 'css/main.css' %}"/>
-       <link rel="stylesheet" text="text/css" href="{% static 'css/my.css' %}"/>
-
-
+      
+       <link rel="stylesheet" text="text/css" href="{% static 'css/all.css' %}"/>
         <title>
             Re -
             {% block title_block %}
             {% endblock %}
         </title>
-         
-        <style type="text/css">
-            .search-bar{
-                max-width: 500px;
-                width: 100%;
-                align: center;
-            }
-            .centre{
-                text-align: center;
-            }
-        
-            .card{
-                max-width: 700px;
-            }
-            
-            .card-body{
-                padding:20px;
-                width:100%;
-            }
-         </style>
     </head>
-    <body>
 
+
+    <body>
+        <!-- Title Bar-->
          <div class="titlebar">
-            <h1 style="text-align:center; padding:3px;">Re - <!--logo--></h1>
-            <hr style="width:200px;"/>
-            <h3 style="text-align:center; padding:3px;">
+            <h1>Re - <!--logo--></h1>
+            <hr />
+            <h3>
             {% block titlebar_block %}
             {% endblock %}
             </h3>
         </div>
         
-        <div class="search-bar">
-            <form method="get" action="{% url 'reuse:query_result' %}">
-                <input type="text" class="form-control" name ="q" id="id_q" placeholder="Search...">
-            </form>    
-        </div>
-
 
         <!-- Navigation bar -->
         <nav class="navbar navbar-expand-md navbar-light bg-light">
             <a href="#" class="navbar-brand">Re-</a>
+            <div class="search-bar">
+            <form method="get" action="{% url 'reuse:query_result' %}">
+                <input type="text" class="form-control" name ="q" id="id_q" placeholder="Search...">
+            </form>    
+        </div>
             <!-- Hamburger button -->
             <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarMenu">
                 <span class="navbar-toggler-icon"> </span>
@@ -73,8 +49,7 @@
                         <a href="{% url 'reuse:homepage' %}" class="nav-link">Home</a>
                     </li>
 
-                    <!-- megamenu -->
-                    
+                    <!-- megamenu for categories-->
                     <li class="nav-item dropdown d-md-block menu-area">
                         <a class="nav-link  dropdown-toggle" id="mega-menu" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Catalog</a>
                         <div class="dropdown-menu mega-area">
@@ -82,7 +57,7 @@
                                      <div class="row">
                                         {% get_category_list %}
 
-                                        <div class="col-md-3 col-sm-4 d-none d-md-block">
+                                        <div class="col-lg-3 col-md-4 col-sm-4 d-none d-lg-block">
                                             <a class="dropdown-item" href="/reuse/clothes/dresses/"> <img src="{% static 'images/dress.jpg' %}" alt=""> </a>
                                             <a class="dropdown-item" href="/reuse/clothes/trousers/"> <img src="{% static 'images/trousers.jpg' %}" alt=""> </a>
                                         </div>
@@ -91,17 +66,17 @@
                         </div>
                     </li>
                     
+
                     {% if user.is_authenticated %}
                         {% get_user_name user as the_name %}
                         <li class="nav-item dropdown d-sm-none  d-md-block ">  
-                        <!-- --> 
+                        <!--Profile pop-down menu --> 
                             <a class="nav-link  dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" >My Profile</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="{% url 'reuse:profile' the_name %}">View Profile</a>
                                 <a class="dropdown-item" href="{% url 'reuse:wishlist' the_name %}">Wishlist</a>
                                 <a class="dropdown-item" href="{% url 'reuse:change_password' the_name %}">Change Password</a>
                                 <a class="dropdown-item" href="{% url 'reuse:edit_profile' the_name %}">Edit profile</a>
-                                <a class="dropdown-item" href="{% url 'reuse:become_a_seller' the_name %}">Become a seller</a>
                             </div>
                         </li>
                          <li class="nav-item  d-none d-sm-block d-md-none">
@@ -121,19 +96,19 @@
                 </ul>
             </div>
         </nav>
-        
-        <div>
-            <div>
-                {% block welcome_block %}
-                {% endblock %}
-            </div>
 
+        
+
+
+        <!-- main content of the page-->
+        <div>
             <div>
                 {% block body_block %}
                 {% endblock %}
             </div>
         </div>
 
+        <!-- Footer--> 
         <footer>
             <div class="footer-top">
                 <div class="container ">
@@ -169,8 +144,20 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script type="text/javascript">
-        document.getElementsByID("id_q").value = "{{query}}"
+        
+        function toggle_visibility(id) {
+           var e = document.getElementById(id);
+           if(e.style.display == 'block'){
+              e.style.display = 'none';
+           }
+           else{
+              e.style.display = 'block';
+           }
+       };
+
+       document.getElementsByID("id_q").value = "{{query}}"
     </script>
+
     </body>
 </html>
 

@@ -9,92 +9,58 @@
     Explore items in  {{ selected_category.name }}
 {% endblock %}
 
+
+
 {% block body_block %}
+<!-- Heading of category-->
 <div class="jumbotron">
     <h1> {{ selected_category.name }} </h1>
 </div>
-
+        <!-- If there are products in this category display them-->
         {% if products %}
         <div class="container">
         <div class="row">
             {% for p in products %}
             <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-                 
                 <div class="product-grid">
-                   
                     <div class="product-image">
-                        <a href="#"><img src="{{  p.image1.url }}" class="pic-1" width="300px" height="300px" alt="product`s image" /><br/> 
+                        <a href="#"><img src="{{  p.image1.url }}" class="pic-1" width="300px" height="300px" alt="{{ p.name }}`s image" /><br/> 
                         </a>
                     </div>
-                
-
                     <div class="product-content">
                         <h3 class="title"><a href="/reuse/cat/{{ selected_category.slug }}/{{ p.subcategory.slug }}/{{ p.slug }}">{{ p.name }}</a></h3>
-                        <h5 class="title"> {{ p.subcategory }}</h5>
+                        <h5 class="subcat"> {{ p.subcategory }}</h5>
                         <div class="price">£{{ p.price }}0</div>
 
                     </div>
 
+                    <!-- Pop-up buttons -->
                     <ul class="social">
+                        <!-- pop-up quick preview-->
                         <li> <a href="javascript:toggle_visibility('{{ p.slug }}')" data-tip="quick view">
                             <i class="fa fa-eye"></i> </a>
                          </li>
-
-                         <a href=></a>
-                             <!-- create the quick preview --> 
-                        <div id="{{ p.slug }}" style="display:none; position: absolute" class="pop-up-menu">
-                            <div class="card" style="width: 18rem;">
+                        <div id="{{ p.slug }}" class="pop-up-menu">
+                            <div class="card">
                                       <div class="card-body">
                                         <p class="card-text">{{ p.description }}</p>
                                         <p class="card-text"> Seller: {{ p.seller }}</p>
                                         <p>  </p>
                                       </div>
-                                    </div>
-                                    
+                            </div>         
                         </div>
-           
-                         
-
-                         {% if user.is_authenticated %}
-                
-                        <li> <a href="" data-tip="wishlist" >
-                            <i class="fa fa-heart"></i></a>
-                         </li> 
-                         {% endif %}
+                      
                     </ul>
-                   
-
                 </div>
             </div>
-
             {% endfor %}
             {% else %}
-            <div class="container"><strong>No products in {{ selected_category.name}}. </strong> </div>
-</div>
-        </div>
+            <!-- If there are no products in the category-->
+            <div class="container"><p class="bold">No products in {{ selected_category.name}}. </p> </div>
+    </div>
+    </div>
         {% endif %}
 
-
-
-
-
-
-
-
-<script type="text/javascript">
-   function toggle_visibility(id) {
-       var e = document.getElementById(id);
-       if(e.style.display == 'block'){
-          e.style.display = 'none';
-       }
-       else{
-          e.style.display = 'block';
-       }
-   };
-</script>
-       
-       
-        
 
 
 {% endblock %}

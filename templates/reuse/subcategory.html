@@ -15,7 +15,6 @@
     </div>
 
   {% if user.is_authenticated %}
-    <p> </p>
         {% if profile.isSeller %}
             <a href="/reuse/cat/{{ category.slug }}/{{ subcategory.slug }}/add_product/"><button type="button" class="btn btn-primary">Add a product</button></a>
         {% endif %}
@@ -26,29 +25,24 @@
         <div class="row">
             {% for p in products %}
             <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-                 
                 <div class="product-grid">
-                   
                     <div class="product-image">
-                        <a href="#"><img src="{{  p.image1.url }}" class="pic-1" width="300px" height="300px" alt="product`s image" /><br/> 
+                        <a href="#"><img src="{{  p.image1.url }}" class="pic-1" width="300px" height="300px" alt="{{ p.name }}'s image" /><br/> 
                         </a>
                     </div>
-                
-
                     <div class="product-content">
                         <h3 class="title"><a href="/reuse/cat/{{ p.category.slug }}/{{ p.subcategory.slug }}/{{ p.slug }}">{{ p.name }}</a></h3>
                         <div class="price">£{{ p.price }}0</div>
                     </div>
 
                     <ul class="social">
+                        <!-- pop-up menu with quick preview for the product -->
                         <li> <a href="javascript:toggle_visibility('{{ p.slug }}')" data-tip="quick view">
                             <i class="fa fa-eye"></i> </a>
                          </li>
-
                          <a href=></a>
-                             <!-- create the quick preview --> 
-                        <div id="{{ p.slug }}" style="display:none; position: absolute" class="pop-up-menu">
-                            <div class="card" style="width: 18rem;">
+                        <div id="{{ p.slug }}" class="pop-up-menu">
+                            <div class="card">
                                       <div class="card-body">
                                         <p class="card-text">{{ p.description }}</p>
                                         <p class="card-text"> Seller: {{ p.seller }}</p>
@@ -57,41 +51,16 @@
                                     </div>
                                     
                         </div>
-                         {% if user.is_authenticated %}
-                    
-                
-                        <li> <a href="" data-tip="wishlist" >
-                            <i class="fa fa-heart"></i></a>
-                         </li> 
-                         {% endif %}
+                         
                     </ul>
-                   
-
-                </div>
             </div>
-           
+            </div>
             {% endfor %}
             {% else %}
-            <div class="container"><strong>No products in {{ subcategory.name }}. </strong> </div>
-</div>
+            <div class="container"><p class="strong">No products in {{ subcategory.name }}. </p> </div>
+        </div>
         </div>
         {% endif %}
-
-
-
-
-<script type="text/javascript">
-   function toggle_visibility(id) {
-       var e = document.getElementById(id);
-       if(e.style.display == 'block'){
-          e.style.display = 'none';
-       }
-       else{
-          e.style.display = 'block';
-       }
-   };
-</script>
-
 
   
 {% endblock %}

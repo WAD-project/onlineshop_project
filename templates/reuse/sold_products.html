@@ -6,19 +6,31 @@
 {% endblock %}
 
 {% block titlebar_block %}
-    My Profile
+    Sold products
 {% endblock %}
 
 {% block body_block %}
-
+<div class="container">
     {% if products %}
-    <ul>
-        {% for product in products %}
-        <li><a href="/reuse/{{ product.category.slug }}/{{ product.subcategory.slug }}/{{ product.slug }}">{{ product.name }}</a></li>
+    <div class="row">
+            {% for p in products %}
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+                <div class="product-grid">
+                    <div class="product-image">
+                        <a href="#"><img src="{{  p.image1.url }}" class="pic-1" width="300px" height="300px" alt="product`s image" /><br/> 
+                        </a>
+                    </div>
+                    <div class="product-content">
+                        <h3 class="title"><a href="/reuse/{{ product.category.slug }}/{{ product.subcategory.slug }}/{{ product.slug }}">{{ p.name }}</a></h3>
+                    </div>
+                </div>
+            </div>
+        </div>
         {% endfor %}
-    </ul>
     {% else %}
-        <strong>You haven't sold anything yet</strong>
+    <div class="jumbotron">
+        <p class="bold">You haven't sold anything yet.</p>
+    </div>
     {% endif %}
-  
+</div> 
 {% endblock %}

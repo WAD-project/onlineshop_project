@@ -10,7 +10,7 @@
     {% if owned %}
         My Profile
     {% else %}
-        {{ otheruser.username }}'s Profile
+        {{otheruser.username }}'s Profile
     {% endif %}
 {% endblock %}
 
@@ -25,13 +25,32 @@
                     <p><a href="{% url 'reuse:wishlist' user_name_slug=the_name  %}">Wishlist</a></p>
                     {% if isSeller %}
                         <p><a href="{% url 'reuse:seller_manual' %}">Read the Seller Manual</a></p>
-                        <p><a href="{% url 'reuse:current_products' user_name_slug=the_name %}">Your Current Products</a></p>
                         <p><a href="{% url 'reuse:sold_products' user_name_slug=the_name %}">Your Sold Products</a></p>
                     {% else %}
                         <p><a href="{% url 'reuse:become_a_seller' user_name_slug=the_name  %}">Become A Seller</a></p>
                     {% endif %}
                     <p><a href="{% url 'reuse:past_orders' user_name_slug=the_name %}">Your Past Orders</a></p>
                 {% endif %}
+
+                       {% if user.is_authenticated %}
+                           {% if isSeller %}
+                                {% if products %}
+                                    <h3 class="currently-selling">Currently selling:</h3>
+                                    
+                                        {% for product in products %}
+                                            <p><a href="{% url 'reuse:product' category_name_slug=product.category.slug subcategory_name_slug=product.subcategory.slug product_name_slug=product.slug %}">{{ product.name }}</a></p>
+                                        {% endfor %}
+                                    
+                                {% else %}
+                                    {% if owned %}
+                                        <p>You are not currently selling anything.</p>
+                                    {% else %}
+                                        <p>This user is not currently selling anything.</p>
+                                    {% endif %}
+                                {% endif %}
+                           {% endif %}
+                        {% endif %}
+      
         </div>
         
         <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
@@ -56,31 +75,9 @@
             {% endif %}
             <hr/>
             <p><i class="fa fa-info"></i>{{ description }}</p>
-        </div>
        
-       
-       <div>
-           {% if user.is_authenticated %}
-               {% if isSeller %}
-                    {% if products %}
-                        <h3>Currently selling:</h3>
-                        <ul>
-                            {% for product in products %}
-                                <li><a href="{% url 'reuse:product' category_name_slug=product.category.slug subcategory_name_slug=product.subcategory.slug product_name_slug=product.slug %}">{{ product.name }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        {% if owned %}
-                            <p>You are not currently selling anything.</p>
-                        {% else %}
-                            <p>This user is not currently selling anything.</p>
-                        {% endif %}
-                    {% endif %}
-               {% endif %}
-            {% endif %}
-        </div>
-       
-        <div>
+         <hr class="review" />
+         <div>
         {% if not owned %}
             <p>If you've bought something from {{ otheruser }}, you can leave a review in <a href="{% url 'reuse:past_orders' the_name %}">your past orders</a></p><hr style="width:20%;"/>
         {% endif %}
@@ -97,6 +94,11 @@
             <p> No reviews yet! Be the first one</p>
         {% endif %}
         </div>
+        </div>
+       
+   
+       
+        
        
         <div class="col-lg-3 col-md-6 d-none d-lg-block">
             <p></p>
