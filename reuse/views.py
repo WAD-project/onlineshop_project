@@ -312,7 +312,30 @@ def user_login(request):
 Successful login with Google Account
 """
 def manage(request):
-    return render(request, 'reuse/manage.html')
+    context_dict = {}
+    user = request.user
+    if request.method == 'POST':
+        profile_form = UserProfileForm(request.POST)
+
+        if profile_form.is_valid():
+            profile = profile_form.save(commit=False)
+            profile.user = user
+
+            if 'picture' in request.FILES:
+                profile.picture = request.FILES['picture']
+            profile.save()
+            
+            wishlist = Wishlist(user=profile)
+            wishlist.save()
+        
+        else:
+            print(profile_form.errors)
+            
+    else:
+        profile_form = UserProfileForm()
+    
+    context_dict['profile_form'] = profile_form
+    return render(request, 'reuse/manage.html', context_dict)
 
 
 """
@@ -540,7 +563,6 @@ def delete_product(request, category_name_slug, subcategory_name_slug, product_n
 
 def sell_product(request, category_name_slug, subcategory_name_slug, product_name_slug):
     context_dict = {'title':'Sell your product'}
-    
     try:
         product = CurrentProduct.objects.get(slug = product_name_slug)
     except CurrentProduct.DoesNotExist:
@@ -560,6 +582,7 @@ def sell_product(request, category_name_slug, subcategory_name_slug, product_nam
         except User.DoesNotExist:
             context_dict['message'] = 'No user with such name'
             return render(request, 'reuse/sell_product.html', context_dict)
+        
         newProduct = SoldProduct(name=product.name, subcategory=product.subcategory, category=product.category, description=product.description, price=product.price, image1=product.image1)
         newProduct.seller = seller
         newProduct.buyer = buyer

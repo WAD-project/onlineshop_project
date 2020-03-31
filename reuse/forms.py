@@ -81,7 +81,7 @@ class UserProfileForm(forms.ModelForm):
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
     class Meta:
         model = UserProfile
-        fields = ('city', 'postcode', 'description','picture', 'address')
+        fields = ('city', 'postcode', 'description', 'picture', 'address')
     field_order=['address', 'postcode', 'city', 'description', 'picture']
 
 
