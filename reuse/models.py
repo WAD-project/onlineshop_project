@@ -1,8 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
-from django.dispatch import receiver
-from allauth.account.signals import user_signed_up
+
 
 
 # Create your models here.
@@ -32,20 +31,6 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
-
-    @receiver(user_signed_up)
-    def populate_profile(sociallogin, user, **kwargs):
-        user.profile = UserProfile()
-        if sociallogin.account.provider == 'google':
-            user_data = user.socialaccount_set.filter(provider='google')[0].extra_data
-            picture_url = user_data['picture']
-            email = user_data['email']
-            full_name = user_data['name']
-
-        user.profile.picture = picture_url
-        user.profile.email = email
-        user.profile.save()
- 
 
 class Category(models.Model):
     name = models.CharField(max_length = 128, unique = True)
