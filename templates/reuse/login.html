@@ -10,26 +10,51 @@
 {% endblock %}
 
 {% block body_block %} 
- 
+{% if notlogged %}
 <div class="container">
-	<div class="login-page ">
-		<h1>Login to Re</h1> 
+<div class="jumbotron">
+	<div class="centre">
+	<h2> Ouchhhh, seems that you entered invalid credentials. </h2>
+	<p class="strong"> You can either try again to <a href="{% url 'reuse:login' %}">log in</a> where you can try to login again or reset your password. Otherwise return to our <a href="{% url 'reuse:homepage' %}">homepage </a> and continue your shopping journey with Re. </p>
+</div>
+</div>
+</div>
+
+{% else %}
+
+ <div class="jumbotron">
+ 	<h1>Login to Re</h1>
+ </div>
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-lg-3 col-md-2 col-sm-2 col-xs-2">
+                <p></p>
+        </div>
+	<div class="col-lg-6 col-md-8 col-sm-6 col-xs-2 form-group">
+		 
 		
 		<form  method="post" action="{% url 'reuse:login' %}">
 			{% csrf_token %} 
 			Username: <input type="text" class= "form-control" name="username" value="" /> <br /> 
 			Password: <input type="password" class= "form-control" name="password" value="" /> <br /> 
-			<input type="submit" value="Submit" class="btn btn-primary"/> <br />
+			<input type="submit" value="Submit" class="btn btn-primary "/> <br />
+
 		</form>
 
-	
-		    <a href="{% url 'password_reset'  %}">Reset Password</a>
+		<a href="{% url 'password_reset'  %}">Reset Password</a>
 		    <hr />
-            <a href="{% url 'social:begin' 'google-oauth2' %}">  <button type="button" class="btn btn-primary"> Google Login </button></a>
-		
+		 <a href="{% url 'social:begin' 'google-oauth2' %}">  <button type="button" class="btn btn-primary"> Google Login </button></a>
 	
 	</div>
+
+	<div class="col-lg-3 col-md-2 col-sm-2 col-xs-2">
+                <p></p>
+    </div>
 </div>
+</div>
+{% endif %}
 {% endblock %}
 
 

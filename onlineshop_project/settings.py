@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'social_django',
     'django_private_chat',
-    'reuse', 
+    'reuse',
+    'widget_tweaks', 
 ]
 
 CHAT_WS_SERVER_HOST = 'localhost'

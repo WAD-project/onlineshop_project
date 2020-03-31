@@ -54,7 +54,6 @@ def query_result(request):
         else:
             search_type = "both"
         context_dict['query'] = str(query)
-        print(search_type)
         context_dict['search_type'] = str(search_type)
     
     product_post = None
@@ -301,9 +300,10 @@ def user_login(request):
                 return redirect(reverse('reuse:homepage'))
             else:
                 return HttpResponse("Your account is disabled")
+            
         else:
             print(f"Invalid login details:{username}, {password}")
-            return HttpResponse ("Invalid login details supplied.")
+            return render(request, 'reuse/login.html', {'notlogged': True, })
     else:
         return render(request, 'reuse/login.html')
  
@@ -347,14 +347,15 @@ def user_logout(request):
      logout(request)
      return redirect(reverse('reuse:homepage'))
 
-
+"""
+change password
+"""
 @login_required
 def change_password(request, user_name_slug):
     user = request.user
     try:
         profile = UserProfile.objects.get(user=user)
     except UserProfile.DoesNotExist:
-        print("No user profile")
         return redirect(reverse('reuse:homepage'))
         
     context_dict = {}
@@ -366,7 +367,6 @@ def change_password(request, user_name_slug):
             update_session_auth_hash(request, user)  
             messages.success(request, 'Your password has been updated successfully!')
             user.save()
-            print("get here")
             changed = True
 
         else:
@@ -494,7 +494,6 @@ def add_product(request, category_name_slug, subcategory_name_slug):
     try:
         seller = UserProfile.objects.get(user=user)
     except UserProfile.DoesNotExist:
-        print("you don't have a userprofile")
         return redirect('/reuse/')
     
     product = None
@@ -658,7 +657,6 @@ def leave_a_review(request, product_name_slug):
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
-            print("hello")
             review = form.save(commit=False)
             review.seller = product.seller
             review.buyer = product.buyer
