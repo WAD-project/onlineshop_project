@@ -9,27 +9,25 @@
     Search
 {% endblock %}
 
-<!-- For Viktoria
-I fear if I touch something I'll make a mess, so:
-    From the context dict you'll receive
-       query : a string with the query
-       search_type : a string with the search type (so either 'products', 'users' or 'both')
-       product_post : a list with the products that matched the search for title or description
-       user_post : a list of UserProfiles with name or description matching the query
-    if the search_type is products then user_post will be None and vice-versa
--->
+
 {% block body_block %}
-{% if product_post %}
-<div class="container">
+<!-- if search for both products and users -->
+{% if product_post and user_post %}
+    <div class="jumbotron">
+        <h1> Search results for {{ query }}</h1>      
+    </div>
+    <div class="container">
+    <h3 class="centre"> Products that match {{ query }} </h3>
+    <hr style="width:400px"/>
     <div class="row">
     {% for product in product_post %}
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+   <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
                 <div class="product-grid">
                     <div class="product-image">
                         <a href="{% url 'reuse:product' product.category.slug product.subcategory.slug product.slug %}"><img src="{{ product.image1.url }}" class="pic-1" width="300px" height="300px" alt="{{ product.name }}`s image" /><br/> 
                         </a>
                     </div>
-                     
+                     {% if user.is_authenticated %}
                     <div class="product-content">
                         <h3 class="title"><a href="{% url 'reuse:product' product.category.slug product.subcategory.slug product.slug %}">{{ product.name }}</a></h3>
                         <h5 class="subcat"> {{ product.subcategory }}</h5>
@@ -37,7 +35,6 @@ I fear if I touch something I'll make a mess, so:
                         <p> Added on {{ product.date }}.</p>
 
                     </div>
-                    {% if user.is_authenticated %}
 
                     <!-- Pop-up buttons -->
                     <ul class="social">
@@ -64,7 +61,87 @@ I fear if I touch something I'll make a mess, so:
                     </ul>
                      {% else %}
                     <div class="card-body">
-                        <p><a href="{% url 'reuse:login' %}">Log in</a> or <a href="{% url 'reuse:register' %}">Register</a> to see seller`s info</p>
+                        <p><a href="{% url 'reuse:login' %}">Log in</a> or <a href="{% url 'reuse:register' %}">Register</a> to see the product's info</p>
+                    </div>
+            {% endif %}
+                </div>
+            </div>   
+
+    {% endfor %}
+    </div>
+   
+    <h3 class="centre" style="margin-top: 100px"> Users that match {{ query }} </h3>
+    <hr style="width:400px"/>
+    <div class="row">
+    {% for user in user_post %}
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+                <div class="product-grid">
+                    <div class="product-image">
+                        <img src="{{MEDIA_URL}}{{ user.picture }}" class="pic-1" width="300px" height="300px" alt="#`s image" /><br/> 
+                    </div>
+                     
+                    <div class="product-content">
+                        <h3 class="title"><a href="">{{ user }} </a></h3>
+                        <h5 class="subcat"> <i class="fa fa-info"></i>  {{user.description }}</h5>
+                    </div>
+                </div>
+            </div>  
+    {% endfor %}        
+    </div>
+</div>
+
+
+ <!-- if search for products only -->   
+{% elif product_post %}
+    <div class="jumbotron">
+        <h1> Search results for {{ query }}</h1>      
+    </div>
+    <div class="container">
+    <h3 class="centre"> Products that match {{ query }} </h3>
+    <hr style="width:400px"/>
+    <div class="row">
+   {% for product in product_post %}
+   <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+                <div class="product-grid">
+                    <div class="product-image">
+                        <a href="{% url 'reuse:product' product.category.slug product.subcategory.slug product.slug %}"><img src="{{ product.image1.url }}" class="pic-1" width="300px" height="300px" alt="{{ product.name }}`s image" /><br/> 
+                        </a>
+                    </div>
+                     {% if user.is_authenticated %}
+                    <div class="product-content">
+                        <h3 class="title"><a href="{% url 'reuse:product' product.category.slug product.subcategory.slug product.slug %}">{{ product.name }}</a></h3>
+                        <h5 class="subcat"> {{ product.subcategory }}</h5>
+                        <div class="price">£{{ product.price }}0</div>
+                        <p> Added on {{ product.date }}.</p>
+
+                    </div>
+
+                    <!-- Pop-up buttons -->
+                    <ul class="social">
+                        <!-- pop-up quick preview-->
+                        <li> <a href="javascript:toggle_visibility('{{ product.slug }}')" data-tip="quick view">
+                            <i class="fa fa-eye"></i> </a>
+                         </li>
+                        <div id="{{ product.slug }}" class="pop-up-menu">
+                            <div class="card">
+                                      <div class="card-body">
+                                        <p class="card-text">{{ product.description }}</p>
+                                        <p class="card-text">  Sold by:
+                                            {% if product.seller.user == request.user %}
+                                                <a href="{% url 'reuse:profile' the_name %}">You</a>
+                                            {% else %}
+                                                <a href="{% url 'reuse:profile' product.seller.slug %}">{{ product.seller }}</a>
+                                            {% endif %}
+                                            </p>
+                                        <p>  </p>
+                                      </div>
+                            </div>         
+                        </div>
+                      
+                    </ul>
+                     {% else %}
+                    <div class="card-body">
+                        <p><a href="{% url 'reuse:login' %}">Log in</a> or <a href="{% url 'reuse:register' %}">Register</a> to see the product's info</p>
                     </div>
             {% endif %}
                 </div>
@@ -72,17 +149,47 @@ I fear if I touch something I'll make a mess, so:
 
     {% endfor %}
 
-    
+   </div>
+    </div>
+
+
+<!-- search for users -->
+{% elif user_post %}
+    <div class="jumbotron">
+        <h1> Search results for {{ query }}</h1>      
+    </div>
+    <div class="container">
+    <h3 class="centre"> Users that match {{ query }} </h3>
+    <hr style="width:400px"/>
+    <div class="row">
+ {% for user in user_post %}
+    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+                <div class="product-grid">
+                    <div class="product-image">
+                        <img src="{{MEDIA_URL}}{{ user.picture }}" class="pic-1" width="300px" height="300px" alt="#`s image" /><br/> 
+                    </div>
+                     
+                    <div class="product-content">
+                        <h3 class="title"><a href="">{{ user }} </a></h3>
+                        <h5 class="subcat"> <i class="fa fa-info"></i>  {{user.description }}</h5>
+                    </div>
+                </div>
+   </div>        
+
+      {% endfor %}
+</div>
+</div>
+
+
 {% else %}
     
-<div class="contaner">
-    <div class="jumbotron">
-   
-
-    <h1>No results </h1>         
-    <p class="centre bold">There were no results matching your search: "{{ query }}"</p>
+    <div class="contaner">
+        <div class="jumbotron">
+            <h1>No results </h1>         
+            <p class="centre bold">There were no results matching your search: "{{ query }}" </p>
     
+        </div>
     </div>
-</div>
 {% endif %}
+
 {% endblock %}

@@ -54,7 +54,6 @@ def query_result(request):
         else:
             search_type = "both"
         context_dict['query'] = str(query)
-        print(search_type)
         context_dict['search_type'] = str(search_type)
     
     product_post = None
@@ -301,9 +300,10 @@ def user_login(request):
                 return redirect(reverse('reuse:homepage'))
             else:
                 return HttpResponse("Your account is disabled")
+            
         else:
             print(f"Invalid login details:{username}, {password}")
-            return HttpResponse ("Invalid login details supplied.")
+            return render(request, 'reuse/login.html', {'notlogged': True, })
     else:
         return render(request, 'reuse/login.html')
  
@@ -324,7 +324,9 @@ def user_logout(request):
      logout(request)
      return redirect(reverse('reuse:homepage'))
 
-
+"""
+change password
+"""
 @login_required
 def change_password(request, user_name_slug):
     user = request.user

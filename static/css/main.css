@@ -42,6 +42,11 @@ body{
 }
 
 
+.form-inline label{
+    padding-right: 5px;
+}
+
+
                
 /** Overwrited css for navbar**/
 .navbar-nav a{
@@ -194,8 +199,10 @@ body{
 /* Category/subcategory  css*/
 .jumbotron h1{
 	text-align:center;
-	font-size: 3em;
+	font-size:3em;
 }
+
+
 
  .product-grid{
     text-align:center;
@@ -727,4 +734,6 @@ a:hover{
 }
 
 
-
+.search-bar i{
+    margin-top: 10px;
+}

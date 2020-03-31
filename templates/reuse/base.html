@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
         <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous"/>
       
-       <link rel="stylesheet" text="text/css" href="{% static 'css/all.css' %}"/>
+       <link rel="stylesheet" text="text/css" href="{% static 'css/main.css' %}"/>
         <title>
             Re -
             {% block title_block %}
@@ -35,15 +35,18 @@
             <a href="#" class="navbar-brand">Re-</a>
             <div class="search-bar">
             <form method="get" action="{% url 'reuse:query_result' %}">
-                <input type="text" class="form-control" name ="q" id="id_q" placeholder="Search..."/>
-                <!-- Viktoria this is for you to style -->
+    
+                <input type="text" class="form-control" name ="q" id="id_q" placeholder="Search for ..."/>
+
+                <div class="form-inline">
                 <input type="radio" id="users" name="search_type" value="users"/>
-                <label for="users">Users</label><br>
+                <label for="users" style="padding-right:25px">Users</label><br>
                 <input type="radio" id="products" name="search_type" value="products"/>
-                <label for="products">Products</label>
+                <label for="products" style="padding-right:25px">Products</label>
                 <input type="radio" id="both" name="search_type" value="both"/>
                 <label for="both">Both</label>
-                <input type="submit" value="Search"/>
+            </div>
+                <!--<input type="submit" value="Search"/>-->
             </form>    
         </div>
             <!-- Hamburger button -->

@@ -1,5 +1,6 @@
 {% extends 'reuse/profile.html' %}
 {% load staticfiles %}
+{% load widget_tweaks %}
 
 {% block title_block %}
 	Edit Profile
@@ -10,23 +11,77 @@
 {% endblock %}
 
 {% block body_block %}
-<div class="container">
-    <div class="edit-profile">
+        
+
         {% if changed %}
-            <strong>Your profile has beed updated successfully!</strong>
-            <p>Go to <a href="{% url 'reuse:profile' the_name %}">your profile page </a>or back to the <a href="{% url 'reuse:homepage' %}">Homepage</a></p><br />
+        <div class="container">
+            <div class="jumbotron">
+                <p class="bold">Your profile has beed updated successfully!</strong>
+                <p>Go to <a href="{% url 'reuse:profile' the_name %}">your profile page </a>or back to the <a href="{% url 'reuse:homepage' %}">Homepage</a></p><br />
+            </div>
+        </div>
         {% else %}
+        <div class="jumbotron">
             <h1>Edit Profile</h1>
-            <form method="post" enctype="multipart/form-data" action="{% url 'reuse:edit_profile' the_name %}">
-                {% csrf_token %}
-                <table>
-                    {{ form.as_table }}
-                    {{ profile_form.as_table}}
-                </table>
-                <input type="submit" class="btn btn-primary" value="Submit"/>
-            </form>
+        </div>
+        <div class="container">
+        <div class="row">
+
+            <div class="col-lg-3 col-md-2 col-sm-2">
+                <p></p>
+            </div>
+
+        <div class="col-lg-6 col-md-8 col-sm-6">
+        <form id="user_form" method="post" class="form-horizontal" action="{% url 'reuse:edit_profile' the_name %}" enctype="multipart/form-data">
+            
+    
+            {% csrf_token %}
+
+            {% for hidden_field in form.hidden_fields %}
+                {{ hidden_field }}
+            {% endfor %}
+
+            {% for field in form.visible_fields %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {% render_field field class="form-control" %}
+                {% if field.help_text %}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            {% for hidden_field in profile_form.hidden_fields %}
+                {{ hidden_field }}
+            {% endfor %}
+
+            {% for field in profile_form.visible_fields %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {% render_field field class="form-control" %}
+                {% if field.help_text %}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                {% endif %}
+            </div>
+            {% endfor %}
+    
+             
+           
+             
+             <br />
+
+            
+            
+            <input type="submit" name="submit" value="Edit profile" class="btn btn-primary centre"/>
+        </form>
+        </div>
+        <div class="col-lg-3 col-md-2 col-sm-2">
+                <p></p>
+    </div>
+    </div>
+ 
             <br/>
         {% endif %}
-    </div>
+  
 </div>
 {% endblock %}

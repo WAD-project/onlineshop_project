@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'social_django',
-    'reuse', 
+    'reuse',
+    'widget_tweaks', 
 ]
 
 
