@@ -83,6 +83,9 @@
                              <a class="nav-link"  href="{% url 'reuse:profile' user_name_slug=the_name %}">My Profile</a>
                         </li>
                         <li class="nav-item">
+                            <a href="{% url 'reuse:signIn_chat' %}" class="nav-link">Chat</a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{% url 'reuse:logout' %}" class="nav-link  "> Logout </a>
                         </li>
                     {% else %}
@@ -91,9 +94,6 @@
                         </li>
                         <li class="nav-item">
                             <a href="{% url 'reuse:login' %}" class="nav-link  ">Log in</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{% url 'reuse:chat' %}" class="nav-link">Chat</a>
                         </li>
                 {% endif %}   
                 </ul>
