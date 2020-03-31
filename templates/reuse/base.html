@@ -35,7 +35,15 @@
             <a href="#" class="navbar-brand">Re-</a>
             <div class="search-bar">
             <form method="get" action="{% url 'reuse:query_result' %}">
-                <input type="text" class="form-control" name ="q" id="id_q" placeholder="Search...">
+                <input type="text" class="form-control" name ="q" id="id_q" placeholder="Search..."/>
+                <!-- Viktoria this is for you to style -->
+                <input type="radio" id="users" name="search_type" value="users"/>
+                <label for="users">Users</label><br>
+                <input type="radio" id="products" name="search_type" value="products"/>
+                <label for="products">Products</label>
+                <input type="radio" id="both" name="search_type" value="both"/>
+                <label for="both">Both</label>
+                <input type="submit" value="Search"/>
             </form>    
         </div>
             <!-- Hamburger button -->
@@ -83,14 +91,14 @@
                              <a class="nav-link"  href="{% url 'reuse:profile' user_name_slug=the_name %}">My Profile</a>
                         </li>
                         <li class="nav-item">
-                            <a href="{% url 'reuse:logout' %}" class="nav-link  "> Logout </a>
+                            <a href="{% url 'reuse:logout' %}" class="nav-link">Logout</a>
                         </li>
                     {% else %}
                         <li class="nav-item ">
-                            <a href="{% url 'reuse:register' %}" class="nav-link ">Register</a>
+                            <a href="{% url 'reuse:register' %}" class="nav-link">Register</a>
                         </li>
                         <li class="nav-item">
-                            <a href="{% url 'reuse:login' %}" class="nav-link  ">Log in</a>
+                            <a href="{% url 'reuse:login' %}" class="nav-link">Log in</a>
                         </li>
                 {% endif %}   
                 </ul>
