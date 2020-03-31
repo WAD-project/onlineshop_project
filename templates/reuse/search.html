@@ -20,14 +20,15 @@
                         <a href="{% url 'reuse:product' product.category.slug product.subcategory.slug product.slug %}"><img src="{{ product.image1.url }}" class="pic-1" width="300px" height="300px" alt="{{ product.name }}`s image" /><br/> 
                         </a>
                     </div>
-                     {% if user.is_authenticated %}
+                     
                     <div class="product-content">
                         <h3 class="title"><a href="{% url 'reuse:product' product.category.slug product.subcategory.slug product.slug %}">{{ product.name }}</a></h3>
-                        <h5 class="subcat"> {{ p.subcategory }}</h5>
-                        <div class="price">£{{ p.price }}0</div>
+                        <h5 class="subcat"> {{ product.subcategory }}</h5>
+                        <div class="price">£{{ product.price }}0</div>
                         <p> Added on {{ product.date }}.</p>
 
                     </div>
+                    {% if user.is_authenticated %}
 
                     <!-- Pop-up buttons -->
                     <ul class="social">
@@ -54,7 +55,7 @@
                     </ul>
                      {% else %}
                     <div class="card-body">
-                        <p><a href="{% url 'reuse:login' %}">Log in</a> or <a href="{% url 'reuse:register' %}">Register</a> to see the product's info</p>
+                        <p><a href="{% url 'reuse:login' %}">Log in</a> or <a href="{% url 'reuse:register' %}">Register</a> to see seller`s info</p>
                     </div>
             {% endif %}
                 </div>
