@@ -49,34 +49,62 @@ def query_result(request):
     query = ""
     if request.GET:
         query = request.GET['q']
+        if 'search_type' in request.GET:
+            search_type = request.GET['search_type']
+        else:
+            search_type = "both"
         context_dict['query'] = str(query)
+        print(search_type)
+        context_dict['search_type'] = str(search_type)
     
     product_post = None
+    user_post = None
     if (str(query) != ""):
-        product_post = sorted(get_shop_queryset(query), key=attrgetter('date'), reverse=True)
+        if str(search_type) == "products":
+            product_post = sorted(get_product_queryset(query), key=attrgetter('date'), reverse=True)
+        elif str(search_type) == "users":
+            user_post = sorted(get_user_queryset(query), key=attrgetter('slug'))
+        else:
+            product_post = sorted(get_product_queryset(query), key=attrgetter('date'), reverse=True)
+            user_post = sorted(get_user_queryset(query), key=attrgetter('slug'))
     else:
         return redirect(reverse('reuse:homepage'))
 
     context_dict['product_post'] = product_post
-    return render(request, 'reuse/search.html', context = context_dict)
+    context_dict['user_post'] = user_post
+    return render(request, 'reuse/search.html', context=context_dict)
 
 
-def get_shop_queryset(query=None):
+def get_product_queryset(query=None):
     queryset = []
     queries = query.split(" ")
     for q in queries:
-        posts = CurrentProduct.objects.filter(
-                Q(name__icontains=q))
+        posts = CurrentProduct.objects.filter(Q(name__icontains=q))
         otherposts = CurrentProduct.objects.filter(Q(description__icontains=q))
-        
+    
     for post in posts:
         queryset.append(post)
-        
+                  
     for otherpost in otherposts:
         queryset.append(otherpost)
-        
+       
     queryset = list(dict.fromkeys(queryset))
-            
+    return queryset
+       
+def get_user_queryset(query=None):
+    queryset = []
+    queries = query.split(" ")
+    for q in queries:
+        users = UserProfile.objects.filter(Q(slug__icontains=q))
+        otherusers = UserProfile.objects.filter(Q(description__icontains=q))
+    
+    for user in users:
+        queryset.append(user)
+                      
+    for otheruser in otherusers:
+        queryset.append(otheruser)
+    
+    queryset = list(dict.fromkeys(queryset))
     return queryset
  
  

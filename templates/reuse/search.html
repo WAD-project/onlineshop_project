@@ -9,6 +9,15 @@
     Search
 {% endblock %}
 
+<!-- For Viktoria
+I fear if I touch something I'll make a mess, so:
+    From the context dict you'll receive
+       query : a string with the query
+       search_type : a string with the search type (so either 'products', 'users' or 'both')
+       product_post : a list with the products that matched the search for title or description
+       user_post : a list of UserProfiles with name or description matching the query
+    if the search_type is products then user_post will be None and vice-versa
+-->
 {% block body_block %}
 {% if product_post %}
 <div class="container">
@@ -23,8 +32,8 @@
                      {% if user.is_authenticated %}
                     <div class="product-content">
                         <h3 class="title"><a href="{% url 'reuse:product' product.category.slug product.subcategory.slug product.slug %}">{{ product.name }}</a></h3>
-                        <h5 class="subcat"> {{ p.subcategory }}</h5>
-                        <div class="price">£{{ p.price }}0</div>
+                        <h5 class="subcat"> {{ product.subcategory }}</h5>
+                        <div class="price">£{{ product.price }}0</div>
                         <p> Added on {{ product.date }}.</p>
 
                     </div>
