@@ -34,7 +34,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #during development!!!!
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #during development!!!!
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'reuse-preloved-items'
+EMAIL_HOST_PASSWORD = 'kakaviki95'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'Re* team <noreply@example.com>'
 
 # Application definition
 
@@ -162,4 +168,6 @@ LOGIN_URL = '/auth/login/google-oauth2/'
 LOGIN_REDIRECT_URL = '/manage/'
 LOGOUT_REDIRECT_URL = ''
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
+
 
