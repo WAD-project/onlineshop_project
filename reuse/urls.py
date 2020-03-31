@@ -40,7 +40,7 @@ path('sold/<slug:product_name_slug>/leave_a_review/', views.leave_a_review, name
 path('sold/<slug:product_name_slug>/update_review/', views.update_review, name='update_review'),
 path('sold/<slug:product_name_slug>/delete_review/', views.delete_review, name='delete_review'),
 url(r'^admin/', admin.site.urls),
-url(r'^$',views.singIn_chat),
+url(r'^$', views.singIn_chat),
 url(r'^postsign/',views.postsign),
 
 

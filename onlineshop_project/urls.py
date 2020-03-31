@@ -15,14 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.urls import include
+from django.conf.urls import include
+from django.conf.urls import url
 from reuse import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django_private_chat import urls as django_private_chat_urls
 from django.contrib.auth.views import LogoutView, PasswordResetView, PasswordResetCompleteView,PasswordResetConfirmView,PasswordChangeDoneView,PasswordChangeView
+
 urlpatterns = [
     path('', views.homepage, name='homepage'),
     path('reuse/', include('reuse.urls')),
+    path('', include('django_private_chat.urls')),
     path('admin/', admin.site.urls),
     path('', include('social_django.urls', namespace='social')),
     path(

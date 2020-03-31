@@ -21,7 +21,7 @@
             <img src="{{ picture.url }}" width="300" height="300" alt="profile image" />
                 {% if owned %}
                     <p><a href="{% url 'reuse:change_password' user_name_slug=the_name %}"> Change Password </a></p>
-                    <p><a href="{% url 'reuse:edit_profile' user_name_slug=the_name  %}"> Edit Profile </a></p>
+                    <p><a href="{% url 'reuse:edit_profile' user_name_slug=the_name  %}">Edit Profile</a></p>
                     <p><a href="{% url 'reuse:wishlist' user_name_slug=the_name  %}">Wishlist</a></p>
                     {% if isSeller %}
                         <p><a href="{% url 'reuse:seller_manual' %}">Read the Seller Manual</a></p>
@@ -52,6 +52,7 @@
                     <p><i class="fa fa-envelope"></i>{{ user.email }}</p>
                 {% else %}
                     <p><i class="fa fa-envelope"></i>{{ otheruser.email }}</p>
+                    <p><a href="{% url 'dialogs_detail' otheruser.username %}">Contact me!</a></p>
                 {% endif %}
                 <p><i class="fa fa-map-marker"></i>{{ address }}<br/> {{ city }} <br/> {{ postcode }} </p>
             {% else %}

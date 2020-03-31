@@ -729,7 +729,7 @@ def postsign(request):
         user = auth.sign_in_with_email_and_password(email,passw)
     except:
         message = "invalid cerediantials"
-        return render(request,"signIn_chat.html",{"msg":message})
+        return render(request, "signIn_chat.html", {"msg":message})
     print(user)
-    return render(request, "welcome_chat.html",{"e":email})
+    return render(request, "welcome_chat.html", {"e":email})
             
