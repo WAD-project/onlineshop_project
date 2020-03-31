@@ -42,3 +42,12 @@ def get_review(product):
         review = None
         
     return review
+
+@register.simple_tag
+def get_first_login(user):
+    try:
+        profile = UserProfile.objects.get(user=user)
+    except UserProfile.DoesNotExist:
+        profile = None
+        
+    return profile

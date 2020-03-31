@@ -1,5 +1,6 @@
 {% extends 'reuse/base.html' %}
 {% load staticfiles %}
+{% load reuse_template_tags %}
 
 {% block title_block %} 
     Successful login
@@ -13,7 +14,20 @@
 <div class="container">
 	<div class="jumbotron">
 	<p class="bold"> You have logged in successfully.</p>
-	<a href="{% url 'reuse:homepage' %}" class="btn btn-primary"> Return to homepage </a>
+    {% get_first_login user as profile %}
+    {% if profile %}
+        <a href="{% url 'reuse:homepage' %}" class="btn btn-primary">Return to the homepage</a>
+        <a href="{% url 'reuse:profile' profile.slug %}" class="btn btn-primary">Go to my profile</a>
+    {% else %}
+        <h3>Looks like it's your first time on Re*</h3>
+        <h4>Please complete your profile</h4>
+        
+        <form id="user_form" method="post" action="{% url 'reuse:manage' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ profile_form.as_p }}
+            <input type="submit" name="submit" value="Complete registration" class="btn btn-primary"/>
+        </form>
+    {% endif %}
 	</div>
 </div>
 {% endblock %}

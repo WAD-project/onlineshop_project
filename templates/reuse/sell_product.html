@@ -28,8 +28,8 @@
                 <form id="product_form" method="post" action="{% url 'reuse:sell_product' product.category.slug product.subcategory.slug product.slug %}"/>
                     {% csrf_token %}
                     <label for="uname">I want to sell {{ product.name }} to:</label><br>
-                    <input type="text" class="form-control" name="uname" id="uname" value="Please enter username"><br>
-                        <p>{{ message }}</p><br>
+                    <input type="text" class="form-control" name="uname" id="uname" placeholder="Username..."><br/>
+                        <p>{{ message }}</p><br/>
                     <input type="submit" name="submit" value="Sell" class="btn btn-primary" />
                 </form>
             </div>
