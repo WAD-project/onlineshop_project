@@ -1,0 +1,25 @@
+{% extends 'reuse/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Chat created
+{% endblock %}
+
+{% block titlebar_block %}
+    Chat created!
+{% endblock %}
+
+{% block body_block %}
+<div class="container">
+    {% if chatopen %}
+        <h2>Chat created succesfully</h2>
+        <a href="{% url 'reuse:chat_open' chat.slug %}">Open it</a> or go back to <a href="{% url 'reuse:homepage' %}">the homepage</a>
+    {% else %}
+        <form method="POST" action="{% url 'reuse:chat_with' otheruser %}">
+            {% csrf_token %}
+            <input type="text" name="name" id="name" placeholder="Name the chat...">
+        </form>
+    {% endif %}
+</div>
+{% endblock %}
+

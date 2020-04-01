@@ -1,0 +1,32 @@
+{% extends 'reuse/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Chat
+{% endblock %}
+
+{% block titlebar_block %}
+    Chat
+{% endblock %}
+
+{% block body_block %}
+<div class="container">
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.sender == contact %}
+                <h4>{{ contact }}</h4>
+            {% else %}
+                <h4>You</h4>
+            {% endif %}
+            <p>{{ message.text }}</p><hr/>
+        {% endfor %}
+    {% else %}
+        <h4>Say hello to {{ contact }}</h4>
+    {% endif %}
+    <form method="POST" action="{% url 'reuse:chat_open' chat.slug %}">
+        {% csrf_token %}
+        <input type="text" name="text" id="text"/>
+    </form>
+</div>
+{% endblock %}
+

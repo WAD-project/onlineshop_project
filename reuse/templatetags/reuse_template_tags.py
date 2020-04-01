@@ -1,5 +1,6 @@
 from django import template
-from reuse.models import Category, Subcategory, UserProfile, Review, CurrentProduct, SoldProduct, Product
+from django.shortcuts import get_object_or_404
+from reuse.models import Category, Subcategory, UserProfile, Review, CurrentProduct, SoldProduct, Product, Chat
 
 register = template.Library()
 
@@ -51,3 +52,17 @@ def get_first_login(user):
         profile = None
         
     return profile
+
+@register.simple_tag
+def get_chat(user1, user2):
+    profile1 = get_object_or_404(UserProfile, user=user1)
+    profile2 = get_object_or_404(UserProfile, user=user2)
+    try:
+        chat = Chat.objects.get(user1=profile1, user2=profile2)
+    except Chat.DoesNotExist:
+        try:
+            chat = Chat.objects.get(user1=profile2, user2=profile1)
+        except Chat.DoesNotExist:
+            chat = None
+
+    return chat

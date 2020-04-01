@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 
-from reuse.models import Category, Subcategory, Product, CurrentProduct, UserProfile, User, Wishlist, SoldProduct, Review
+from reuse.models import Category, Subcategory, Product, CurrentProduct, UserProfile, User, Wishlist, SoldProduct, Review, Chat, Message
 from reuse.forms import ProductForm, UserForm, UserProfileForm,  UserUpdateForm, ProfileUpdateForm, SellerForm, UpdateProductForm, ReviewForm, UpdateReviewForm
 from django.db.models import Q
 
@@ -95,7 +95,7 @@ def get_user_queryset(query=None):
     queries = query.split(" ")
     for q in queries:
         users = UserProfile.objects.filter(Q(slug__icontains=q))
-        otherusers = UserProfile.objects.filter(Q(description__icontains=q))
+        otherusers = UserProfile.objects.filter(Q(user__first_name__icontains=q))
     
     for user in users:
         queryset.append(user)
@@ -253,6 +253,7 @@ def view_profile(request, user_name_slug):
     context_dict['isSeller'] = profile.isSeller
     context_dict['date_reg'] = profile.date_reg
     context_dict['owned'] = owned
+    context_dict['slug'] = profile.slug
     if profile.isSeller:
         try:
             products = CurrentProduct.objects.filter(seller=profile).order_by('date')
@@ -720,6 +721,73 @@ def delete_review(request, product_name_slug):
     
     review.delete()
     return redirect(reverse('reuse:past_orders', kwargs={'user_name_slug': profile.slug}))
+
+
+"""
+Chat stuff
+"""
+def chat(request, user_name_slug):
+    user = request.user
+    profile = get_object_or_404(UserProfile, user=user)
+    chats = Chat.objects.filter(user1=profile)
+    otherchats = Chat.objects.filter(user2=profile)
+    
+    user_chats = []
+    for chat in chats:
+        user_chats.append(chat)
+    for otherchat in otherchats:
+        user_chats.append(otherchat)
+    
+    context_dict = {'title':'Your chats', 'chats':user_chats}
+    return render(request, 'reuse/chat.html', context_dict)
+    
+def chat_with(request, user_name_slug):
+    chatopen = False
+    context_dict = {}
+    if request.method == 'POST':
+        if 'name' in request.POST:
+            name = request.POST['name']
+            user = request.user
+            profilereq = get_object_or_404(UserProfile, user=user)
+            profilerec = get_object_or_404(UserProfile, slug=user_name_slug)
+            chat = Chat(user1=profilereq, user2=profilerec)
+            chat.name = name
+            chat.save()
+            context_dict['chat'] = chat
+            chatopen = True
+    context_dict['chatopen'] = chatopen
+    context_dict['otheruser'] = user_name_slug
+    return render(request, 'reuse/chat_with.html', context_dict)
+
+        
+def chat_open(request, chat_name_slug):
+    chat = get_object_or_404(Chat, slug=chat_name_slug)
+    context_dict = {'chat': chat}
+    
+    user = request.user
+    profilereq = get_object_or_404(UserProfile, user=user)
+    if profilereq == chat.user1:
+        context_dict['contact'] = chat.user2
+    else:
+        context_dict['contact'] = chat.user1
+    
+    if request.method == 'POST':
+        if 'text' in request.POST:
+            text = request.POST['text']
+            message = Message(text=text, chat=chat, sender=profilereq)
+            message.save()
+            
+    messages = Message.objects.filter(chat=chat)
+    context_dict['messages'] = messages
+    
+    return render(request, 'reuse/chat_open.html', context_dict)
+
+
+
+
+
+
+
 
 config = {
     'apiKey': "AIzaSyBy-6FZq9Ye6hY_43_Yy49nCL1dBeo-Hcg",

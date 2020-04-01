@@ -50,9 +50,15 @@
             {% if user.is_authenticated %}
                 {% if owned %}
                     <p><i class="fa fa-envelope"></i>{{ user.email }}</p>
+                    <a href="{% url 'reuse:chat' slug %}">Go to your chats</a>
                 {% else %}
                     <p><i class="fa fa-envelope"></i>{{ otheruser.email }}</p>
-                    <p><a href="{% url 'dialogs_detail' otheruser.username %}">Contact me!</a></p>
+                    {% get_chat user otheruser as chat %}
+                    {% if chat %}
+                        <a href="{% url 'reuse:chat_open' chat.slug %}">Go to your chat with {{ otheruser.username }}</a>
+                    {% else %}
+                        <a href="{% url 'reuse:chat_with' slug %}">Open a chat with {{ otheruser.username }}</a>
+                    {% endif %}
                 {% endif %}
                 <p><i class="fa fa-map-marker"></i>{{ address }}<br/> {{ city }} <br/> {{ postcode }} </p>
             {% else %}

@@ -98,3 +98,4 @@ class ProfileUpdateForm(forms.ModelForm):
         model = UserProfile
         fields = ['city', 'postcode', 'description', 'picture','address']
     field_order=['address', 'postcode', 'city', 'description', 'picture']
+

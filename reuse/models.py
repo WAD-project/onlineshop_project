@@ -114,6 +114,19 @@ class Wishlist(models.Model):
     user = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
     products = models.ManyToManyField(CurrentProduct)
 
+class Chat(models.Model):
+    user1 = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="user1")
+    user2 = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="user2")
+    name = models.CharField(max_length = 128, unique = True)
+    slug = models.SlugField(unique = True)
+    
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Chat, self).save(*args, **kwargs)
 
+class Message(models.Model):
+    text = models.TextField(help_text = "Type your message here")
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
+    sender = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
 
 
