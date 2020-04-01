@@ -35,14 +35,21 @@
             <div class="search-bar">
             
             <form method="get" action="{% url 'reuse:query_result' %}">
-                <input type="text" class="form-control" name ="q" id="id_q" placeholder="Search..."/>
-                <div class="form-inline">
-                    <input type="radio" id="users" name="search_type" onchange="ShowFilters()" value="users"/>
-                    <label for="users" style="padding-right:25px">Users</label><br>
-                    <input type="radio" id="products" name="search_type" onchange="ShowFilters()" value="products"/>
-                    <label for="products" style="padding-right:25px">Products</label>
-                </div>
-            </form>
+                <input type="text" class="form-control" name ="q" id="id_q" placeholder="Search for ..."/>
+                <hr class="my-hr"/>
+
+                <div class="form-inline radio-toolbar">
+                <input type="radio" id="users" name="search_type" value="users"/>
+                <label for="users" style="padding-right:25px">Users</label><br>
+                <input type="radio" id="products" name="search_type" value="products"/>
+                <label for="products" style="padding-right:25px">Products</label>
+                <input type="radio" id="both" name="search_type" value="both" />
+                <label for="both" style="padding-right:25px ">Both</label>
+                <!-- Material unchecked -->
+
+            </div>
+                <!--<input type="submit" value="Search"/>-->
+            </form>    
 
         </div>
             <!-- Hamburger button -->
@@ -65,8 +72,8 @@
                                         {% get_category_list %}
 
                                         <div class="col-lg-3 col-md-4 col-sm-4 d-none d-lg-block">
-                                            <a class="dropdown-item" href="/reuse/clothes/dresses/"> <img src="{% static 'images/dress.jpg' %}" alt=""> </a>
-                                            <a class="dropdown-item" href="/reuse/clothes/trousers/"> <img src="{% static 'images/trousers.jpg' %}" alt=""> </a>
+                                            <a class="dropdown-item" href="/reuse/cat/clothes/dresses/"> <img src="{% static 'images/dress.jpg' %}" alt=""> </a>
+                                            <a class="dropdown-item" href="/reuse/cat/clothes/trousers/"> <img src="{% static 'images/trousers.jpg' %}" alt=""> </a>
                                         </div>
                                      </div>
                                </div>
