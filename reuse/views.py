@@ -120,7 +120,16 @@ def show_category(request, category_name_slug):
             context_dict['categories'][cat] = Subcategory.objects.filter(category=cat).order_by('name')
         category_selected = Category.objects.get(slug=category_name_slug)
         context_dict['selected_category']=category_selected
-        products=CurrentProduct.objects.filter(category=category_selected).order_by('name')
+        
+        if 'price-min' in request.GET:
+            min_price = request.GET['price-min']
+        else:
+            min_price = 0
+        if 'price-max' in request.GET:
+            max_price = request.GET['price-max']
+        else:
+            max_price = 1000
+        products = CurrentProduct.objects.filter(category=category_selected).filter(price__gte=min_price).filter(price__lte=max_price).order_by('date')
         context_dict['products']=products
          #context_dict['subcategories'] = subCat
          #context_dict['category'] = category
@@ -136,7 +145,15 @@ def show_sub(request, category_name_slug, subcategory_name_slug):
         
     try:
         subcategory = Subcategory.objects.get(slug=subcategory_name_slug)
-        products = CurrentProduct.objects.filter(subcategory=subcategory)
+        if 'price-min' in request.GET:
+            min_price = request.GET['price-min']
+        else:
+            min_price = 0
+        if 'price-max' in request.GET:
+            max_price = request.GET['price-max']
+        else:
+            max_price = 1000
+        products = CurrentProduct.objects.filter(subcategory=subcategory).filter(price__gte=min_price).filter(price__lte=max_price).order_by('date')
         context_dict['category'] = subcategory.category
         context_dict['subcategory'] = subcategory
         context_dict['products'] = products

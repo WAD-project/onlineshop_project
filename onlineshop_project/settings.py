@@ -52,14 +52,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'social_django',
-    'django_private_chat',
     'reuse',
     'widget_tweaks', 
 ]
 
-CHAT_WS_SERVER_HOST = 'localhost'
-CHAT_WS_SERVER_PORT = 5002
-CHAT_WS_SERVER_PROTOCOL = 'ws'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

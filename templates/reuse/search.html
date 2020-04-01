@@ -81,8 +81,8 @@
                     </div>
                      
                     <div class="product-content">
-                        <h3 class="title"><a href="">{{ user }} </a></h3>
-                        <h5 class="subcat"> <i class="fa fa-info"></i>  {{user.description }}</h5>
+                        <h3 class="title"><a href="{% url 'reuse:profile' user.slug %}">{{ user }} </a></h3>
+                        <h5 class="subcat"> <i class="fa fa-info"></i>  {{ user.description }}</h5>
                     </div>
                 </div>
             </div>  
@@ -170,7 +170,7 @@
                     </div>
                      
                     <div class="product-content">
-                        <h3 class="title"><a href="">{{ user }} </a></h3>
+                        <h3 class="title"><a href="{% url 'reuse:profile' user.slug %}">{{ user }} </a></h3>
                         <h5 class="subcat"> <i class="fa fa-info"></i>  {{user.description }}</h5>
                     </div>
                 </div>
