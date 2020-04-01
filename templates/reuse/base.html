@@ -37,14 +37,17 @@
             <form method="get" action="{% url 'reuse:query_result' %}">
     
                 <input type="text" class="form-control" name ="q" id="id_q" placeholder="Search for ..."/>
+               <hr class="my-hr">
 
-                <div class="form-inline">
+                <div class="form-inline radio-toolbar">
                 <input type="radio" id="users" name="search_type" value="users"/>
                 <label for="users" style="padding-right:25px">Users</label><br>
                 <input type="radio" id="products" name="search_type" value="products"/>
                 <label for="products" style="padding-right:25px">Products</label>
-                <input type="radio" id="both" name="search_type" value="both"/>
-                <label for="both">Both</label>
+                <input type="radio" id="both" name="search_type" value="both" />
+                <label for="both" style="padding-right:25px ">Both</label>
+                <!-- Material unchecked -->
+
             </div>
                 <!--<input type="submit" value="Search"/>-->
             </form>    
