@@ -87,9 +87,9 @@ ALLOWED_HOSTS = []
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_PORT = 587
 #add account here
-EMAIL_HOST_USER = ''
+EMAIL_HOST_USER = 're-buy'
 #add password here
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_PASSWORD = 'wadproject2020'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'Re* team <noreply@example.com>'
 
