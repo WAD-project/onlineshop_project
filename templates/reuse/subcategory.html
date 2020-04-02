@@ -17,18 +17,16 @@
 
   {% if user.is_authenticated %}
         {% if profile.isSeller %}
-            <a href="{% url 'reuse:add_product' category.slug subcategory.slug %}"><button type="button" class="btn btn-primary">Add a product</button></a>
+            <a href="{% url 'reuse:add_product' category.slug subcategory.slug %}"><button type="button" class="btn btn-primary form-inline">Add a product</button></a>
         {% endif %}
     {% endif %}
 
     {% if products %}
         <div style="width:100%">
-            <form method="get" action="{% url 'reuse:show_sub' category.slug subcategory.slug %}">
-                <label for="price-min">Min price:</label>
-                <input type="number" name="price-min" id="price-min" value="2" min="0" max="1000"><br/>
-                <label for="price-max">Max price:</label>
-                <input type="number" name="price-max" id="price-max" value="80" min="0" max="1000">
-                <input type="submit" value="Filter">
+            <form method="get" action="{% url 'reuse:show_sub' category.slug subcategory.slug %}" class="form-inline centre" style="margin-left: 40%">
+                <input type="number" name="price-min" id="price-min" min="0" max="1000" placeholder="Min"><br/>
+                <input type="number" name="price-max" id="price-max"  min="0" max="1000" placeholder="Max">
+                <input type="submit" value="Filter" class="btn btn-primary">
             </form>
         </div>
         <div class="container">
