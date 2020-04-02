@@ -1,5 +1,6 @@
 {% extends 'reuse/homepage.html' %}
 {% load staticfiles %}
+{% load widget_tweaks %}
 
 {% block title_block %}
     Leave A Review
@@ -11,7 +12,7 @@
 
 {% block body_block %}
 <div class="container">
-
+<!-- review template -->
     {% if completed %}
     <div class="jumbotron">
         <h1>Review completed!</h1>
@@ -24,7 +25,20 @@
             <div>
                 <form id="product_form" method="post" action="{% url 'reuse:leave_a_review' product.slug %}">
                     {% csrf_token %}
-                    {{ form.as_p }}
+                    {% for hidden_field in form.hidden_fields %}
+                        {{ hidden_field }}
+                    {% endfor %}
+
+                    {% for field in form.visible_fields %}
+                        <div class="form-group">
+                        {{ field.label_tag }}
+                        {% render_field field class="form-control" %}
+                        {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                     {% endif %}
+                </div>
+                {% endfor %}
+
                     <input type="submit" name="submit" value="Leave a review!" class="btn btn-primary" />
                 </form>
             </div>

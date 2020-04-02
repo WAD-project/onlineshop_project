@@ -13,10 +13,12 @@
         {{otheruser.username }}'s Profile
     {% endif %}
 {% endblock %}
+<!-- profile template-->
 
 {% block body_block %}
 <div class="container">
     <div class="row profile-data">
+        <!-- sidebar with user profile image and links to the appropriate functions available to users-->
         <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
             <img src="{{ picture.url }}" width="300" height="300" alt="profile image" />
                 {% if owned %}
@@ -48,7 +50,7 @@
         </div>
         
         <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-            
+            <!-- profile information -->
             {% if owned %}
                 <h4> {{ user.first_name }} {{ user.last_name }}</h4>
                 <p><i class="fa fa-user"></i>{{ user.username }}</p>

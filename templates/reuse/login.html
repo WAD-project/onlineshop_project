@@ -10,6 +10,8 @@
 {% endblock %}
 
 {% block body_block %} 
+<!-- login page -->
+
 {% if notlogged %}
 <div class="container">
 <div class="jumbotron">
@@ -43,6 +45,7 @@
 
 		</form>
 
+		<!-- in development stage the reset message is displayed on the console with the appropriate link to the reset password page for the user, in settings.py there is also code that is commented out but it can be used when the project is deployed for actual use. The problem we experienced is that we cannot add the email and password to the actual code (neither in github, nor in pythonanywhere) for the commercial website from which the reset emails would be send, because that info can be stolen and used for illegal purposes. Our account in SendGrid was disabled due to this. -->  
 		<a href="{% url 'password_reset'  %}">Reset Password</a>
 		    <hr />
 		 <a href="{% url 'social:begin' 'google-oauth2' %}">  <button type="button" class="btn btn-primary"> Google Login </button></a>

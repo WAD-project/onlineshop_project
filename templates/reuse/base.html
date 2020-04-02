@@ -29,11 +29,12 @@
         </div>
         
 
-        <!-- Navigation bar -->
+        <!-- Navigation bar - modified version of Bootstrap nav bar example-->
         <nav class="navbar navbar-expand-md navbar-light bg-light">
             <a href="#" class="navbar-brand">Re-</a>
             <div class="search-bar">
             
+            <!--search bar-->
             <form method="get" action="{% url 'reuse:query_result' %}">
                 <input type="text" class="form-control" name ="q" id="id_q" placeholder="Search for ..."/>
                 <hr class="my-hr"/>
@@ -45,10 +46,7 @@
                 <label for="products" style="padding-right:25px">Products</label>
                 <input type="radio" id="both" name="search_type" value="both" />
                 <label for="both" style="padding-right:25px ">Both</label>
-                <!-- Material unchecked -->
-
-            </div>
-                <!--<input type="submit" value="Search"/>-->
+            </div>    
             </form>    
 
         </div>
@@ -140,6 +138,7 @@
                         <div class="col-md-4 col-sm-12 segment-three md-mb-30 sm-mb-30">
                             <h3>Follow us</h3>
                             <p> Please follow us on our Social Media Profile so that you always know what`s new in our online shop</p>
+                            <!-- icons for social media - inactive in our app -->
                             <a href="#"><i class="fa fa-facebook"> </i></a>
                             <a href="#"><i class="fa fa-twitter"> </i></a>
                             <a href="#"><i class="fa fa-instagram"> </i></a>
@@ -157,9 +156,8 @@
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <script type="text/javascript">
-        
-        function toggle_visibility(id) {
+    <script type="text/javascript"> 
+     function toggle_visibility(id) {
            var e = document.getElementById(id);
            if(e.style.display == 'block'){
               e.style.display = 'none';
@@ -169,8 +167,7 @@
            }
        };
 
-       document.getElementsByID("id_q").value = "{{query}}"
-    </script>
+       document.getElementsByID("id_q").value = "{{query}}"</script>
 
     </body>
 </html>

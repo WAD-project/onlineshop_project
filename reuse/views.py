@@ -236,7 +236,6 @@ User Profile view
 """
 @login_required  
 def view_profile(request, user_name_slug):
-    #Need this for the mega menu at the nav bar --> No longer, fixed with template tags <3
     owned = False
     context_dict = {}
 
@@ -275,11 +274,8 @@ Edit profile view
 """
 @login_required
 def edit_profile(request, user_name_slug):
-    #This is for the mega menu at the navbar
     context_dict = {}
     changed = False
-    #edit_profile
-    #work to be done here!!!
     if request.method == 'POST':
         form = UserUpdateForm(request.POST, instance=request.user)
         profile_form = ProfileUpdateForm(request.POST,request.FILES,instance=request.user.userprofile)
@@ -365,9 +361,7 @@ def user_logout(request):
      logout(request)
      return redirect(reverse('reuse:homepage'))
 
-"""
-change password
-"""
+
 @login_required
 def change_password(request, user_name_slug):
     user = request.user
@@ -609,7 +603,7 @@ def sell_product(request, category_name_slug, subcategory_name_slug, product_nam
     return render(request, 'reuse/sell_product.html', context_dict)
     
 """
-Wishlist and add to wishlist
+Wishlist, add to wishlist, delete items from wishlist
 """
 @login_required
 def wishlist(request, user_name_slug):
@@ -660,6 +654,9 @@ def remove_from_wishlist(request, user_name_slug, product_name_slug):
     return redirect(reverse('reuse:wishlist', kwargs={'user_name_slug':user_name_slug}))
     
 
+""" 
+Reviews 
+"""
 def leave_a_review(request, product_name_slug):
 
     context_dict = {'title': 'Leave A Review'}

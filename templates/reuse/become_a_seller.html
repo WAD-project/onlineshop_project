@@ -11,9 +11,11 @@
 
 {% block body_block %}
 
+<!-- template for becoming a seller -->
 
     {% if profile.isSeller %}
     <div class="container">
+        <!-- success message for becoming a seller-->
         <div class="jumbotron centre">
         <h1>Thank you.</h1>
         <h2>You are now part of the Re* team.</h2>
@@ -21,6 +23,7 @@
         <p><a href="{% url 'reuse:seller_manual' %}" >Go to the seller manual</a> or <a href="{% url 'reuse:homepage' %}">return to the homepage</a></p>
     </div>
     </div>
+    <!-- become a seller form --> 
     {% else %}
     <div class="jumbotron">
         <h1>Become a seller</h1>

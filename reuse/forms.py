@@ -7,7 +7,7 @@ import re
 
 EMAIL_REGEX = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
 
-#Add product - not finished
+#Add product 
 class ProductForm(forms.ModelForm):
     name = forms.CharField(max_length = 128, help_text="Please enter the name of the product.")
     description = forms.CharField(help_text="Enter short description of the product.")

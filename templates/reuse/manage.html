@@ -12,9 +12,10 @@
 {% endblock %}
 
 {% block body_block %}  
+<!-- template for login with google API-->
 
     {% get_first_login user as profile %}
-
+<!-- for google account that have already sign in the app-->
     {% if profile %}
     <div class="container">
         <div class="jumbotron">
@@ -24,6 +25,7 @@
         </div>
     </div>
 
+    <!-- if user is loggin with google account for the first time in the app, they need to complete a short form to create a profile for the app -->
     {% else %}
     <div class="container">
         <div class="jumbotron">

@@ -11,7 +11,10 @@
     Add a Product
 {% endblock %}
 
+<!--template for adding a product to the app -->
+
 {% block body_block %}
+<!-- if product is added successfully - display success message -->
     {% if added %}
     <div class="container">
         <div class="jumbotron">
@@ -19,6 +22,8 @@
         <p>See <a href="{% url 'reuse:product' category.slug subcategory.slug product.slug %}">your product</a>, or go back to <a href="{% url 'reuse:profile' the_name%}">your profile </a>or the <a href="{% url 'reuse:homepage' %}">Homepage</a></p>
     </div>
     </div>
+    
+<!-- form for creating a product --->
     {% else %}
     <div class="jumbotron">
         <h1>Add a Product to {{ subcategory.name }}</h1>

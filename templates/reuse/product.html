@@ -10,11 +10,12 @@
 {% endblock %}
 
 {% block body_block %}
+<!-- template for a product page-->
 <div class="super_container">
     <div class="single_product">
         <div class="container-fluid">
             <div class="row">
-
+                <!-- display all images of the product - our database can keep up to  5 images-->
                 <div class="col-lg-2 order-lg-1 order-2 d-none d-lg-block">
                     <ul class="image_list">
                         {% if product.image2 %}
@@ -32,7 +33,7 @@
                         
                     </ul>
                 </div>
-
+                <!--main image of the products and product data-->
                 <div class="col-lg-4 order-lg-2 order-1">
                     <div class="image_selected"><img src="{{ product.image1.url }}" alt="{{ product.name }}`s picture"></div>
                 </div>
@@ -56,11 +57,13 @@
                     <div> 
                         {% if user.is_authenticated %}
                             {% if seller == profile %}
+                            <!-- seller buttons to manage their products-->
                                 <button type="button" class="btn btn-primary"> <a href="{% url 'reuse:manage_product' category.slug subcategory.slug product.slug %}" style="color:white">Manage</a></button>
                                 <button type="button" class="btn btn-primary"><a href="{% url 'reuse:sell_product' category.slug subcategory.slug product.slug %}" style="color:white" >Sell</a></button>
                                 <button type="button" class="btn btn-primary"><a href="{% url 'reuse:delete_product' category.slug subcategory.slug product.slug %}" style="color:white" >Delete</a></button>
                             
                             {% else %}
+                            <!-- add to wishlist -->
                                 <form id="add_to_wishlist" action="{% url 'reuse:add_to_wishlist' category.slug subcategory.slug product.slug %}" method="post">
                                 {% csrf_token %}
                                 <input name="submit" type="submit" value="Add to wishlish" class="btn btn-primary" />
@@ -69,7 +72,7 @@
                     </div>
                 </div>
             </div>
-          
+          <!-- seller information under product-  visible only if user is authenticated-->
             <hr class="line" style="margin-top: 80px"> 
             <div class="profile-data">
          

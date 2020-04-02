@@ -11,8 +11,7 @@
 {% endblock %}
 
 {% block body_block %}
-        
-
+<!-- successfully edited profile -->
         {% if changed %}
         <div class="container">
             <div class="jumbotron">
@@ -20,6 +19,8 @@
                 <p>Go to <a href="{% url 'reuse:profile' the_name %}">your profile page </a>or back to the <a href="{% url 'reuse:homepage' %}">Homepage</a></p><br />
             </div>
         </div>
+
+<!-- render form for editing user`s profile-->
         {% else %}
         <div class="jumbotron">
             <h1>Edit Profile</h1>
@@ -36,6 +37,7 @@
             
     
             {% csrf_token %}
+            <!-- user form - renders email, first and second name and password-->
 
             {% for hidden_field in form.hidden_fields %}
                 {{ hidden_field }}
@@ -51,6 +53,7 @@
             </div>
             {% endfor %}
 
+            <!-- renders the profile specific fields as specified in our model - address, postcode, description, picture--->
             {% for hidden_field in profile_form.hidden_fields %}
                 {{ hidden_field }}
             {% endfor %}
