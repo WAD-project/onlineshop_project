@@ -83,8 +83,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #during development!!!!
-EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #during development!!!!
+"""
+Code below is for sending emails for resetting password. We have not specify user and password, because
+our repository is public and this information can be seen by anyone. Instead reset message is displayed on 
+the console. We also have similar problem on pythonanywhere.
+"""
+"""
+EMAIL_HOST = ''
 EMAIL_PORT = 587
 #add account here
 EMAIL_HOST_USER = ''
@@ -92,6 +98,7 @@ EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'Re* team <noreply@example.com>'
+"""
 
 # Application definition
 
